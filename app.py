@@ -1153,15 +1153,12 @@ def main():
                 st.session_state['page'] = 'roadmap'
                 st.session_state['show_profile'] = False
                 st.rerun()
-
-            # Add a divider
-            st.markdown("---")
-
+            
             if st.button("📄 Resume Builder", key="resume_btn", use_container_width=True):
                 st.session_state['page'] = 'resume_builder'
+                st.session_state['show_profile'] = False
                 st.rerun()
 
-                       
             st.markdown(
                 """
                 <a href="https://skillassessment.streamlit.app/" target="_blank">
