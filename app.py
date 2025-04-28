@@ -1140,7 +1140,7 @@ def main():
                 st.session_state['show_profile'] = False
                 st.rerun()
 
-            if st.button("📝 Complete Profile", key="profile_btn", use_container_width=True):
+            if st.button("👤 Complete Profile", key="profile_btn", use_container_width=True):
                 st.session_state['page'] = 'questionnaire'
                 st.session_state['show_profile'] = False
                 st.rerun()
@@ -1150,15 +1150,22 @@ def main():
                 st.session_state['show_profile'] = False
                 st.rerun()
 
+            if st.button("🧠 Daily Knowledge Dose", key="knowledge_btn", use_container_width=True):
+                st.session_state['page'] = 'knowledge_dose'
+                st.session_state['show_profile'] = False
+                st.rerun()
+
             if st.button("🚀 Your Roadmap", key="roadmap_btn", use_container_width=True):
                 st.session_state['page'] = 'roadmap'
                 st.session_state['show_profile'] = False
                 st.rerun()
             
-            if st.button("📄 Resume Builder", key="resume_btn", use_container_width=True):
+            if st.button("📝 Resume Builder", key="resume_btn", use_container_width=True):
                 st.session_state['page'] = 'resume_builder'
                 st.session_state['show_profile'] = False
                 st.rerun()
+
+            
 
             st.markdown(
                 """
@@ -1175,17 +1182,14 @@ def main():
                         border-radius:10px;
                         text-align:center;
                     ">
-                        🧠 Skill Assessment
+                        📋 Skill Assessment
                     </button>
                 </a>
                 """,
                 unsafe_allow_html=True
             )
 
-            if st.button("🧠 Daily Knowledge Dose", key="knowledge_btn", use_container_width=True):
-                st.session_state['page'] = 'knowledge_dose'
-                st.session_state['show_profile'] = False
-                st.rerun()
+            
 
             st.markdown("---")
 
