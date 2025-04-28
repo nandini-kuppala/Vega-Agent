@@ -517,19 +517,6 @@ def display_roadmap_page():
             st.session_state['page'] = 'questionnaire'
             st.rerun()
 
-    # Navigation buttons at bottom
-    st.markdown("---")
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        if st.button("🏠 Home", key="home_from_roadmap", use_container_width=True):
-            st.session_state['page'] = 'home'
-            st.rerun()
-            
-    with col2:
-        if st.button("💬 Chat with ASHA", key="chat_from_roadmap", use_container_width=True):
-            st.session_state['page'] = 'chat'
-            st.rerun()
 
 def transcribe_audio(audio_data):
     """Transcribe audio using Sarvam AI API"""
@@ -1117,7 +1104,7 @@ def main():
                 groq_api_key=groq_api_key
             )
             if st.session_state.get('user_id'):
-                st.session_state['assistant'].get_profile(user_id=st.session_state['user_id'])
+                st.session_state['assistant'].load_profile(user_id=st.session_state['user_id'])
         except Exception as e:
             st.error(f"Error initializing assistant: {str(e)}")
             print(traceback.format_exc())
