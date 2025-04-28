@@ -174,8 +174,12 @@ def display_profile_modal():
             st.markdown('</div>', unsafe_allow_html=True)
             return            
         
+        res = get_profile(st.session_state['user_id'])
+        
+        if res["status"] == "success":
+            profile= res["profile"]
         # Display profile information
-        profile = st.session_state.profile_data
+        profile = st.session_state.profile
         
         # User header with avatar
         st.write(f"## {profile.get('name', 'User')}")
