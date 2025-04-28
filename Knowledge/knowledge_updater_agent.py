@@ -342,9 +342,74 @@ class KnowledgeUpdaterCrew:
             "Emerging Trends": [],
             "Recommended Reads": []
         }
+        tech_latest = [
+                {
+                    "title": "Monzo's former CEO shares 3 tips for getting the most out of vibe coding",
+                    "description": "Tom Blomfield, former CEO of Monzo and current Y Combinator partner, shares strategies for maximizing 'vibe coding,' a new approach to programming that uses AI to generate code via text instructions.",
+                    "url": "https://www.businessinsider.com/monzo-tom-blomfield-vibe-coding-tips-ai-tools-2025-4",
+                    "image": "https://i.insider.com/5d10cee30a28493f9f343be3?width=1300&format=jpeg&auto=webp",
+                    "source": "Business Insider",
+                    "date": "2025-04-28"
+                },
+                {
+                    "title": "Nvidia Thinks It Has a Better Way of Building AI Agents",
+                    "description": "Nvidia has launched a new software platform called NeMo microservices to enable businesses to build their own autonomous AI agents, emphasizing the use of open-weight AI models for greater flexibility.",
+                    "url": "https://www.wsj.com/articles/nvidia-thinks-it-has-a-better-way-of-building-ai-agents-b289a574",
+                    "image": "https://images.wsj.net/im-87285111?width=700&size=1.518&pixel_ratio=1.5",
+                    "source": "The Wall Street Journal",
+                    "date": "2025-04-23"
+                },
+                {
+                    "title": "Introducing Gemini 2.0: our new AI model for the agentic era",
+                    "description": "Google DeepMind introduces Gemini 2.0, a new AI model designed for the 'agentic era,' featuring native image and audio output and tool use.",
+                    "url": "https://blog.google/technology/google-deepmind/google-gemini-ai-update-december-2024/",
+                    "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/blog_gemini_keyword_header.width-1600.format-webp.webp",
+                    "source": "Google Blog",
+                    "date": "2024-12-06"
+                },
+                {
+                    "title": "Cisco Launches Foundation AI and Introduces Open-Source Security AI Model",
+                    "description": "Cisco has unveiled Foundation AI, an open-source initiative focused on cybersecurity, featuring the 'Security AI Reasoning Model,' an 8-billion-parameter language model trained exclusively on cybersecurity data.",
+                    "url": "https://www.techzine.eu/news/security/130906/cisco-launches-foundation-ai-and-introduces-open-source-security-ai-model/",
+                    "image": "https://www.techzine.eu/wp-content/uploads/2025/04/shutterstock_2422220481.jpg",
+                    "source": "Techzine Europe",
+                    "date": "2025-04-28"
+                            },
+                {
+                    "title": "Microsoft Launches Recall and Click to Do Features in Windows 11",
+                    "description": "Microsoft has officially released the Recall feature for Copilot+ PCs, capturing and storing screenshots of user activity to enable comprehensive search functionality. Additionally, 'Click to Do' allows users to perform contextual actions through keyboard shortcuts or touchscreen gestures.",
+                    "url": "https://www.tomshardware.com/software/windows/microsoft-launches-recall-to-windows-11-general-availability-click-to-do-and-improved-search-also-coming",
+                    "image": "https://cdn.mos.cms.futurecdn.net/UFwtZJ6bYD5RhChCzXSzTJ-970-80.jpg.webp",
+                    "source": "Tom's Hardware",
+                    "date": "2025-04-26"
+                },
+                {
+                    "title": "Baidu Unveils Ernie 4.5 Turbo and Ernie X1 Turbo AI Models",
+                    "description": "At its annual developer conference, Baidu introduced two new AI models: Ernie 4.5 Turbo, matching top industry standards in coding and language comprehension, and the reasoning model Ernie X1 Turbo.",
+                    "url": "https://www.reuters.com/world/china/chinas-baidu-says-its-kunlun-chip-cluster-can-train-deepseek-like-models-2025-04-25/",
+                    "image": "https://www.reuters.com/resizer/v2/Y23KWZ3XPJMGRMZLOORCDOGQTU.jpg?auth=bbe5096e9600d38d0d18c3f7389a732da30d621db97e47c7d773f498e4cd9883&width=720&quality=80",
+                    "source": "Reuters",
+                    "date": "2025-04-25"
+                },
+                {
+                    "title": "OpenAI Expands 'Operator' AI Agent to Multiple Countries",
+                    "description": "OpenAI has expanded access to its AI agent 'Operator,' beyond the US, making it available in multiple countries including India. The tool can autonomously browse the internet and perform tasks online, making it more of a digital assistant than just a chatbot.",
+                    "url": "https://thetechportal.com/2025/02/22/openai-expands-its-operator-ai-agent-in-several-countries-including-india/",
+                    "image": "https://thetechportal.com/wp-content/uploads/2023/01/openai-the-tech-portal.png.webp",
+                    "source": "The Tech Portal",
+                    "date": "2025-02-22"
+                },
+                {
+                    "title": "Adobe Launches Firefly Image Model 4 at Adobe Max London 2025",
+                    "description": "At Adobe Max London 2025, Adobe unveiled Firefly Image Model 4, offering hyper-realistic image generation, along with Firefly Boards, a collaborative AI moodboarding tool now in public beta.",
+                    "url": "https://www.techradar.com/news/live/adobe-max-london-2025-live",
+                    "image": "https://cdn.mos.cms.futurecdn.net/MC5fKSSCWvCPp9nBvHbGeE-970-80.jpg.webp",
+                    "source": "TechRadar",
+                    "date": "2025-04-24"
+                }
+            ]
 
-            # REAL articles and images based on tech topics
-                # Real articles and images based on tech topics
+
         tech_news = [
             {
                 "title": "IBM to Invest $150 Billion in U.S. to Advance Quantum Computing",
@@ -369,6 +434,14 @@ class KnowledgeUpdaterCrew:
                 "image": "https://www.investors.com/wp-content/uploads/2017/03/SILO-AUTO-95Comp-031417-shutter.jpg",
                 "source": "Investor's Business Daily",
                 "date": "2025-04-28"
+            },
+            {
+                "title": "Cerebras Unveils Six Data Centers to Meet Accelerating Demand for AI Inference at Scale",
+                "description": "Cerebras announces the deployment of over 300 CS-3 systems in new data centers to meet the growing demand for AI inference at scale.",
+                "url": "https://www.datacenterfrontier.com/hyperscale/article/55273769/cerebras-unveils-six-data-centers-to-meet-accelerating-demand-for-ai-inference-at-scale",
+                "image": "https://img.datacenterfrontier.com/files/base/ebm/datacenterfrontier/image/2025/03/67d05bfa189931bf0cf636c8-cs3.png?auto=format,compress&fit=max&q=45&w=950&width=950",
+                "source": "Data Center Frontier",
+                "date": "2025-03-25"
             }
         ]
 
@@ -407,8 +480,8 @@ class KnowledgeUpdaterCrew:
             {
                 "title": "Comprehensive Guide to Llama 3: Meta's Open-Source Giant",
                 "description": "Learn everything about the Llama 3 model family, capabilities, and how to fine-tune them.",
-                "url": "https://huggingface.co/blog/llama-3",
-                "author": "Hugging Face",
+                "url": "https://ai.meta.com/blog/meta-llama-3/",
+                "author": "Meta",
                 "date": "2025-04-01"
             },
             {
@@ -446,14 +519,14 @@ class KnowledgeUpdaterCrew:
             date = (today - timedelta(days=random.randint(0, 5))).strftime("%Y-%m-%d")
             
             # New Technologies
-            tech_article = tech_news[i % len(tech_news)]
+            tech_ar = tech_latest[i % len(tech_news)]
             mock_data["New Technologies"].append({
-                "title": tech_article["title"],
-                "description": tech_article["description"],
-                "url": tech_article["url"],
+                "title": tech_ar["title"],
+                "description": tech_ar["description"],
+                "url": tech_ar["url"],
                 "date": date,
-                "image": tech_article["image"],
-                "source": tech_article["source"],
+                "image": tech_ar["image"],
+                "source": tech_ar["source"],
                 "personalization": f"As a {interest} enthusiast, this latest update is crucial for staying ahead."
             })
             
