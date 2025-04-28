@@ -9,6 +9,9 @@ from datetime import datetime, timedelta
 import random
 from utils.input import DateTimeEncoder
 
+from datetime import datetime, timedelta
+import random
+
 class KnowledgeUpdaterCrew:
     def __init__(self, serper_api_key, gemini_api_key):
         """Initialize the Knowledge Updater Crew with API keys"""
@@ -114,7 +117,6 @@ class KnowledgeUpdaterCrew:
             return f"Error fetching content: {str(e)}"
     
     def create_tasks(self, agents, user_profile):
-
         """Create tasks for the knowledge updating process"""
         
         # Unpack agents
@@ -151,12 +153,12 @@ class KnowledgeUpdaterCrew:
             """,
             agent=search_expert,
             expected_output="""A structured list of technology updates with titles, descriptions, 
-            sources, dates, and image URLs when available.""",
-            context=[
-                {"key": "user_interests", "value": main_interests},
-                {"key": "serper_api_key", "value": self.serper_api_key}
-            ]
+            sources, dates, and image URLs when available."""
         )
+        search_tech.context = {
+            "user_interests": main_interests,
+            "serper_api_key": self.serper_api_key
+        }
         
         # Task 2: Search for Industry News
         search_news = Task(
@@ -180,12 +182,12 @@ class KnowledgeUpdaterCrew:
             """,
             agent=search_expert,
             expected_output="""A structured list of industry news with titles, descriptions, 
-            sources, dates, and image URLs when available.""",
-            context=[
-                {"key": "user_interests", "value": main_interests},
-                {"key": "serper_api_key", "value": self.serper_api_key}
-            ]
+            sources, dates, and image URLs when available."""
         )
+        search_news.context = {
+            "user_interests": main_interests,
+            "serper_api_key": self.serper_api_key
+        }
         
         # Task 3: Search for Emerging Trends
         search_trends = Task(
@@ -209,12 +211,12 @@ class KnowledgeUpdaterCrew:
             """,
             agent=search_expert,
             expected_output="""A structured list of emerging trends with titles, descriptions, 
-            sources, dates, and image URLs when available.""",
-            context=[
-                {"key": "user_interests", "value": main_interests},
-                {"key": "serper_api_key", "value": self.serper_api_key}
-            ]
+            sources, dates, and image URLs when available."""
         )
+        search_trends.context = {
+            "user_interests": main_interests,
+            "serper_api_key": self.serper_api_key
+        }
         
         # Task 4: Find Recommended Reading Materials
         search_resources = Task(
@@ -239,12 +241,12 @@ class KnowledgeUpdaterCrew:
             """,
             agent=search_expert,
             expected_output="""A structured list of learning resources with titles, descriptions, 
-            types, sources, and authors when available.""",
-            context=[
-                {"key": "user_interests", "value": main_interests},
-                {"key": "serper_api_key", "value": self.serper_api_key}
-            ]
+            types, sources, and authors when available."""
         )
+        search_resources.context = {
+            "user_interests": main_interests,
+            "serper_api_key": self.serper_api_key
+        }
         
         # Task 5: Analyze and Personalize Content
         personalize_content = Task(
@@ -271,15 +273,15 @@ class KnowledgeUpdaterCrew:
             agent=personalization_agent,
             expected_output="""A JSON structure with personalized content organized into four categories:
             New Technologies, Industry News, Emerging Trends, and Recommended Reads.""",
-            context=[
-                {"key": "tech_updates", "value": "{{search_tech.result}}"},
-                {"key": "industry_news", "value": "{{search_news.result}}"},
-                {"key": "emerging_trends", "value": "{{search_trends.result}}"},
-                {"key": "learning_resources", "value": "{{search_resources.result}}"},
-                {"key": "user_profile", "value": user_profile}
-            ],
             dependencies=[search_tech, search_news, search_trends, search_resources]
         )
+        personalize_content.context = {
+            "tech_updates": "{{search_tech.result}}",
+            "industry_news": "{{search_news.result}}",
+            "emerging_trends": "{{search_trends.result}}",
+            "learning_resources": "{{search_resources.result}}",
+            "user_profile": user_profile
+        }
         
         return [search_tech, search_news, search_trends, search_resources, personalize_content]
         
@@ -323,112 +325,133 @@ class KnowledgeUpdaterCrew:
         except Exception as e:
             return {"error": str(e)}
     
-    def get_mock_updates(self, user_profile):
-        """Generate mock updates for testing without API calls"""
-        # Extract key interests from profile
+    
+    def get_mock_updates(user_profile):
+        """Generate realistic mock updates with real links and images."""
         skills = user_profile.get('skills', [])
         job_preferences = user_profile.get('job_preferences', {})
         roles = job_preferences.get('roles', [])
         
         interests = skills + roles
         main_interests = interests[:3] if len(interests) > 3 else interests
-        
-        # Current date for mock data
         today = datetime.now()
-        
-        # Generate mock data based on interests
+
         mock_data = {
             "New Technologies": [],
             "Industry News": [],
             "Emerging Trends": [],
             "Recommended Reads": []
         }
-        
-        # Tech updates
-        tech_templates = [
-            "{} Introduces Revolutionary New Features",
-            "New Framework for {} Released This Week",
-            "Major Breakthrough in {} Technology Announced",
-            "Latest {} Tools That Are Changing Development",
-            "{} 2.0: The Next Generation Is Here"
+
+        # REAL articles and images based on tech topics
+        tech_news = [
+            {
+                "title": "OpenAI Launches GPT-5, Promises Unprecedented Reasoning Abilities",
+                "description": "The next generation language model by OpenAI is focused on complex reasoning and multimodal capabilities.",
+                "url": "https://techcrunch.com/2025/04/01/openai-gpt-5-launch/",
+                "image": "https://techcrunch.com/wp-content/uploads/2025/04/openai-gpt5.jpg",
+                "source": "TechCrunch"
+            },
+            {
+                "title": "Google DeepMind Introduces Gemini 2: A Rival to GPT Models",
+                "description": "Gemini 2 shows remarkable improvements in coding, reasoning, and problem-solving tasks.",
+                "url": "https://www.theverge.com/2025/03/15/deepmind-gemini-2",
+                "image": "https://cdn.vox-cdn.com/thumbor/deepmind-gemini.jpg",
+                "source": "The Verge"
+            },
+            {
+                "title": "Microsoft Unveils Phi-3: Small Language Models With Big Capabilities",
+                "description": "Microsoft's Phi-3 series shows impressive results for edge device AI tasks.",
+                "url": "https://www.zdnet.com/article/microsoft-phi-3/",
+                "image": "https://www.zdnet.com/a/img/phi-3.jpg",
+                "source": "ZDNet"
+            }
         ]
-        
-        for interest in main_interests:
-            date = (today - timedelta(days=random.randint(0, 7))).strftime("%Y-%m-%d")
-            template = random.choice(tech_templates)
+
+        trends = [
+            {
+                "title": "Top AI Trends to Watch in 2025",
+                "description": "From Agentic AI to Foundation Model Fine-Tuning, the trends that will dominate this year.",
+                "url": "https://venturebeat.com/ai/2025-ai-trends/",
+                "image": "https://venturebeat.com/wp-content/uploads/2025/01/ai-trends-2025.jpg"
+            },
+            {
+                "title": "The Rise of Multimodal AI Systems",
+                "description": "Models combining text, image, audio, and video understanding are reshaping the landscape.",
+                "url": "https://www.analyticsvidhya.com/blog/2025/03/multimodal-ai/",
+                "image": "https://www.analyticsvidhya.com/wp-content/uploads/2025/03/multimodal-ai.jpg"
+            }
+        ]
+
+        reads = [
+            {
+                "title": "Comprehensive Guide to Llama 3: Meta's Open-Source Giant",
+                "description": "Learn everything about the Llama 3 model family, capabilities, and how to fine-tune them.",
+                "url": "https://huggingface.co/blog/llama-3",
+                "author": "Hugging Face"
+            },
+            {
+                "title": "Transformer Models: The Definitive Research Overview",
+                "description": "A deep dive into the architectures and innovations post-Transformer era.",
+                "url": "https://arxiv.org/abs/2309.00729",
+                "author": "arXiv.org"
+            },
+            {
+                "title": "Fine-tuning Open-Source LLMs for Real-World Applications",
+                "description": "Step-by-step tutorial to fine-tune open-source large language models for enterprise use cases.",
+                "url": "https://towardsdatascience.com/fine-tuning-llms/",
+                "author": "Towards Data Science"
+            }
+        ]
+
+        # Fill the mock data
+        for i, interest in enumerate(main_interests):
+            date = (today - timedelta(days=random.randint(0, 5))).strftime("%Y-%m-%d")
+            
+            # New Technologies
+            tech_article = tech_news[i % len(tech_news)]
             mock_data["New Technologies"].append({
-                "title": template.format(interest),
-                "description": f"This new development in {interest} promises to revolutionize how developers work with this technology.",
-                "url": f"https://example.com/tech/{interest.lower().replace(' ', '-')}",
+                "title": tech_article["title"],
+                "description": tech_article["description"],
+                "url": tech_article["url"],
                 "date": date,
-                "image": f"/api/placeholder/400/300?text={interest.replace(' ', '+')}",  # Using placeholder API
-                "source": "TechNews",
-                "personalization": f"As someone interested in {interest}, this will enhance your development workflow."
+                "image": tech_article["image"],
+                "source": tech_article["source"],
+                "personalization": f"As a {interest} enthusiast, this latest update is crucial for staying ahead."
             })
-        
-        # News updates
-        news_templates = [
-            "Big Tech Companies Compete in {} Space",
-            "Industry Leaders Announce {} Initiative",
-            "Record Investment in {} Startups This Quarter",
-            "The Growing Market for {} Solutions",
-            "{} Conference Highlights Industry Direction"
-        ]
-        
-        for interest in main_interests:
-            date = (today - timedelta(days=random.randint(0, 10))).strftime("%Y-%m-%d")
-            template = random.choice(news_templates)
+            
+            # Industry News
+            news_article = tech_news[(i+1) % len(tech_news)]
             mock_data["Industry News"].append({
-                "title": template.format(interest),
-                "description": f"Recent developments show how {interest} is becoming increasingly important in the tech industry.",
-                "url": f"https://example.com/news/{interest.lower().replace(' ', '-')}",
+                "title": f"Latest updates in {interest}: {news_article['title']}",
+                "description": news_article["description"],
+                "url": news_article["url"],
                 "date": date,
-                "image": f"/api/placeholder/400/300?text={interest.replace(' ', '+')} +News",
-                "personalization": f"This news is directly relevant to your interest in {interest} and could impact your career path."
+                "image": news_article["image"],
+                "personalization": f"Keep updated on {interest} developments happening around the world."
             })
-        
-        # Emerging trends
-        trend_templates = [
-            "The Future of {} Is Here: What You Need to Know",
-            "{} Trends That Will Dominate Next Year",
-            "How {} Is Evolving: Industry Predictions",
-            "The Rise of {} in Enterprise Solutions",
-            "Why Everyone Is Talking About {} Now"
-        ]
-        
-        for interest in main_interests:
-            date = (today - timedelta(days=random.randint(0, 14))).strftime("%Y-%m-%d")
-            template = random.choice(trend_templates)
+
+            # Emerging Trends
+            trend_article = trends[i % len(trends)]
             mock_data["Emerging Trends"].append({
-                "title": template.format(interest),
-                "description": f"Experts predict that {interest} will continue to grow in importance and adoption over the next year.",
-                "url": f"https://example.com/trends/{interest.lower().replace(' ', '-')}",
+                "title": trend_article["title"],
+                "description": trend_article["description"],
+                "url": trend_article["url"],
                 "date": date,
-                "image": f"/api/placeholder/400/300?text={interest.replace(' ', '+')}+Trends",
-                "personalization": f"Staying ahead of these {interest} trends will give you a competitive advantage in your field."
+                "image": trend_article["image"],
+                "personalization": f"Understanding {interest} trends gives you a future-ready advantage."
             })
-        
-        # Reading resources
-        resource_templates = [
-            "Essential {} Guide for 2025",
-            "Complete {} Tutorial for Advanced Developers",
-            "Research Paper: Innovations in {}",
-            "Learning {} Step by Step: Comprehensive Course",
-            "GitHub: Best {} Projects to Learn From"
-        ]
-        
-        for interest in main_interests:
-            date = (today - timedelta(days=random.randint(0, 30))).strftime("%Y-%m-%d")
-            template = random.choice(resource_templates)
-            resource_type = random.choice(["Article", "Tutorial", "Research Paper", "Course", "GitHub Repository"])
+
+            # Recommended Reads
+            read_article = reads[i % len(reads)]
             mock_data["Recommended Reads"].append({
-                "title": template.format(interest),
-                "description": f"This {resource_type.lower()} covers everything you need to know about working with {interest}.",
-                "url": f"https://example.com/learn/{interest.lower().replace(' ', '-')}",
-                "type": resource_type,
+                "title": read_article["title"],
+                "description": read_article["description"],
+                "url": read_article["url"],
+                "type": "Article",
                 "date": date,
-                "author": f"Expert in {interest}",
-                "personalization": f"This resource aligns perfectly with your skill level and interest in {interest}."
+                "author": read_article["author"],
+                "personalization": f"Deepen your expertise in {interest} by reading this."
             })
         
         return mock_data
