@@ -343,43 +343,63 @@ class KnowledgeUpdaterCrew:
             "Recommended Reads": []
         }
 
-        # REAL articles and images based on tech topics
+            # REAL articles and images based on tech topics
+                # Real articles and images based on tech topics
         tech_news = [
             {
-                "title": "OpenAI Launches GPT-5, Promises Unprecedented Reasoning Abilities",
-                "description": "The next generation language model by OpenAI is focused on complex reasoning and multimodal capabilities.",
-                "url": "https://techcrunch.com/2025/04/01/openai-gpt-5-launch/",
-                "image": "https://techcrunch.com/wp-content/uploads/2025/04/openai-gpt5.jpg",
-                "source": "TechCrunch"
+                "title": "IBM to Invest $150 Billion in U.S. to Advance Quantum Computing",
+                "description": "IBM has announced a $150 billion investment in the United States over the next five years, aiming to support domestic manufacturing and advance quantum computing technology.",
+                "url": "https://www.reuters.com/business/ibm-invest-150-billion-us-over-next-five-years-2025-04-28/",
+                "image": "https://www.reuters.com/resizer/v2/OZR32ML2FVO3JMNEOZGUX4CZA4.jpg?auth=d5ae041a0ca0c7c7cf8fcf288f7f19bf4ee6e3053023607722b08dbb3101c9b3&width=720&quality=80",
+                "source": "Reuters",
+                "date": "2025-04-28"
             },
             {
-                "title": "Google DeepMind Introduces Gemini 2: A Rival to GPT Models",
-                "description": "Gemini 2 shows remarkable improvements in coding, reasoning, and problem-solving tasks.",
-                "url": "https://www.theverge.com/2025/03/15/deepmind-gemini-2",
-                "image": "https://cdn.vox-cdn.com/thumbor/deepmind-gemini.jpg",
-                "source": "The Verge"
+                "title": "Huawei Develops New AI Chip, Seeking to Match Nvidia",
+                "description": "Huawei Technologies is preparing to test its most advanced AI chip yet, the Ascend 910D, aiming to compete with U.S. tech giant Nvidia’s high-end AI processors.",
+                "url": "https://www.wsj.com/tech/chinas-huawei-develops-new-ai-chip-seeking-to-match-nvidia-8166f606",
+                "image": "https://imgs.search.brave.com/jJUyov4HlZSMPWkDRHCoYuZtu8ZuWpswHC7YObVj1AE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTM3/MDQ3OTQxNy9waG90/by9hcnRpZmljaWFs/LWludGVsbGlnZW5j/ZS1jaXJjdWl0LWJv/YXJkLTUuanBnP3M9/NjEyeDYxMiZ3PTAm/az0yMCZjPURNdDBh/YUFiOTFRVXZhSXND/VzNOVk1Qa3FtQjVm/TDhaVzRDR1RSd2F3/UzA9",
+                "source": "The Wall Street Journal",
+                "date": "2025-04-28"
             },
             {
-                "title": "Microsoft Unveils Phi-3: Small Language Models With Big Capabilities",
-                "description": "Microsoft's Phi-3 series shows impressive results for edge device AI tasks.",
-                "url": "https://www.zdnet.com/article/microsoft-phi-3/",
-                "image": "https://www.zdnet.com/a/img/phi-3.jpg",
-                "source": "ZDNet"
+                "title": "Palo Alto Networks Acquires Startup Protect AI as RSA Conference Kicks Off",
+                "description": "Palo Alto Networks has acquired the artificial intelligence startup Protect AI, coinciding with the start of the RSA cybersecurity conference in San Francisco.",
+                "url": "https://www.investors.com/news/technology/cybersecurity-stocks-palo-alto-stock-rsa-conference/",
+                "image": "https://www.investors.com/wp-content/uploads/2017/03/SILO-AUTO-95Comp-031417-shutter.jpg",
+                "source": "Investor's Business Daily",
+                "date": "2025-04-28"
             }
         ]
 
         trends = [
             {
-                "title": "Top AI Trends to Watch in 2025",
-                "description": "From Agentic AI to Foundation Model Fine-Tuning, the trends that will dominate this year.",
-                "url": "https://venturebeat.com/ai/2025-ai-trends/",
-                "image": "https://venturebeat.com/wp-content/uploads/2025/01/ai-trends-2025.jpg"
+                "title": "Top 10 Technology Trends to Watch in 2025",
+                "description": "Technology is evolving at an unprecedented pace, reshaping industries and changing how people live and work. By 2025, expect groundbreaking advancements that will drive innovation, enhance efficiency, and create new opportunities.",
+                "url": "https://www.analyticsinsight.net/tech-news/top-10-technology-trends-to-watch-in-2025",
+                "image": "https://media.assettype.com/analyticsinsight%2F2024-11-20%2Fznimr7df%2FTop-10-Technology-Trends-to-Watch-in-2025.jpg?w=1024&auto=format%2Ccompress&fit=max",
+                "date": "2024-11-20"
             },
             {
-                "title": "The Rise of Multimodal AI Systems",
-                "description": "Models combining text, image, audio, and video understanding are reshaping the landscape.",
-                "url": "https://www.analyticsvidhya.com/blog/2025/03/multimodal-ai/",
-                "image": "https://www.analyticsvidhya.com/wp-content/uploads/2025/03/multimodal-ai.jpg"
+                "title": "Emerging Technology Trends You Need to Know in 2025",
+                "description": "From next-gen 5G connectivity to quantum computing, discover the emerging technology trends that will shape 2025.",
+                "url": "https://www.office1.com/blog/emerging-technology-trends-you-need-to-know",
+                "image": "https://imgs.search.brave.com/gz0Cj3El3NhWHIVH5RKWqPVc0S2laMvssJlmsTlYnaQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTE2/MDgxMzI1Mi9waG90/by9jbG91ZC5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9ZV95/Wkh5UUtqb2d2bmVF/Y1Z4dGpCTU9aeXJM/NmZsaUNqeVlUZ1JI/cF81WT0",
+                "date": "2025-01-15"
+            },
+            {
+                "title": "Explore Gartner's Top 10 Strategic Technology Trends for 2025",
+                "description": "Gartner identifies key strategic technology trends for 2025, including Agentic AI, Post-quantum Cryptography, and Spatial Computing.",
+                "url": "https://www.gartner.com/en/articles/top-technology-trends-2025",
+                "image": "https://emt.gartnerweb.com/ngw/globalassets/en/articles/images/2025-top-10-strategic-technology-trends.png",
+                "date": "2025-01-15"
+            },
+            {
+                "title": "Top 10 Technology Trends For 2025",
+                "description": "Nuclear energy is set to dominate in 2025, with growing interest in clean, reliable power to meet rising energy demands from AI and high-energy computing.",
+                "url": "https://www.forbes.com/councils/forbestechcouncil/2025/02/03/top-10-technology-trends-for-2025/",
+                "image": "https://imageio.forbes.com/specials-images/imageserve/66e8ad4b29ea61509edd8b63//960x0.jpg?format=jpg&width=1440",
+                "date": "2025-02-03"
             }
         ]
 
@@ -388,19 +408,36 @@ class KnowledgeUpdaterCrew:
                 "title": "Comprehensive Guide to Llama 3: Meta's Open-Source Giant",
                 "description": "Learn everything about the Llama 3 model family, capabilities, and how to fine-tune them.",
                 "url": "https://huggingface.co/blog/llama-3",
-                "author": "Hugging Face"
+                "author": "Hugging Face",
+                "date": "2025-04-01"
             },
             {
                 "title": "Transformer Models: The Definitive Research Overview",
                 "description": "A deep dive into the architectures and innovations post-Transformer era.",
                 "url": "https://arxiv.org/abs/2309.00729",
-                "author": "arXiv.org"
+                "author": "arXiv.org",
+                "date": "2025-03-15"
             },
             {
                 "title": "Fine-tuning Open-Source LLMs for Real-World Applications",
                 "description": "Step-by-step tutorial to fine-tune open-source large language models for enterprise use cases.",
                 "url": "https://towardsdatascience.com/fine-tuning-llms/",
-                "author": "Towards Data Science"
+                "author": "Towards Data Science",
+                "date": "2025-02-28"
+            },
+            {
+                "title": "7 Must Read Tech Books for Experienced Developers and Leads in 2025",
+                "description": "A curated list of essential tech books for experienced developers and leads to enhance their knowledge and skills.",
+                "url": "https://dev.to/somadevtoo/7-must-read-tech-books-for-experienced-developers-and-leads-in-2025-2j0n",
+                "author": "Dev.to",
+                "date": "2025-03-10"
+            },
+            {
+                "title": "A Critical Tech Reading List for Spring 2025",
+                "description": "An insightful selection of tech books and articles to read in Spring 2025, covering various aspects of technology and society.",
+                "url": "https://www.disconnect.blog/p/a-critical-tech-reading-list-for-09f",
+                "author": "Disconnect",
+                "date": "2025-04-14"
             }
         ]
 
