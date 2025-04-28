@@ -284,10 +284,12 @@ def display_profile():
     if 'user_id' not in st.session_state:
         st.error("User ID not found in session state. Please log in again.")
         return
-    
-            
-    # Display profile information
-    profile = st.session_state.profile_data
+    res = get_profile(st.session_state['user_id'])
+        
+    if res["status"] == "success":
+        profile= res["profile"]
+        # Display profile information
+    profile = st.session_state.profile   
     
     col1, col2 = st.columns(2)
     
