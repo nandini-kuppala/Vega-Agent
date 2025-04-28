@@ -3,6 +3,7 @@ import os
 from crewai import LLM
 import json
 import re
+from utils.input import DateTimeEncoder
 
 class ResumeBuilderCrew:
     def __init__(self, api_key):
@@ -95,7 +96,7 @@ class ResumeBuilderCrew:
             description=f"""Using the job description analysis and the candidate's profile, create tailored content for each section of the resume.
             
             Candidate Profile:
-            {json.dumps(user_profile, indent=2)}
+            {json.dumps(user_profile, indent=2, cls=DateTimeEncoder)}
             
             Projects:
             {projects}
