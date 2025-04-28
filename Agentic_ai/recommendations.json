@@ -1,0 +1,301 @@
+{
+  "profile_analysis": {
+    "candidate_id": "6809c3daa03a7a1e240ab91f",
+    "analysis": {
+      "primary_skills": {
+        "skills": [
+          "Python",
+          "Java",
+          "AI",
+          "NLP",
+          "ML",
+          "DL"
+        ],
+        "competency_level": "Intermediate",
+        "rationale": "The candidate has 1 year of experience as an AI developer and lists several relevant skills.  However, the spelling errors in 'wed development' and 'app deelopment' suggest a need for further refinement in these areas. The focus on AI/ML skills suggests a stronger competency in this domain compared to web/app development."
+      },
+      "career_stage_trajectory": {
+        "current_stage": "Early Career",
+        "trajectory": "The candidate is actively seeking to upskill and secure a better position, indicating a desire for career advancement.  The long-term goal of entrepreneurship suggests a potential path towards independent work in the future.",
+        "rationale": "One year of experience positions the candidate in the early career stage.  Their stated goals and active job search confirm this."
+      },
+      "career_goals": {
+        "short_term": "Upskill and secure a better job placement.  Focus on strengthening AI/ML skills and potentially web/app development skills.",
+        "long_term": "Become an entrepreneur in a field related to their technical skills (likely AI/ML or software development)."
+      },
+      "work_preferences": {
+        "location": "Flexible; willing to relocate from Tirupati.",
+        "remote_in_person": "Prefers remote work, but open to flexible arrangements.",
+        "work_mode": "Flexible"
+      },
+      "growth_areas": {
+        "technical": [
+          "Improve web development skills ('wed development' needs improvement)",
+          "Improve app development skills ('app deelopment' needs improvement)",
+          "Deepen expertise in chosen AI/ML specializations (NLP, ML, DL)",
+          "Explore areas like software architecture and design"
+        ],
+        "soft_skills": [
+          "Improve communication skills (consider professional writing courses)",
+          "Develop business acumen (relevant for long-term entrepreneurial goals)"
+        ]
+      },
+      "community_engagement": {
+        "preferences": "Seeks mentorship focused on skill development and wants to participate in community events.",
+        "mentorship_type": "Skill development",
+        "event_participation": "Yes"
+      },
+      "communication": {
+        "preferred_method": "Email"
+      }
+    }
+  },
+  "recommendations": {
+    "jobs": [
+      {
+        "job_title": "Software Developer - Java",
+        "company": "Ericsson",
+        "job_url": null,
+        "match_score": 85,
+        "match_explanation": "This role strongly aligns with the candidate's intermediate Java skills and aligns with their stated short-term goal of upskilling and securing a better position.  The hybrid work model also matches their preference for remote work. The experience requirement (2-8 years) accommodates the candidate's one year of experience, allowing for growth within the company.",
+        "growth_opportunity": "Working at Ericsson, a reputable company, provides excellent experience and networking opportunities.  The role allows the candidate to further develop their Java skills and potentially explore other technologies within the company, contributing to their long-term entrepreneurial goals by building a strong professional foundation."
+      },
+      {
+        "job_title": "Software Engineer (Java and Microservices)",
+        "company": "Finastra",
+        "job_url": null,
+        "match_score": 80,
+        "match_explanation": "This position leverages the candidate's Java skills and offers exposure to microservices, a valuable skill for career advancement. The experience requirement (3-5 years) is slightly higher than the candidate's current experience but is achievable given their ambition and stated desire for upskilling. The location in Bangalore might require relocation, but the candidate has expressed flexibility.",
+        "growth_opportunity": "Working with microservices is a significant step up in terms of technical skills and is highly sought after in the industry. This role provides a pathway to more senior engineering positions and strengthens the candidate's software development expertise, beneficial for their entrepreneurial aspirations."
+      },
+      {
+        "job_title": "Associate Software Engineer",
+        "company": "Finastra",
+        "job_url": null,
+        "match_score": 75,
+        "match_explanation": "While this role requires C++ which is not explicitly listed in the candidate's primary skills, their experience in Java and other programming languages suggests transferrable skills.  The focus on software engineering aligns with their career trajectory. The experience requirement (1-5 years) is suitable for their early career stage. The location in Bangalore might require relocation, but the candidate has expressed flexibility.",
+        "growth_opportunity": "This role offers a good entry point into Finastra, a well-known company.  The candidate can gain valuable experience in software development and potentially transition to other roles within the company, leveraging their existing skills and learning new ones like C++. This experience will be valuable for their future entrepreneurial endeavors."
+      }
+    ],
+    "events": [
+      {
+        "event_title": "SkillReBoot program: Restart Your Career Journey",
+        "event_date": "21st Apr, 2025 to 20th May, 2025",
+        "event_url": "https://events.herkey.com/events/skillreboot-program:-restart-your-career-journey/1663",
+        "match_score": 95,
+        "match_explanation": "This program directly addresses the candidate's need to upskill and restart their career journey.  The title suggests a comprehensive approach to career development, which aligns perfectly with the candidate's short-term goal of securing a better job placement. The online format and free price point make it highly accessible.",
+        "expected_benefits": [
+          "Improved technical skills relevant to AI/ML and potentially web/app development (depending on the program's curriculum).",
+          "Enhanced career prospects due to upskilling and improved resume.",
+          "Potential for mentorship or networking opportunities within the program."
+        ]
+      },
+      {
+        "event_title": "Advance Your Career with a Premier Executive MBA from Great Lakes",
+        "event_date": "16th Apr, 2025 to 30th Apr, 2025",
+        "event_url": "https://events.herkey.com/events/advance-your-career-with-a-premier-executive-mba-from-great-lakes/1669",
+        "match_score": 85,
+        "match_explanation": "While an MBA is a long-term investment, this event could provide valuable insights into career advancement strategies and business acumen.  The focus on executive education suggests a high-level perspective that could benefit the candidate's long-term entrepreneurial aspirations. The free nature of the event makes it a low-risk opportunity to explore this path.",
+        "expected_benefits": [
+          "Exposure to advanced business concepts and strategies.",
+          "Networking opportunities with experienced professionals and potential mentors.",
+          "Improved understanding of business management, crucial for entrepreneurial goals."
+        ]
+      },
+      {
+        "event_title": "#STEMTheBias Scholarship - Avail Scholarships up to Rs. 80,000",
+        "event_date": "3rd Mar, 2025 to 25th Mar, 2025",
+        "event_url": "https://events.herkey.com/events/#stemthebias-scholarship---avail-scholarships-up-to-rs.-80,000/1666",
+        "match_score": 75,
+        "match_explanation": "This scholarship opportunity directly supports the candidate's career advancement by providing financial assistance for further education or training in STEM fields.  Given the candidate's interest in AI/ML, securing this scholarship could significantly accelerate their skill development and career progression.  The focus on STEM aligns perfectly with the candidate's technical skills.",
+        "expected_benefits": [
+          "Financial support for further education or training in AI/ML.",
+          "Increased access to advanced learning opportunities.",
+          "Enhanced career prospects due to improved skills and qualifications."
+        ]
+      }
+    ],
+    "sessions": [
+      {
+        "session_title": "Learn how to grow your startup and lead with intent with Mabel Chacko of Open Financial",
+        "session_date": "28 Apr 25",
+        "host": "Khushboo Ramnane",
+        "session_url": "https://www.herkey.com/sessions/learn-how-to-grow-your-startup-and-lead-with-intent-with-mabel-chacko-of-open-financial/1744446025045114215",
+        "match_score": 95,
+        "match_explanation": "This session directly addresses the candidate's long-term goal of becoming an entrepreneur.  Mabel Chacko's expertise in growing a startup provides invaluable insights into business strategy, leadership, and scaling a venture, all crucial for entrepreneurial success.  The session's focus on 'leading with intent' aligns with the candidate's desire for purposeful work and career advancement.",
+        "learning_outcomes": [
+          "Startup growth strategies",
+          "Entrepreneurial leadership principles",
+          "Business planning and execution",
+          "Scaling a business"
+        ]
+      },
+      {
+        "session_title": "Think. Build. Lead : AI Product Management \u2013 Crafting Intelligence with Purpose",
+        "session_date": "24 Apr 25",
+        "host": "K Chavan",
+        "session_url": "https://www.herkey.com/sessions/think.-build.-lead-:-ai-product-management-\u00e2\u20ac\u201c-crafting-intelligence-with-purpose/1744725279041814985",
+        "match_score": 90,
+        "match_explanation": "This session is highly relevant to the candidate's intermediate AI/ML skills and short-term goal of securing a better job.  It focuses on AI product management, a crucial skill for advancing in the AI field.  The session's emphasis on building and leading AI products directly addresses the candidate's technical growth areas and aligns with their career aspirations.  The past date suggests the content might be available on-demand.",
+        "learning_outcomes": [
+          "AI product development lifecycle",
+          "AI product strategy and planning",
+          "Leadership in AI product teams",
+          "Ethical considerations in AI product development"
+        ]
+      },
+      {
+        "session_title": "Opportunity to Network With Employers And Industry Leaders | HerRising 2025 | Bangalore",
+        "session_date": "19 Jun 25",
+        "host": "Herkey Events",
+        "session_url": "https://www.herkey.com/sessions/opportunity-to-network-with-employers-and-industry-leaders-|-herrising-2025-|-bangalore/1743591719045085169",
+        "match_score": 85,
+        "match_explanation": "This networking event is valuable for the candidate's job search and career advancement.  Connecting with employers and industry leaders provides opportunities for mentorship, job leads, and insights into the current job market.  The candidate's expressed desire for community engagement and mentorship makes this session a strong fit.  The future date allows ample time for preparation.",
+        "learning_outcomes": [
+          "Networking skills",
+          "Industry insights",
+          "Job search strategies",
+          "Mentorship opportunities"
+        ]
+      }
+    ],
+    "communities": [
+      {
+        "group_name": "Women in Tech",
+        "member_count": 26590,
+        "group_url": null,
+        "match_score": 95,
+        "match_explanation": "This group directly aligns with the candidate's primary skills (Python, Java, AI, NLP, ML, DL) and career goals.  Given their intermediate competency level and desire to upskill in AI/ML, this community offers significant peer learning opportunities, mentorship potential from experienced professionals, and networking with others in the field. The large member count increases the chances of finding relevant connections and resources.",
+        "networking_value": "Access to a large network of women in tech, potential mentorship from senior professionals, collaboration opportunities on projects, and exposure to diverse perspectives and experiences within the tech industry.  This can lead to job opportunities, skill development, and industry insights."
+      },
+      {
+        "group_name": "Women Entrepreneurs",
+        "member_count": 3040,
+        "group_url": null,
+        "match_score": 85,
+        "match_explanation": "This group strongly supports the candidate's long-term goal of becoming an entrepreneur.  While not directly related to their technical skills, it provides valuable networking opportunities with other women entrepreneurs, access to resources and advice on starting and running a business, and a supportive community to navigate the challenges of entrepreneurship.  This is crucial for their long-term career trajectory.",
+        "networking_value": "Connections with established women entrepreneurs, access to mentorship and guidance on business development, potential collaborations and partnerships, and exposure to funding opportunities and investor networks. This can significantly aid in the candidate's entrepreneurial journey."
+      },
+      {
+        "group_name": "Career Growth",
+        "member_count": 21940,
+        "group_url": null,
+        "match_score": 75,
+        "match_explanation": "This group's broad focus on career advancement complements the candidate's short-term goal of securing a better job placement.  While not specific to AI/ML, it offers general career advice, networking opportunities with professionals across various fields, and resources for skill development.  The large member count increases the likelihood of finding relevant connections and job leads.",
+        "networking_value": "Access to a diverse network of professionals, potential mentorship from career coaches or experienced individuals, exposure to various career paths and opportunities, and access to job postings and recruitment events. This can help the candidate refine their career strategy and identify suitable job opportunities."
+      }
+    ]
+  },
+  "integrated_plan": {
+    "immediate_actions": [
+      {
+        "category": "Event",
+        "recommendation": {
+          "event_title": "SkillReBoot program: Restart Your Career Journey",
+          "event_date": "21st Apr, 2025 to 20th May, 2025",
+          "event_url": "https://events.herkey.com/events/skillreboot-program:-restart-your-career-journey/1663",
+          "match_score": 95,
+          "rationale": "This program directly addresses the candidate's need for immediate upskilling and aligns perfectly with their short-term goal of securing a better job.  Its accessibility (online and free) makes it a high-impact, low-risk action."
+        }
+      },
+      {
+        "category": "Community",
+        "recommendation": {
+          "group_name": "Women in Tech",
+          "member_count": 26590,
+          "group_url": null,
+          "match_score": 95,
+          "rationale": "Joining this community provides immediate access to a large network of professionals, potential mentors, and learning opportunities relevant to the candidate's technical skills and career goals.  This strengthens their job search efforts."
+        }
+      },
+      {
+        "category": "Session",
+        "recommendation": {
+          "session_title": "Opportunity to Network With Employers And Industry Leaders | HerRising 2025 | Bangalore",
+          "session_date": "19 Jun 25",
+          "host": "Herkey Events",
+          "session_url": "https://www.herkey.com/sessions/opportunity-to-network-with-employers-and-industry-leaders-|-herrising-2025-|-bangalore/1743591719045085169",
+          "match_score": 85,
+          "rationale": "Networking is crucial for job searching.  This event provides a focused opportunity to connect with potential employers and industry leaders, leveraging the upskilling from the SkillReBoot program."
+        }
+      }
+    ],
+    "short_term_development": [
+      {
+        "category": "Job",
+        "recommendation": {
+          "job_title": "Software Developer - Java",
+          "company": "Ericsson",
+          "job_url": null,
+          "match_score": 85,
+          "rationale": "This role offers a strong alignment with the candidate's skills and experience, providing a stepping stone for career advancement while allowing for skill development within a reputable company. The hybrid work model suits their preferences."
+        }
+      },
+      {
+        "category": "Session",
+        "recommendation": {
+          "session_title": "Think. Build. Lead : AI Product Management \u2013 Crafting Intelligence with Purpose",
+          "session_date": "24 Apr 25",
+          "host": "K Chavan",
+          "session_url": "https://www.herkey.com/sessions/think.-build.-lead-:-ai-product-management-\u00e2\u20ac\u201c-crafting-intelligence-with-purpose/1744725279041814985",
+          "match_score": 90,
+          "rationale": "This session enhances the candidate's AI/ML skills, making them a stronger candidate for the target job roles and future career advancement.  Even if past, the content likely remains valuable."
+        }
+      },
+      {
+        "category": "Event",
+        "recommendation": {
+          "event_title": "#STEMTheBias Scholarship - Avail Scholarships up to Rs. 80,000",
+          "event_date": "3rd Mar, 2025 to 25th Mar, 2025",
+          "event_url": "https://events.herkey.com/events/#stemthebias-scholarship---avail-scholarships-up-to-rs.-80,000/1666",
+          "match_score": 75,
+          "rationale": "Applying for this scholarship can provide financial support for future learning and skill development, accelerating the candidate's career progression."
+        }
+      }
+    ],
+    "long_term_growth": [
+      {
+        "category": "Job",
+        "recommendation": {
+          "job_title": "Software Engineer (Java and Microservices)",
+          "company": "Finastra",
+          "job_url": null,
+          "match_score": 80,
+          "rationale": "This role offers exposure to microservices, a valuable skill for long-term career advancement.  It's a natural progression after gaining experience in the initial Software Developer role."
+        }
+      },
+      {
+        "category": "Session",
+        "recommendation": {
+          "session_title": "Learn how to grow your startup and lead with intent with Mabel Chacko of Open Financial",
+          "session_date": "28 Apr 25",
+          "host": "Khushboo Ramnane",
+          "session_url": "https://www.herkey.com/sessions/learn-how-to-grow-your-startup-and-lead-with-intent-with-mabel-chacko-of-open-financial/1744446025045114215",
+          "match_score": 95,
+          "rationale": "This session directly supports the candidate's long-term entrepreneurial goals, providing valuable insights into startup growth and leadership."
+        }
+      },
+      {
+        "category": "Community",
+        "recommendation": {
+          "group_name": "Women Entrepreneurs",
+          "member_count": 3040,
+          "group_url": null,
+          "match_score": 85,
+          "rationale": "This community provides a supportive network and resources for the candidate's entrepreneurial aspirations, complementing the startup growth session."
+        }
+      },
+      {
+        "category": "Event",
+        "recommendation": {
+          "event_title": "Advance Your Career with a Premier Executive MBA from Great Lakes",
+          "event_date": "16th Apr, 2025 to 30th Apr, 2025",
+          "event_url": "https://events.herkey.com/events/advance-your-career-with-a-premier-executive-mba-from-great-lakes/1669",
+          "match_score": 85,
+          "rationale": "Attending this event provides valuable insights into long-term career strategies and business acumen, beneficial for entrepreneurial pursuits."
+        }
+      }
+    ],
+    "overall_strategy_explanation": "This plan prioritizes immediate upskilling and networking to secure a better job within the next few months.  It then focuses on building expertise in high-demand areas like microservices and AI product management, while simultaneously nurturing the candidate's long-term entrepreneurial aspirations through relevant sessions, community engagement, and strategic events.  The plan balances short-term career advancement with long-term vision, creating a coherent and impactful development journey."
+  }
+}
