@@ -6,15 +6,16 @@ from crewai_tools import SerperDevTool
 from crewai import LLM
 import json
 import re
+import streamlit as st
 
 # Set up API keys
-os.environ['SERPER_API_KEY'] = "6f2227a931b482b6e1b21298ecc47bb6"  # Replace with your actual key
+os.environ['SERPER_API_KEY'] = st.secrets["SERPER_API_KEY"] 
 
 # Initialize LLM
 llm = LLM(
-    model="gemini/gemini-1.5-flash",  # You can replace with your preferred model
+    model="gemini/gemini-1.5-flash",  
     temperature=0.7,
-    api_key="AIzaSyBNOQJ3D5xVYeKt7xokZlQ-zXZrKwGgspE"  # Replace with your actual key
+    api_key=st.secrets["GEMINI_API_KEY"] 
 )
 
 # Initialize tools
