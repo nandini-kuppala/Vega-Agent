@@ -3,8 +3,7 @@ import os
 from crewai import LLM
 import json
 import re
-from utils.input import DateTimeEncoder
-
+from utils.input import DateTimeEncoder # cls=DateTimeEncoder
 
 class ResumeBuilderCrew:
     def __init__(self, api_key):
@@ -165,7 +164,7 @@ class ResumeBuilderCrew:
         crew = Crew(
             agents=agents,
             tasks=tasks,
-            verbose=True,
+            verbose=2,
             process=Process.sequential
         )
         
@@ -178,11 +177,22 @@ class ResumeBuilderCrew:
     
     def _extract_resume_from_result(self, result):
         """Extract and clean up the final resume from the crew result"""
-        # The result will contain the formatted resume from the final task
-        # We may need to clean it up to remove any agent commentary
+        # Check if the result is a CrewOutput object
+        if hasattr(result, 'final_output'):
+            # Extract the final output from the CrewOutput object
+            result_text = result.final_output
+        elif hasattr(result, 'raw_output'):
+            # Alternative attribute name
+            result_text = result.raw_output
+        elif hasattr(result, '__str__'):
+            # If it has a string representation, use that
+            result_text = str(result)
+        else:
+            # Fallback
+            raise ValueError("Could not extract resume text from crew result")
         
         # Basic cleaning - this might need to be enhanced based on actual output
-        cleaned_result = result
+        cleaned_result = result_text
         
         # Remove any markdown code block markers if present
         cleaned_result = re.sub(r'```(?:markdown|md|html)?\n', '', cleaned_result)
