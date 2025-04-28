@@ -934,7 +934,7 @@ def main():
                 groq_api_key=groq_api_key
             )
             if st.session_state.get('user_id'):
-                st.session_state['assistant'].load_profile(user_id=st.session_state['user_id'])
+                st.session_state['assistant'].get_profile(user_id=st.session_state['user_id'])
         except Exception as e:
             st.error(f"Error initializing assistant: {str(e)}")
             print(traceback.format_exc())
