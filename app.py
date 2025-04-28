@@ -605,7 +605,7 @@ def display_chat_page():
                     try:
                         assistant = st.session_state.get('assistant')
                         response = assistant._get_job_recommendations()
-                        st.session_state.messages.append({"role": "user", "content": "Find me latest job postings"})
+                        st.session_state.messages.append({"role": "user", "content": "Find me latest job postings for you"})
                         st.session_state.messages.append({"role": "assistant", "content": response, "feedback": None})
                         st.rerun()
                     except Exception as e:
@@ -617,7 +617,7 @@ def display_chat_page():
                     try:
                         assistant = st.session_state.get('assistant')
                         response = assistant._get_event_recommendations()
-                        st.session_state.messages.append({"role": "user", "content": "Find upcoming events"})
+                        st.session_state.messages.append({"role": "user", "content": "Find upcoming events for you"})
                         st.session_state.messages.append({"role": "assistant", "content": response, "feedback": None})
                         st.rerun()
                     except Exception as e:
@@ -629,7 +629,7 @@ def display_chat_page():
                     try:
                         assistant = st.session_state.get('assistant')
                         response = assistant._get_community_recommendations()
-                        st.session_state.messages.append({"role": "user", "content": "Find community groups"})
+                        st.session_state.messages.append({"role": "user", "content": "Find community groups for you"})
                         st.session_state.messages.append({"role": "assistant", "content": response, "feedback": None})
                         st.rerun()
                     except Exception as e:
@@ -641,7 +641,7 @@ def display_chat_page():
                     try:
                         assistant = st.session_state.get('assistant')
                         response = assistant._get_session_recommendations()
-                        st.session_state.messages.append({"role": "user", "content": "Find community groups"})
+                        st.session_state.messages.append({"role": "user", "content": "Find Workshops and sessions for you"})
                         st.session_state.messages.append({"role": "assistant", "content": response, "feedback": None})
                         st.rerun()
                     except Exception as e:
