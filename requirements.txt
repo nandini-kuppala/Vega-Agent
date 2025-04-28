@@ -193,7 +193,7 @@ python-dateutil
 python-docx
 python-dotenv
 pytz
-ppyvis
+pyvis
 pywin32
 PyYAML
 pyzmq
