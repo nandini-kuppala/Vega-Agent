@@ -374,7 +374,7 @@ def display_roadmap_page():
         """, unsafe_allow_html=True
     )
 
-    st.markdown("<br><br>", unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
     
 
     
@@ -423,7 +423,7 @@ def display_roadmap_page():
                 else:
                     st.info("Please complete your profile to view career goals")
                     
-            st.markdown("<br><br>", unsafe_allow_html=True)
+            st.markdown("<br>", unsafe_allow_html=True)
             
             # Learning goal input section
             st.markdown("### 📚 What's your learning goal?")
