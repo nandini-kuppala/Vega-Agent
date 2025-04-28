@@ -1,8 +1,13 @@
 #app.py
 import sys
 import os
-__import__('pysqlite3')
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
+# Try to import pysqlite3 only if it's installed
+try:
+    __import__('pysqlite3')
+    sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+except (ImportError, KeyError):
+    pass
 from Agentic_ai.chatbot import CareerGuidanceChatbot
 import streamlit as st
 import requests
@@ -592,7 +597,7 @@ def display_chat_page():
         
         st.markdown('<div class="quick-actions">', unsafe_allow_html=True)
         
-        col1, col2, col3 = st.columns(3)
+        col1, col2, col3,col4 = st.columns(4)
         
         with col1:
             if st.button("🔍 Find Latest Job Postings", key="find_jobs"):
@@ -629,6 +634,19 @@ def display_chat_page():
                         st.rerun()
                     except Exception as e:
                         st.error(f"Error finding community groups: {str(e)}")
+
+        with col4:
+            if st.button("🧑‍🏫 Find Workshops and sessions", key="find_sessions"):
+                with st.spinner("Discovering sessions..."):
+                    try:
+                        assistant = st.session_state.get('assistant')
+                        response = assistant._get_session_recommendations()
+                        st.session_state.messages.append({"role": "user", "content": "Find community groups"})
+                        st.session_state.messages.append({"role": "assistant", "content": response, "feedback": None})
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"Error finding Workshops and sessions: {str(e)}")
+        
         
         st.markdown('</div>', unsafe_allow_html=True)
         
