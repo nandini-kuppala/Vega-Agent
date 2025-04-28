@@ -2,7 +2,7 @@
 from crewai import Agent, Task, Crew, Process
 
 import os
-from crewai_tools import SerperDevTool
+from crewai_tools.tools import SerperDevTool
 from crewai import LLM
 import json
 import re
