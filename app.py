@@ -142,7 +142,7 @@ def main():
                 st.session_state['show_profile'] = False
                 st.rerun()
 
-            if st.button("💬 Chat", key="chat_btn", use_container_width=True):
+            if st.button("🤖 Chat", key="chat_btn", use_container_width=True):
                 st.session_state['page'] = 'chat'
                 st.session_state['show_profile'] = False
                 st.rerun()
