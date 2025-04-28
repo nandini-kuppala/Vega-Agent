@@ -6,7 +6,6 @@ import base64
 import tempfile
 import os
 import pandas as pd
-from resume_builder_agent import ResumeBuilderCrew
 import markdown
 from bs4 import BeautifulSoup
 import re
