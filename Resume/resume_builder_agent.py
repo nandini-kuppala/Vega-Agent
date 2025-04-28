@@ -165,7 +165,7 @@ class ResumeBuilderCrew:
         crew = Crew(
             agents=agents,
             tasks=tasks,
-            verbose=2,
+            verbose=True,
             process=Process.sequential
         )
         
