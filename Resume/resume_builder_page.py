@@ -1,14 +1,16 @@
 import streamlit as st
+from Resume.resume_builder_agent import ResumeBuilderCrew
+import streamlit as st
 import json
 import base64
 import tempfile
 import os
 import pandas as pd
-from Resume.resume_builder_agent import ResumeBuilderCrew
+from resume_builder_agent import ResumeBuilderCrew
 import markdown
 from bs4 import BeautifulSoup
 import re
-from backend.database import get_profile
+import pdfkit  # For converting HTML to PDF
 
 def display_resume_builder_page():
     """Display the resume builder page in Streamlit"""
@@ -39,7 +41,7 @@ def display_resume_builder_page():
             user_profile = None
             if 'user_id' in st.session_state:
                 try:
-                    
+                    from database import get_profile
                     result = get_profile(st.session_state['user_id'])
                     if result["status"] == "success":
                         user_profile = result["profile"]
@@ -147,7 +149,55 @@ def display_resume_builder_page():
                     
                     # Convert markdown to HTML for better display
                     html = markdown.markdown(resume_content)
-                    st.session_state.resume_html = html
+                    
+                    # Add CSS styling to the HTML
+                    styled_html = f"""
+                    <html>
+                    <head>
+                        <style>
+                            body {{
+                                font-family: 'Arial', sans-serif;
+                                line-height: 1.6;
+                                color: #333;
+                                max-width: 800px;
+                                margin: 0 auto;
+                                padding: 20px;
+                            }}
+                            h1 {{
+                                font-size: 24px;
+                                margin-bottom: 5px;
+                                color: #2c3e50;
+                            }}
+                            h2 {{
+                                font-size: 20px;
+                                color: #3498db;
+                                border-bottom: 1px solid #ddd;
+                                padding-bottom: 5px;
+                                margin-top: 20px;
+                            }}
+                            h3 {{
+                                font-size: 18px;
+                                margin-bottom: 5px;
+                            }}
+                            .contact-info {{
+                                margin-bottom: 20px;
+                            }}
+                            ul {{
+                                margin-top: 5px;
+                                margin-bottom: 15px;
+                            }}
+                            li {{
+                                margin-bottom: 5px;
+                            }}
+                        </style>
+                    </head>
+                    <body>
+                        {html}
+                    </body>
+                    </html>
+                    """
+                    
+                    st.session_state.resume_html = styled_html
                     
                     st.success("Resume generated successfully!")
                     
@@ -162,6 +212,13 @@ def display_resume_builder_page():
             # Create a container with styling for the resume preview
             preview_container = st.container()
             with preview_container:
+                # Strip HTML head for display (we only want the body content)
+                display_html = st.session_state.resume_html
+                if "<body>" in display_html and "</body>" in display_html:
+                    body_content = display_html.split("<body>")[1].split("</body>")[0]
+                else:
+                    body_content = display_html
+                    
                 st.markdown("""
                 <style>
                 .resume-preview {
@@ -186,14 +243,14 @@ def display_resume_builder_page():
                 }
                 </style>
                 <div class="resume-preview">
-                """ + st.session_state.resume_html + """
+                """ + body_content + """
                 </div>
                 """, unsafe_allow_html=True)
             
             # Download options
             st.markdown("#### Download Resume")
             
-            # Function to convert resume to PDF
+            # Function to convert and create download links
             def create_download_link(content, filename, format_type):
                 if format_type == "markdown":
                     b64 = base64.b64encode(content.encode()).decode()
@@ -204,10 +261,62 @@ def display_resume_builder_page():
                 elif format_type == "html":
                     b64 = base64.b64encode(content.encode()).decode()
                     href = f'<a href="data:text/html;base64,{b64}" download="{filename}.html">Download as HTML</a>'
+                elif format_type == "pdf":
+                    # Create PDF from HTML
+                    try:
+                        with tempfile.NamedTemporaryFile(delete=False, suffix='.html') as temp_html:
+                            temp_html.write(content.encode('utf-8'))
+                            temp_html_path = temp_html.name
+                        
+                        with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as temp_pdf:
+                            temp_pdf_path = temp_pdf.name
+                        
+                        # Convert HTML to PDF
+                        pdfkit_config = pdfkit.configuration(wkhtmltopdf='/usr/bin/wkhtmltopdf')
+                        pdfkit.from_file(temp_html_path, temp_pdf_path, configuration=pdfkit_config)
+                        
+                        # Read the PDF and encode it
+                        with open(temp_pdf_path, 'rb') as pdf_file:
+                            pdf_data = pdf_file.read()
+                        
+                        # Clean up temp files
+                        os.unlink(temp_html_path)
+                        os.unlink(temp_pdf_path)
+                        
+                        b64 = base64.b64encode(pdf_data).decode()
+                        href = f'<a href="data:application/pdf;base64,{b64}" download="{filename}.pdf">Download as PDF</a>'
+                    except Exception as e:
+                        # Fallback method using weasyprint if pdfkit fails
+                        try:
+                            from weasyprint import HTML
+                            with tempfile.NamedTemporaryFile(delete=False, suffix='.html') as temp_html:
+                                temp_html.write(content.encode('utf-8'))
+                                temp_html_path = temp_html.name
+                            
+                            with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as temp_pdf:
+                                temp_pdf_path = temp_pdf.name
+                            
+                            # Convert HTML to PDF using WeasyPrint
+                            HTML(filename=temp_html_path).write_pdf(temp_pdf_path)
+                            
+                            # Read the PDF and encode it
+                            with open(temp_pdf_path, 'rb') as pdf_file:
+                                pdf_data = pdf_file.read()
+                            
+                            # Clean up temp files
+                            os.unlink(temp_html_path)
+                            os.unlink(temp_pdf_path)
+                            
+                            b64 = base64.b64encode(pdf_data).decode()
+                            href = f'<a href="data:application/pdf;base64,{b64}" download="{filename}.pdf">Download as PDF</a>'
+                        except Exception as e2:
+                            st.error(f"Failed to create PDF: {str(e2)}")
+                            href = '<span style="color:red;">PDF creation failed, please try another format</span>'
+                
                 return href
             
             # Download buttons
-            download_format = st.selectbox("Select format", ["Markdown", "Text", "HTML"])
+            download_format = st.selectbox("Select format", ["PDF", "HTML", "Markdown", "Text"])
             
             if download_format == "Markdown":
                 download_link = create_download_link(st.session_state.resume_content, "resume", "markdown")
@@ -215,8 +324,10 @@ def display_resume_builder_page():
                 # Convert markdown to plain text
                 plain_text = re.sub(r'[#*_]', '', st.session_state.resume_content)
                 download_link = create_download_link(plain_text, "resume", "text")
-            else:  # HTML
+            elif download_format == "HTML":
                 download_link = create_download_link(st.session_state.resume_html, "resume", "html")
+            else:  # PDF
+                download_link = create_download_link(st.session_state.resume_html, "resume", "pdf")
                 
             st.markdown(download_link, unsafe_allow_html=True)
             

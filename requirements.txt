@@ -155,6 +155,7 @@ pandas
 parso
 pdfminer.six
 pdfplumber
+pdfkit
 pillow
 platformdirs
 playwright
@@ -269,6 +270,7 @@ webdriver-manager
 websocket-client
 websockets
 wrapt
+weasyprint
 wsproto
 yarl
 zipp
