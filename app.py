@@ -24,6 +24,7 @@ from Roadmap.roadmap import generate_learning_roadmap
 from skill_assessment import skill
 from backend.database import get_profile
 from Resume.resume_builder_page import display_resume_builder_page
+from Knowledge.knowledge_dose_page import display_knowledge_dose_page
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -1181,7 +1182,13 @@ def main():
                 unsafe_allow_html=True
             )
 
-    
+            if st.button("🧠 Daily Knowledge Dose", key="knowledge_btn", use_container_width=True):
+                st.session_state['page'] = 'knowledge_dose'
+                st.session_state['show_profile'] = False
+                st.rerun()
+
+            st.markdown("---")
+
             if st.button("🚪 Logout", key="logout_btn", use_container_width=True):
                 # Clear session storage to completely log out
                 for key in list(st.session_state.keys()):
@@ -1193,6 +1200,7 @@ def main():
                 st.rerun()
 
             st.markdown("---")
+
             st.info("""
             **Why wait for quality?** ⏳💡
             
@@ -1223,6 +1231,9 @@ def main():
         display_chat_page()   
     elif page == 'resume_builder':
         display_resume_builder_page() 
+    elif page == 'knowledge_dose':
+        display_knowledge_dose_page()
+    
     else:
         st.error("Page not found!")
         st.session_state['page'] = 'login'
