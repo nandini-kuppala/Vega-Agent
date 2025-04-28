@@ -184,7 +184,10 @@ def display_content_cards(items):
                 
                 # Image if available
                 if 'image' in item and item['image']:
-                    st.image(item['image'], use_column_width=True)
+                    try:
+                        st.image(item['image'], use_container_width=True)
+                    except Exception as e:
+                        st.warning(f"Could not load image: {str(e)}")
                 
                 # Description
                 if 'description' in item:
@@ -209,7 +212,6 @@ def display_content_cards(items):
                     """, unsafe_allow_html=True)
                 
                 st.markdown("</div>", unsafe_allow_html=True)
-
 def display_resource_cards(items):
     """Display resource items as cards"""
     # Use a single column layout for resource items

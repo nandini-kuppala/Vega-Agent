@@ -1,0 +1,184 @@
+
+import streamlit as st
+from backend.database import get_profile
+from Roadmap.roadmap import generate_learning_roadmap
+
+def display_roadmap_page():
+    """Display the learning roadmap page"""
+    
+    # Check if user is authenticated
+    if not st.session_state.get('authenticated', False):
+        st.warning("Please sign in first")
+        st.session_state['page'] = 'login'
+        st.rerun()
+        return
+    st.markdown(
+        """
+        <h1 style="color: #935073; text-align: center; font-size: 36px; font-weight: bold;">
+            Your Personalized Learning Roadmap Awaits! <span style="font-size: 40px;">🚀</span>
+        </h1>
+        <p style="text-align: center; font-size: 18px; color: #555;">
+            Ready to take your career to the next level? With our tailor-made roadmap, 
+            you’ll get a clear path forward, personalized just for you based on your skills, goals, and experience. 
+            Let’s start crafting the future you’ve always wanted! 
+        </p>
+        
+        """, unsafe_allow_html=True
+    )
+
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+
+    
+    # Try to get user profile information
+    try:
+        # Use direct database function to get profile
+        result = get_profile(st.session_state['user_id'])
+        
+        if result["status"] == "success":
+            profile_data = result["profile"]
+            
+            # Profile Summary Section
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                st.markdown(f"### 📋 Your Profile Summary")
+                st.write(f"🎓 **Education**: {profile_data.get('education', 'Not specified')}")
+                st.write(f"💼 **Experience**: {profile_data.get('experience_years', 0)} years")
+                
+                # Display skills as tags
+                if profile_data.get('skills'):
+                    st.write("🔧 **Current Skills**:")
+                    skill_html = "<div style='display: flex; flex-wrap: wrap; gap: 8px;'>"
+                    for skill in profile_data.get('skills', []):
+                        skill_html += f"<span style='background-color: #f0f0f0; padding: 5px 10px; border-radius: 20px; font-size: 14px;'>{skill}</span>"
+                    skill_html += "</div>"
+                    st.markdown(skill_html, unsafe_allow_html=True)
+            
+            with col2:
+                st.markdown(f"### 🎯 Career Goals")
+                if 'job_preferences' in profile_data and profile_data['job_preferences']:
+                    st.write(f"🎯 **Short-term Goal**: {profile_data['job_preferences'].get('short_term_goal', 'Not specified')}")
+                    st.write(f"🚀 **Long-term Goal**: {profile_data['job_preferences'].get('long_term_goal', 'Not specified')}")
+                    
+                    # Display preferred roles
+                    if 'roles' in profile_data['job_preferences']:
+                        st.write("👔 **Preferred Roles**:")
+                        roles_html = "<div style='display: flex; flex-wrap: wrap; gap: 8px;'>"
+                        for role in profile_data['job_preferences']['roles']:
+                            roles_html += f"<span style='background-color: #e6f3ff; padding: 5px 10px; border-radius: 20px; font-size: 14px;'>{role}</span>"
+                        roles_html += "</div>"
+                        st.markdown(roles_html, unsafe_allow_html=True)
+                else:
+                    st.info("Please complete your profile to view career goals")
+                    
+            st.markdown("<br><br>", unsafe_allow_html=True)
+            
+            # Learning goal input section
+            st.markdown("### 📚 What's your learning goal?")
+            
+            # Default learning goal based on profile
+            default_goal = profile_data.get('job_preferences', {}).get('short_term_goal', "")
+            
+            # Add some predefined learning goals to choose from
+            goal_options = [
+                "I want to become a Machine Learning Engineer",
+                "I want to specialize in Natural Language Processing",
+                "I want to become a Full Stack Developer",
+                "I want to learn Data Science and Analytics",
+                "I want to become a DevOps Engineer",
+                "Custom Goal"
+            ]
+            
+            # Goal selection dropdown
+            selected_goal = st.selectbox("Select a learning goal", options=goal_options)
+            
+            if selected_goal == "Custom Goal":
+                custom_goal = st.text_area("Enter your custom learning goal", 
+                                          value=default_goal, 
+                                          height=100, 
+                                          placeholder="E.g., I want to become a proficient AI engineer...")
+                learning_goal = custom_goal
+            else:
+                learning_goal = selected_goal
+            
+            # Format the user profile data for the roadmap generator
+            user_profile_text = f"""
+            **Name**: {st.session_state.get('username', 'User')}
+            **Education**: {profile_data.get('education', 'Not specified')}
+            
+            **Skills**:
+            {', '.join(profile_data.get('skills', ['None specified']))}
+            
+            **Experience**: {profile_data.get('experience_years', 0)} years
+            """
+            
+            if profile_data.get('last_job'):
+                user_profile_text += f"""
+                **Last Job**: {profile_data['last_job'].get('title', 'Not specified')} at {profile_data['last_job'].get('company', 'Not specified')}
+                """
+            
+            # Generate roadmap button
+            if st.button("🔮 Generate Learning Roadmap", type="primary"):
+                if learning_goal:
+                    with st.spinner("Generating your personalized learning roadmap... This may take a few minutes."):
+                        try:
+                            # Call the CrewAI function to generate the roadmap
+                            roadmap = generate_learning_roadmap(user_profile_text, learning_goal)
+                            
+                            # Store the roadmap in session state
+                            st.session_state['current_roadmap'] = roadmap
+                            
+                            # Display the roadmap
+                            st.markdown("## 🗺️ Your Personalized Learning Roadmap")
+                            st.markdown(roadmap)
+                            
+                            # Add a download button for the markdown file
+                            st.download_button(
+                                label="📥 Download Roadmap",
+                                data=roadmap,
+                                file_name="my_learning_roadmap.md",
+                                mime="text/markdown"
+                            )
+                            
+                        except Exception as e:
+                            st.error(f"Error generating roadmap: {str(e)}")
+                else:
+                    st.warning("Please enter a learning goal first")
+            
+            # Display previously generated roadmap if it exists
+            if 'current_roadmap' in st.session_state and not st.button:
+                st.markdown("## 🗺️ Your Personalized Learning Roadmap")
+                st.markdown(st.session_state['current_roadmap'])
+                
+                # Add a download button for the markdown file
+                st.download_button(
+                    label="📥 Download Roadmap", 
+                    data=st.session_state['current_roadmap'],
+                    file_name="my_learning_roadmap.md",
+                    mime="text/markdown"
+                )
+        
+        else:
+            # Profile doesn't exist yet
+            st.info("It looks like you haven't completed your profile questionnaire yet.")
+            
+            if st.button("Complete Your Profile Now"):
+                st.session_state['page'] = 'questionnaire'
+                st.rerun()
+    
+    except Exception as e:
+        st.error(f"Error retrieving profile: {str(e)}")
+        
+        # Fallback content
+        st.markdown("""
+        ## Complete Your Profile
+        
+        To generate a personalized learning roadmap, we need to know more about you.
+        Please complete your profile questionnaire first.
+        """)
+        
+        if st.button("Complete Your Profile"):
+            st.session_state['page'] = 'questionnaire'
+            st.rerun()
+

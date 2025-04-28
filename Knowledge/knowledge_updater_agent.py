@@ -77,8 +77,12 @@ class KnowledgeUpdaterCrew:
             'Content-Type': 'application/json'
         }
         
-        response = requests.request("POST", url, headers=headers, data=payload)
-        return response.json()
+        try:
+            response = requests.request("POST", url, headers=headers, data=payload)
+            return response.json()
+        except Exception as e:
+            print(f"Search error: {str(e)}")
+            return {"error": str(e)}
     
     def fetch_webpage_content(self, url):
         """Fetch and parse content from a webpage"""
@@ -110,6 +114,7 @@ class KnowledgeUpdaterCrew:
             return f"Error fetching content: {str(e)}"
     
     def create_tasks(self, agents, user_profile):
+
         """Create tasks for the knowledge updating process"""
         
         # Unpack agents
@@ -147,11 +152,10 @@ class KnowledgeUpdaterCrew:
             agent=search_expert,
             expected_output="""A structured list of technology updates with titles, descriptions, 
             sources, dates, and image URLs when available.""",
-            context={
-                "user_interests": main_interests,
-                "serper_api_key": self.serper_api_key,
-                "search_function": self.perform_search
-            }
+            context=[
+                {"key": "user_interests", "value": main_interests},
+                {"key": "serper_api_key", "value": self.serper_api_key}
+            ]
         )
         
         # Task 2: Search for Industry News
@@ -177,11 +181,10 @@ class KnowledgeUpdaterCrew:
             agent=search_expert,
             expected_output="""A structured list of industry news with titles, descriptions, 
             sources, dates, and image URLs when available.""",
-            context={
-                "user_interests": main_interests,
-                "serper_api_key": self.serper_api_key,
-                "search_function": self.perform_search
-            }
+            context=[
+                {"key": "user_interests", "value": main_interests},
+                {"key": "serper_api_key", "value": self.serper_api_key}
+            ]
         )
         
         # Task 3: Search for Emerging Trends
@@ -207,11 +210,10 @@ class KnowledgeUpdaterCrew:
             agent=search_expert,
             expected_output="""A structured list of emerging trends with titles, descriptions, 
             sources, dates, and image URLs when available.""",
-            context={
-                "user_interests": main_interests,
-                "serper_api_key": self.serper_api_key,
-                "search_function": self.perform_search
-            }
+            context=[
+                {"key": "user_interests", "value": main_interests},
+                {"key": "serper_api_key", "value": self.serper_api_key}
+            ]
         )
         
         # Task 4: Find Recommended Reading Materials
@@ -238,11 +240,10 @@ class KnowledgeUpdaterCrew:
             agent=search_expert,
             expected_output="""A structured list of learning resources with titles, descriptions, 
             types, sources, and authors when available.""",
-            context={
-                "user_interests": main_interests,
-                "serper_api_key": self.serper_api_key,
-                "search_function": self.perform_search
-            }
+            context=[
+                {"key": "user_interests", "value": main_interests},
+                {"key": "serper_api_key", "value": self.serper_api_key}
+            ]
         )
         
         # Task 5: Analyze and Personalize Content
@@ -270,18 +271,18 @@ class KnowledgeUpdaterCrew:
             agent=personalization_agent,
             expected_output="""A JSON structure with personalized content organized into four categories:
             New Technologies, Industry News, Emerging Trends, and Recommended Reads.""",
-            context={
-                "tech_updates": "{{search_tech.result}}",
-                "industry_news": "{{search_news.result}}",
-                "emerging_trends": "{{search_trends.result}}",
-                "learning_resources": "{{search_resources.result}}",
-                "user_profile": user_profile
-            },
+            context=[
+                {"key": "tech_updates", "value": "{{search_tech.result}}"},
+                {"key": "industry_news", "value": "{{search_news.result}}"},
+                {"key": "emerging_trends", "value": "{{search_trends.result}}"},
+                {"key": "learning_resources", "value": "{{search_resources.result}}"},
+                {"key": "user_profile", "value": user_profile}
+            ],
             dependencies=[search_tech, search_news, search_trends, search_resources]
         )
         
         return [search_tech, search_news, search_trends, search_resources, personalize_content]
-    
+        
     def get_knowledge_updates(self, user_profile):
         """Main function to get personalized knowledge updates"""
         
@@ -360,7 +361,8 @@ class KnowledgeUpdaterCrew:
                 "description": f"This new development in {interest} promises to revolutionize how developers work with this technology.",
                 "url": f"https://example.com/tech/{interest.lower().replace(' ', '-')}",
                 "date": date,
-                "image": f"https://via.placeholder.com/300x200?text={interest.replace(' ', '+')}",
+                "image": f"/api/placeholder/400/300?text={interest.replace(' ', '+')}",  # Using placeholder API
+                "source": "TechNews",
                 "personalization": f"As someone interested in {interest}, this will enhance your development workflow."
             })
         
@@ -381,7 +383,7 @@ class KnowledgeUpdaterCrew:
                 "description": f"Recent developments show how {interest} is becoming increasingly important in the tech industry.",
                 "url": f"https://example.com/news/{interest.lower().replace(' ', '-')}",
                 "date": date,
-                "image": f"https://via.placeholder.com/300x200?text={interest.replace(' ', '+')}+News",
+                "image": f"/api/placeholder/400/300?text={interest.replace(' ', '+')} +News",
                 "personalization": f"This news is directly relevant to your interest in {interest} and could impact your career path."
             })
         
@@ -402,7 +404,7 @@ class KnowledgeUpdaterCrew:
                 "description": f"Experts predict that {interest} will continue to grow in importance and adoption over the next year.",
                 "url": f"https://example.com/trends/{interest.lower().replace(' ', '-')}",
                 "date": date,
-                "image": f"https://via.placeholder.com/300x200?text={interest.replace(' ', '+')}+Trends",
+                "image": f"/api/placeholder/400/300?text={interest.replace(' ', '+')}+Trends",
                 "personalization": f"Staying ahead of these {interest} trends will give you a competitive advantage in your field."
             })
         
