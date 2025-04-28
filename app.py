@@ -360,23 +360,22 @@ def display_roadmap_page():
         st.session_state['page'] = 'login'
         st.rerun()
         return
-    
     st.markdown(
         """
-        <h1 style="color: #4CAF50; text-align: center; font-family: 'Arial', sans-serif; font-size: 36px; font-weight: bold;">
+        <h1 style="color: #935073; text-align: center; font-size: 36px; font-weight: bold;">
             Your Personalized Learning Roadmap Awaits! <span style="font-size: 40px;">🚀</span>
         </h1>
-        <p style="text-align: center; font-family: 'Arial', sans-serif; font-size: 18px; color: #555;">
-            Ready to take your career to the next level? With our tailor-made roadmap, you’ll get a clear path forward, 
-            personalized just for you based on your skills, goals, and experience. Let’s start crafting the future you’ve always wanted! 
+        <p style="text-align: center; font-size: 18px; color: #555;">
+            Ready to take your career to the next level? With our tailor-made roadmap, 
+            you’ll get a clear path forward, personalized just for you based on your skills, goals, and experience. 
+            Let’s start crafting the future you’ve always wanted! 
         </p>
-        <div style="text-align: center;">
-            <img src="https://via.placeholder.com/400x200.png?text=Your+Learning+Journey+Starts+Here" 
-                alt="Learning Journey" 
-                style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-        </div>
+        
         """, unsafe_allow_html=True
     )
+
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    
 
     
     # Try to get user profile information
@@ -388,7 +387,7 @@ def display_roadmap_page():
             profile_data = result["profile"]
             
             # Display user information
-            st.markdown("Hello! 👋 Let’s build your personalized learning roadmap! 🚀")
+            st.markdown("Let’s build your personalized learning roadmap! 🚀")
             
             # Profile Summary Section
             col1, col2 = st.columns(2)
