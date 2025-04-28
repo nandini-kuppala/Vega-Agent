@@ -31,7 +31,7 @@ coloredlogs
 comm
 contourpy
 crewai
-crewai-tools
+crewai-tools>=0.3.0
 cryptography
 cycler
 dataclasses-json
