@@ -333,7 +333,7 @@ class KnowledgeUpdaterCrew:
         roles = job_preferences.get('roles', [])
         
         interests = skills + roles
-        main_interests = interests[:3] if len(interests) > 3 else interests
+        main_interests = interests
         today = datetime.now()
 
         mock_data = {
