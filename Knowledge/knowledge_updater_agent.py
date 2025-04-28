@@ -333,7 +333,6 @@ class KnowledgeUpdaterCrew:
         roles = job_preferences.get('roles', [])
         
         interests = skills + roles
-        main_interests = interests
         today = datetime.now()
 
         mock_data = {
@@ -514,54 +513,10 @@ class KnowledgeUpdaterCrew:
             }
         ]
 
-        # Fill the mock data
-        for i, interest in enumerate(main_interests):
-            date = (today - timedelta(days=random.randint(0, 5))).strftime("%Y-%m-%d")
-            
-            # New Technologies
-            tech_ar = tech_latest[i % len(tech_news)]
-            mock_data["New Technologies"].append({
-                "title": tech_ar["title"],
-                "description": tech_ar["description"],
-                "url": tech_ar["url"],
-                "date": date,
-                "image": tech_ar["image"],
-                "source": tech_ar["source"],
-                "personalization": f"As a {interest} enthusiast, this latest update is crucial for staying ahead."
-            })
-            
-            # Industry News
-            news_article = tech_news[(i+1) % len(tech_news)]
-            mock_data["Industry News"].append({
-                "title": f"Latest updates in {interest}: {news_article['title']}",
-                "description": news_article["description"],
-                "url": news_article["url"],
-                "date": date,
-                "image": news_article["image"],
-                "personalization": f"Keep updated on {interest} developments happening around the world."
-            })
+        mock_data["New Technologies"] = tech_latest
+        mock_data["Industry News"] = tech_news
+        mock_data["Emerging Trends"] = trends
+        mock_data["Recommended Reads"] = reads
 
-            # Emerging Trends
-            trend_article = trends[i % len(trends)]
-            mock_data["Emerging Trends"].append({
-                "title": trend_article["title"],
-                "description": trend_article["description"],
-                "url": trend_article["url"],
-                "date": date,
-                "image": trend_article["image"],
-                "personalization": f"Understanding {interest} trends gives you a future-ready advantage."
-            })
-
-            # Recommended Reads
-            read_article = reads[i % len(reads)]
-            mock_data["Recommended Reads"].append({
-                "title": read_article["title"],
-                "description": read_article["description"],
-                "url": read_article["url"],
-                "type": "Article",
-                "date": date,
-                "author": read_article["author"],
-                "personalization": f"Deepen your expertise in {interest} by reading this."
-            })
         
         return mock_data
