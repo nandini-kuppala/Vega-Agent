@@ -20,10 +20,10 @@ import logging
 import json
 from datetime import datetime
 from streamlit_extras.stylable_container import stylable_container
-from Agentic_ai.roadmap import generate_learning_roadmap
+from Roadmap.roadmap import generate_learning_roadmap
 from skill_assessment import skill
 from backend.database import get_profile
-
+from Resume.resume_builder_page import display_resume_builder_page
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -1149,12 +1149,16 @@ def main():
                 st.session_state['show_profile'] = False
                 st.rerun()
 
-            if st.button("🚀 Your Roadmap", key="roadmap", use_container_width=True):
+            if st.button("🚀 Your Roadmap", key="roadmap_btn", use_container_width=True):
                 st.session_state['page'] = 'roadmap'
                 st.session_state['show_profile'] = False
                 st.rerun()
 
-            if st.button("📄 Resume Builder", key="resume", use_container_width=True):
+            # Add a divider
+            st.markdown("---")
+
+            if st.button("📄 Resume Builder", key="resume_btn", use_container_width=True):
+                st.session_state['page'] = 'resume_builder'
                 st.rerun()
 
                        
@@ -1219,7 +1223,9 @@ def main():
     elif page == 'home':
         display_home_page()
     elif page == 'chat':
-        display_chat_page()    
+        display_chat_page()   
+    elif page == 'resume_builder':
+        display_resume_builder_page() 
     else:
         st.error("Page not found!")
         st.session_state['page'] = 'login'
