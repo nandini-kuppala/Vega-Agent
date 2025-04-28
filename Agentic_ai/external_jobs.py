@@ -7,7 +7,6 @@ import os
 from dotenv import load_dotenv
 import groq
 from datetime import datetime
-
 # Load environment variables from .env file if it exists
 load_dotenv()
 

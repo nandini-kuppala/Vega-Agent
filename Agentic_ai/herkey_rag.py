@@ -5,7 +5,7 @@ from typing import Dict, List, Any
 from datetime import datetime
 from dotenv import load_dotenv
 from crewai import Agent, Task, Crew, Process
-
+from utils.input import DateTimeEncoder
 import google.generativeai as genai
 
 from langchain_community.chat_models import ChatLiteLLM
@@ -169,7 +169,7 @@ def create_profile_analysis_task(profile_analyzer_agent, candidate_profile):
         Analyze the following candidate profile to extract key insights:
         
         ```
-        {json.dumps(candidate_profile, indent=2)}
+        {json.dumps(candidate_profile, indent=2,cls=DateTimeEncoder)}
         ```
         
         Provide a comprehensive analysis including:
@@ -193,12 +193,12 @@ def create_job_recommendation_task(job_recommender_agent, candidate_analysis, jo
         
         Candidate Analysis:
         ```
-        {json.dumps(candidate_analysis, indent=2)}
+        {json.dumps(candidate_analysis, indent=2, cls=DateTimeEncoder)}
         ```
         
         Available Jobs:
         ```
-        {json.dumps(jobs_data, indent=2)}
+        {json.dumps(jobs_data, indent=2, cls=DateTimeEncoder)}
         ```
         
         For each recommendation, explain why it's a good match for the candidate's skills, experience, and career goals.
@@ -224,12 +224,12 @@ def create_event_recommendation_task(event_recommender_agent, candidate_analysis
         
         Candidate Analysis:
         ```
-        {json.dumps(candidate_analysis, indent=2)}
+        {json.dumps(candidate_analysis, indent=2, cls=DateTimeEncoder)}
         ```
         
         Available Events:
         ```
-        {json.dumps(events_data, indent=2)}
+        {json.dumps(events_data, indent=2, cls=DateTimeEncoder)}
         ```
         
         For each recommendation, explain why this event would be particularly valuable for the candidate's career development.
@@ -255,12 +255,12 @@ def create_session_recommendation_task(session_recommender_agent, candidate_anal
         
         Candidate Analysis:
         ```
-        {json.dumps(candidate_analysis, indent=2)}
+        {json.dumps(candidate_analysis, indent=2, cls=DateTimeEncoder)}
         ```
         
         Available Sessions:
         ```
-        {json.dumps(sessions_data, indent=2)}
+        {json.dumps(sessions_data, indent=2, cls=DateTimeEncoder)}
         ```
         
         For each recommendation, explain why this learning session would be particularly valuable for the candidate's skill development.
@@ -287,12 +287,12 @@ def create_community_recommendation_task(community_recommender_agent, candidate_
         
         Candidate Analysis:
         ```
-        {json.dumps(candidate_analysis, indent=2)}
+        {json.dumps(candidate_analysis, indent=2, cls=DateTimeEncoder)}
         ```
         
         Available Groups:
         ```
-        {json.dumps(groups_data, indent=2)}
+        {json.dumps(groups_data, indent=2, cls=DateTimeEncoder)}
         ```
         
         For each recommendation, explain why this community group would be particularly valuable for the candidate's professional growth.
