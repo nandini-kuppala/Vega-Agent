@@ -194,7 +194,6 @@ python-docx
 python-dotenv
 pytz
 pyvis
-pywin32
 PyYAML
 pyzmq
 referencing
