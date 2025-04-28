@@ -3,15 +3,14 @@ import os
 import json
 from typing import Dict, List, Any
 from datetime import datetime
-from dotenv import load_dotenv
 from crewai import Agent, Task, Crew, Process
 from utils.input import DateTimeEncoder
 import google.generativeai as genai
+import streamlit as st
 
 from langchain_community.chat_models import ChatLiteLLM
-# Load environment variables
-load_dotenv()
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
 
 # Data paths
 HERKEY_SESSIONS_PATH = "Agentic_ai/Herkey_data/herkey_sessions.json"

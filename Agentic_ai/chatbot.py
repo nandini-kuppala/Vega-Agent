@@ -15,6 +15,7 @@ from Agentic_ai.herkey_rag import get_community_recommendations
 from Agentic_ai.external_jobs import JobHuntingAgent
 from Agentic_ai.carrer_guide import get_career_guidance
 
+import streamlit as st
 
 from backend.database import get_profile
 
@@ -37,8 +38,8 @@ class CareerGuidanceChatbot:
         self.user_type = None  # "starter", "restarter", or "raiser"
         
         # Load API keys from environment variables if not provided
-        self.firecrawl_api_key = firecrawl_api_key or os.getenv("FIRECRAWL_API_KEY")
-        self.groq_api_key = groq_api_key or os.getenv("GROQ_API_KEY")
+        self.firecrawl_api_key = firecrawl_api_key or st.secrets["FIRECRAWL_API_KEY"]
+        self.groq_api_key = groq_api_key or st.secrets["GROQ_API_KEY"]
         
         # Initialize job hunting agent if API keys are available
         if self.firecrawl_api_key and self.groq_api_key:
@@ -610,8 +611,8 @@ def main():
     Main function to test the chatbot functionality.
     """
     # Get API keys from environment variables
-    firecrawl_api_key = os.getenv("FIRECRAWL_API_KEY")
-    groq_api_key = os.getenv("GROQ_API_KEY")
+    firecrawl_api_key = st.secrets["FIRECRAWL_API_KEY"]
+    groq_api_key = st.secrets["GROQ_API_KEY"]
     
     # Initialize the chatbot
     chatbot = CareerGuidanceChatbot(

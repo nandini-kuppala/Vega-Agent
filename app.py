@@ -910,8 +910,8 @@ def main():
     # Assistant Initialization
     if st.session_state.get('authenticated') and 'assistant' not in st.session_state:
         try:
-            firecrawl_api_key = os.getenv("FIRECRAWL_API_KEY")
-            groq_api_key = os.getenv("GROQ_API_KEY")
+            firecrawl_api_key = st.secrets["FIRECRAWL_API_KEY"]
+            groq_api_key = st.secrets["GROQ_API_KEY"]
             st.session_state['assistant'] = CareerGuidanceChatbot(
                 firecrawl_api_key=firecrawl_api_key,
                 groq_api_key=groq_api_key

@@ -4,11 +4,9 @@ from pydantic import BaseModel, Field
 from firecrawl import FirecrawlApp
 import json
 import os
-from dotenv import load_dotenv
 import groq
 from datetime import datetime
-# Load environment variables from .env file if it exists
-load_dotenv()
+import streamlit as st
 
 class NestedModel1(BaseModel):
     """Schema for job posting data"""
@@ -303,8 +301,8 @@ class JobHuntingAgent:
 
 def main():
     # Load API keys from environment variables
-    firecrawl_api_key = os.getenv("FIRECRAWL_API_KEY")
-    groq_api_key = os.getenv("GROQ_API_KEY")
+    firecrawl_api_key = st.secrets["FIRECRAWL_API_KEY"]
+    groq_api_key = st.secrets["GROQ_API_KEY"]
     
     if not firecrawl_api_key or not groq_api_key:
         print("Error: Missing API keys. Please set FIRECRAWL_API_KEY and GROQ_API_KEY environment variables.")

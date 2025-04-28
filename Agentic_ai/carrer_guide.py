@@ -1,6 +1,6 @@
 import os
 import json
-from dotenv import load_dotenv
+
 from crewai import Agent, Task, Crew, Process
 from utils.input import DateTimeEncoder
 from Agentic_ai.herkey_rag import create_profile_analyzer_agent
@@ -10,10 +10,9 @@ from Agentic_ai.herkey_rag import parse_json_result
 import google.generativeai as genai
 
 from langchain_community.chat_models import ChatLiteLLM
+import streamlit as st
 
-# Load environment variables
-load_dotenv()
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
 
 def general_purpose_agent():
     llm = ChatLiteLLM(
