@@ -5,6 +5,7 @@ import json
 import re
 from utils.input import DateTimeEncoder
 
+
 class ResumeBuilderCrew:
     def __init__(self, api_key):
         """Initialize the Resume Builder Crew with API key"""
@@ -85,10 +86,7 @@ class ResumeBuilderCrew:
             - Key responsibilities
             - Important keywords
             - Industry-specific terminology
-            """,
-            context={
-                "job_description": job_description
-            }
+            """
         )
         
         # Task 2: Tailor Resume Content
@@ -122,12 +120,6 @@ class ResumeBuilderCrew:
             - Projects section with descriptions
             - Achievements section
             """,
-            context={
-                "job_analysis": "{{analyze_job.result}}",
-                "candidate_profile": user_profile,
-                "projects": projects,
-                "achievements": achievements
-            },
             dependencies=[analyze_job]
         )
         
@@ -157,9 +149,6 @@ class ResumeBuilderCrew:
             
             The resume should be provided in a clean, structured format that can be easily rendered in HTML or markdown.
             """,
-            context={
-                "resume_content": "{{tailor_resume.result}}"
-            },
             dependencies=[tailor_resume]
         )
         
