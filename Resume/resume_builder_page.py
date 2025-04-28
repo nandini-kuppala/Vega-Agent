@@ -10,6 +10,7 @@ import markdown
 from bs4 import BeautifulSoup
 import re
 import pdfkit  # For converting HTML to PDF
+from backend.database import get_profile
 
 def display_resume_builder_page():
     """Display the resume builder page in Streamlit"""
@@ -40,7 +41,7 @@ def display_resume_builder_page():
             user_profile = None
             if 'user_id' in st.session_state:
                 try:
-                    from database import get_profile
+                    
                     result = get_profile(st.session_state['user_id'])
                     if result["status"] == "success":
                         user_profile = result["profile"]
