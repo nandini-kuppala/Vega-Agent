@@ -24,7 +24,7 @@ from Roadmap.roadmap import generate_learning_roadmap
 from skill_assessment import skill
 from backend.database import get_profile
 from Resume.resume_builder_page import display_resume_builder_page
-from Knowledge.knowledge_dose_page import display_knowledge_dose_page
+from Knowledge.knowledge_dose_page import display_daily_knowledge_page
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -1236,7 +1236,7 @@ def main():
     elif page == 'resume_builder':
         display_resume_builder_page() 
     elif page == 'knowledge_dose':
-        display_knowledge_dose_page()
+        display_daily_knowledge_page()
     
     else:
         st.error("Page not found!")

@@ -2,194 +2,292 @@ from crewai import Agent, Task, Crew, Process
 import os
 from crewai import LLM
 import json
+import requests
+from bs4 import BeautifulSoup
 import re
-from datetime import datetime
-from typing import Dict, List, Any
+from datetime import datetime, timedelta
+import random
+from utils.input import DateTimeEncoder
 
 class KnowledgeUpdaterCrew:
-    def __init__(self, api_key):
-        """Initialize the Knowledge Updater Crew with API key"""
+    def __init__(self, serper_api_key, gemini_api_key):
+        """Initialize the Knowledge Updater Crew with API keys"""
+        self.serper_api_key = serper_api_key
         self.llm = LLM(
             model="gemini/gemini-1.5-flash",
-            temperature=0.2,
-            api_key=api_key
+            temperature=0.7,
+            api_key=gemini_api_key
         )
     
     def create_agents(self):
-        """Create the agents for the knowledge update process"""
+        """Create the agents for the knowledge updating process"""
         
-        # Technology Scout Agent
-        tech_scout = Agent(
-            role="Technology Scout",
-            goal="Discover the latest technology updates and innovations relevant to the candidate",
-            backstory="""You are a technology scout with an encyclopedic knowledge of the latest 
-            tools, frameworks, libraries, and technological developments. You stay up-to-date with 
-            all emerging technologies across various domains and have a talent for identifying 
-            which technologies are most relevant to specific skill sets and industries.""",
+        # Search Expert Agent
+        search_expert = Agent(
+            role="Tech Search Expert",
+            goal="Find the most relevant and recent information on technology and industry trends",
+            backstory="""You are an expert at finding and curating the latest technology information.
+            You know exactly how to craft search queries to find the most recent and relevant information
+            about emerging technologies, industry news, and research breakthroughs. You are always up-to-date
+            with the latest developments in the tech world.""",
             verbose=True,
             llm=self.llm,
             allow_delegation=False
         )
         
-        # Industry Analyst Agent
-        industry_analyst = Agent(
-            role="Industry Analyst",
-            goal="Provide industry-specific news and insights",
-            backstory="""You are a seasoned industry analyst who monitors market trends, 
-            company movements, and industry shifts. You have deep knowledge of multiple 
-            sectors including tech, healthcare, finance, and more. You understand industry 
-            challenges, opportunities, and can contextualize news in terms of their 
-            significance for professionals in that industry.""",
+        # Content Analyst Agent
+        content_analyst = Agent(
+            role="Content Analysis Expert",
+            goal="Analyze and extract key insights from tech articles and news",
+            backstory="""You are skilled at analyzing technical content and extracting the most
+            important information. You can identify key trends, breakthrough technologies, and
+            important industry shifts from news articles, blog posts, and research papers.
+            You know how to distill complex technical content into clear, concise summaries.""",
             verbose=True,
             llm=self.llm,
             allow_delegation=True
         )
         
-        # Trends Researcher Agent
-        trends_researcher = Agent(
-            role="Trends Researcher",
-            goal="Identify emerging trends and future directions",
-            backstory="""You are an expert at spotting patterns and forecasting future directions.
-            You analyze multiple data points to identify emerging trends that will affect 
-            various industries and skill domains. You're particularly good at connecting 
-            seemingly unrelated developments to identify larger movements in the professional
-            landscape.""",
+        # Personalization Agent
+        personalization_agent = Agent(
+            role="Content Personalization Expert",
+            goal="Tailor technology updates to individual users based on their profile and interests",
+            backstory="""You specialize in personalizing content for individuals based on their
+            interests, skills, and career goals. You understand how to match technical content to
+            a person's background and learning objectives. You excel at identifying which technologies,
+            trends, and resources would be most valuable for a particular individual's growth.""",
             verbose=True,
             llm=self.llm,
             allow_delegation=True
         )
         
-        # Content Curator Agent
-        content_curator = Agent(
-            role="Content Curator",
-            goal="Select and recommend valuable content for professional development",
-            backstory="""You are a talented content curator with a knack for finding the most 
-            valuable articles, videos, courses, and resources on any topic. You understand what 
-            makes content useful for professionals at different stages of their careers and
-            can match learning resources to specific skill development needs.""",
-            verbose=True,
-            llm=self.llm,
-            allow_delegation=True
-        )
-        
-        return [tech_scout, industry_analyst, trends_researcher, content_curator]
+        return [search_expert, content_analyst, personalization_agent]
     
-    def create_tasks(self, agents, candidate_profile):
-        """Create tasks for the knowledge update process"""
+    def perform_search(self, query):
+        """Perform a search using the Serper API"""
+        url = "https://google.serper.dev/search"
+        
+        payload = json.dumps({
+            "q": query,
+            "num": 5
+        })
+        
+        headers = {
+            'X-API-KEY': self.serper_api_key,
+            'Content-Type': 'application/json'
+        }
+        
+        response = requests.request("POST", url, headers=headers, data=payload)
+        return response.json()
+    
+    def fetch_webpage_content(self, url):
+        """Fetch and parse content from a webpage"""
+        try:
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            }
+            response = requests.get(url, headers=headers, timeout=10)
+            if response.status_code == 200:
+                soup = BeautifulSoup(response.content, 'html.parser')
+                
+                # Remove script and style elements
+                for script in soup(["script", "style"]):
+                    script.extract()
+                
+                # Extract text
+                text = soup.get_text(separator='\n')
+                
+                # Clean up text
+                lines = (line.strip() for line in text.splitlines())
+                chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
+                text = '\n'.join(chunk for chunk in chunks if chunk)
+                
+                # Limit text length to avoid token limits
+                return text[:5000]  # Limit to first 5000 characters
+            else:
+                return f"Error fetching content: Status code {response.status_code}"
+        except Exception as e:
+            return f"Error fetching content: {str(e)}"
+    
+    def create_tasks(self, agents, user_profile):
+        """Create tasks for the knowledge updating process"""
         
         # Unpack agents
-        tech_scout, industry_analyst, trends_researcher, content_curator = agents
+        search_expert, content_analyst, personalization_agent = agents
         
-        # Extract profile information
-        skills = candidate_profile.get('skills', [])
-        industry = candidate_profile.get('industry', '')
-        interests = candidate_profile.get('interests', [])
+        # Extract key interests and skills from user profile
+        skills = user_profile.get('skills', [])
+        job_preferences = user_profile.get('job_preferences', {})
+        roles = job_preferences.get('roles', [])
         
-        today = datetime.now().strftime("%B %d, %Y")
+        # Generate search queries
+        interests = skills + roles
+        main_interests = ', '.join(interests[:3]) if len(interests) > 3 else ', '.join(interests)
         
-        # Task 1: Generate Technology Updates
-        tech_updates_task = Task(
-            description=f"""Based on the candidate's profile, generate 3-5 significant technology 
-            updates that would be most relevant to them as of {today}.
+        # Task 1: Search for Latest Technologies
+        search_tech = Task(
+            description=f"""Find the latest technology updates related to the user's background and interests.
             
-            Candidate Skills: {', '.join(skills) if isinstance(skills, list) else skills}
-            Industry: {industry}
-            Interests: {', '.join(interests) if isinstance(interests, list) else interests}
+            User's main interests: {main_interests}
             
-            For each technology update, provide:
-            1. A concise headline
-            2. A brief description (2-3 sentences)
-            3. Why it's relevant to the candidate's profile
-            4. A potential impact on their professional growth
+            Search for:
+            1. Latest advancements in {main_interests}
+            2. New tools, frameworks, or platforms related to these areas
+            3. Recent technological breakthroughs in these fields
             
-            The updates should be current and relevant to the candidate's background.
+            For each result, provide:
+            - Title of the news/update
+            - Brief description (1-2 sentences)
+            - Source URL
+            - Date published (if available)
+            - Image URL (if available)
+            
+            Perform at least 3 different searches to get comprehensive results.
             """,
-            agent=tech_scout,
-            expected_output="""A structured list of 3-5 technology updates with headlines, 
-            descriptions, relevance explanations, and potential impacts."""
-        )
-        
-        # Task 2: Generate Industry News
-        industry_news_task = Task(
-            description=f"""Based on the candidate's profile, generate 3-4 important industry news 
-            items that would be most relevant to them as of {today}.
-            
-            Candidate Skills: {', '.join(skills) if isinstance(skills, list) else skills}
-            Industry: {industry}
-            Interests: {', '.join(interests) if isinstance(interests, list) else interests}
-            
-            For each news item, provide:
-            1. A concise headline
-            2. A brief description (2-3 sentences)
-            3. Why it matters for professionals in this field
-            
-            The news should be current and focus on major developments in the candidate's industry.
-            """,
-            agent=industry_analyst,
-            expected_output="""A structured list of 3-4 industry news items with headlines, 
-            descriptions, and significance explanations."""
-        )
-        
-        # Task 3: Identify Emerging Trends
-        trends_task = Task(
-            description=f"""Based on the candidate's profile, identify 2-3 emerging trends 
-            that could impact their career trajectory or should be on their radar as of {today}.
-            
-            Candidate Skills: {', '.join(skills) if isinstance(skills, list) else skills}
-            Industry: {industry}
-            Interests: {', '.join(interests) if isinstance(interests, list) else interests}
-            
-            For each trend, provide:
-            1. A name or title for the trend
-            2. A description of the trend and its current state
-            3. How this trend might evolve in the next 6-12 months
-            4. Why the candidate should pay attention to this trend
-            
-            Focus on trends that are not yet mainstream but are gaining momentum.
-            """,
-            agent=trends_researcher,
-            expected_output="""A structured list of 2-3 emerging trends with names, 
-            descriptions, future outlook, and relevance explanations."""
-        )
-        
-        # Task 4: Recommend Learning Resources
-        resources_task = Task(
-            description=f"""Based on the candidate's profile and the identified technology 
-            updates, industry news, and emerging trends, recommend 3-4 high-quality resources 
-            for further learning.
-            
-            Candidate Skills: {', '.join(skills) if isinstance(skills, list) else skills}
-            Industry: {industry}
-            Interests: {', '.join(interests) if isinstance(interests, list) else interests}
-            
-            For each resource, provide:
-            1. Title of the resource
-            2. Type (article, video, course, etc.)
-            3. A brief description of what the candidate would learn
-            4. Why this resource is valuable for their professional development
-            
-            Focus on resources that would help the candidate stay ahead in their field or 
-            develop skills that will be increasingly valuable based on the identified trends.
-            """,
-            agent=content_curator,
-            expected_output="""A structured list of 3-4 learning resources with titles, 
-            types, descriptions, and value explanations.""",
+            agent=search_expert,
+            expected_output="""A structured list of technology updates with titles, descriptions, 
+            sources, dates, and image URLs when available.""",
             context={
-                "tech_updates": "{{tech_updates_task.result}}",
-                "industry_news": "{{industry_news_task.result}}",
-                "emerging_trends": "{{trends_task.result}}"
-            },
-            dependencies=[tech_updates_task, industry_news_task, trends_task]
+                "user_interests": main_interests,
+                "serper_api_key": self.serper_api_key,
+                "search_function": self.perform_search
+            }
         )
         
-        return [tech_updates_task, industry_news_task, trends_task, resources_task]
+        # Task 2: Search for Industry News
+        search_news = Task(
+            description=f"""Find recent industry news related to the user's background and interests.
+            
+            User's main interests: {main_interests}
+            
+            Search for:
+            1. Recent industry developments in {main_interests}
+            2. Company news related to these technologies/fields
+            3. Market trends in these areas
+            
+            For each result, provide:
+            - Title of the news
+            - Brief description (1-2 sentences)
+            - Source URL
+            - Date published (if available)
+            - Image URL (if available)
+            
+            Perform at least 2 different searches to get comprehensive results.
+            """,
+            agent=search_expert,
+            expected_output="""A structured list of industry news with titles, descriptions, 
+            sources, dates, and image URLs when available.""",
+            context={
+                "user_interests": main_interests,
+                "serper_api_key": self.serper_api_key,
+                "search_function": self.perform_search
+            }
+        )
+        
+        # Task 3: Search for Emerging Trends
+        search_trends = Task(
+            description=f"""Find emerging trends related to the user's background and interests.
+            
+            User's main interests: {main_interests}
+            
+            Search for:
+            1. Emerging trends in {main_interests}
+            2. Future predictions for these technologies/fields
+            3. Growing adoption patterns or shifts in these areas
+            
+            For each result, provide:
+            - Title of the trend
+            - Brief description (1-2 sentences)
+            - Source URL
+            - Date published (if available)
+            - Image URL (if available)
+            
+            Perform at least 2 different searches to get comprehensive results.
+            """,
+            agent=search_expert,
+            expected_output="""A structured list of emerging trends with titles, descriptions, 
+            sources, dates, and image URLs when available.""",
+            context={
+                "user_interests": main_interests,
+                "serper_api_key": self.serper_api_key,
+                "search_function": self.perform_search
+            }
+        )
+        
+        # Task 4: Find Recommended Reading Materials
+        search_resources = Task(
+            description=f"""Find learning resources related to the user's background and interests.
+            
+            User's main interests: {main_interests}
+            
+            Search for:
+            1. Recent research papers in {main_interests}
+            2. Tutorial articles or documentation for new technologies
+            3. Educational videos or courses on these topics
+            4. GitHub repositories or projects worth exploring
+            
+            For each result, provide:
+            - Title of the resource
+            - Brief description (1-2 sentences)
+            - Type (research paper, tutorial, video, repository)
+            - Source URL
+            - Author/Creator (if available)
+            
+            Perform at least 3 different searches to get comprehensive results.
+            """,
+            agent=search_expert,
+            expected_output="""A structured list of learning resources with titles, descriptions, 
+            types, sources, and authors when available.""",
+            context={
+                "user_interests": main_interests,
+                "serper_api_key": self.serper_api_key,
+                "search_function": self.perform_search
+            }
+        )
+        
+        # Task 5: Analyze and Personalize Content
+        personalize_content = Task(
+            description=f"""Analyze all the gathered information and personalize it for the user based on their profile.
+            
+            User Profile:
+            {json.dumps(user_profile, indent=2, cls=DateTimeEncoder)}
+            
+            For each category (technologies, news, trends, resources):
+            1. Rank items by relevance to the user's specific interests and career goals
+            2. Add a short personalized note for each item explaining why it's relevant to them
+            3. Ensure diversity of content - don't focus only on one aspect of their interests
+            4. Consider their experience level when recommending technical content
+            
+            Format the output as a structured JSON with separate sections for:
+            - New Technologies
+            - Industry News
+            - Emerging Trends
+            - Recommended Reads
+            
+            Each item should include all available metadata (title, description, URL, image, date, etc.)
+            plus your added personalization notes.
+            """,
+            agent=personalization_agent,
+            expected_output="""A JSON structure with personalized content organized into four categories:
+            New Technologies, Industry News, Emerging Trends, and Recommended Reads.""",
+            context={
+                "tech_updates": "{{search_tech.result}}",
+                "industry_news": "{{search_news.result}}",
+                "emerging_trends": "{{search_trends.result}}",
+                "learning_resources": "{{search_resources.result}}",
+                "user_profile": user_profile
+            },
+            dependencies=[search_tech, search_news, search_trends, search_resources]
+        )
+        
+        return [search_tech, search_news, search_trends, search_resources, personalize_content]
     
-    def generate_knowledge_update(self, candidate_profile):
-        """Main function to generate knowledge updates for a candidate"""
+    def get_knowledge_updates(self, user_profile):
+        """Main function to get personalized knowledge updates"""
         
         # Create agents and tasks
         agents = self.create_agents()
-        tasks = self.create_tasks(agents, candidate_profile)
+        tasks = self.create_tasks(agents, user_profile)
         
         # Create and run the crew
         crew = Crew(
@@ -199,98 +297,136 @@ class KnowledgeUpdaterCrew:
             process=Process.sequential
         )
         
-        result = crew.kickoff()
-        
-        # Process and structure the results
-        structured_update = self._structure_knowledge_update(result)
-        
-        return structured_update
+        try:
+            result = crew.kickoff()
+            
+            # Extract and parse the JSON result
+            # Find JSON content between triple backticks if present
+            json_match = re.search(r'```json\s*([\s\S]*?)\s*```', result)
+            if json_match:
+                json_str = json_match.group(1)
+            else:
+                # Try to find any JSON-like structure
+                json_match = re.search(r'\{[\s\S]*\}', result)
+                if json_match:
+                    json_str = json_match.group(0)
+                else:
+                    return {"error": "Could not extract JSON from result", "raw_result": result}
+            
+            try:
+                json_result = json.loads(json_str)
+                return json_result
+            except json.JSONDecodeError:
+                return {"error": "Invalid JSON format", "raw_result": result}
+                
+        except Exception as e:
+            return {"error": str(e)}
     
-    def _structure_knowledge_update(self, result):
-        """Process and structure the knowledge update results"""
-        # Initialize structured output
-        knowledge_update = {
-            "date": datetime.now().strftime("%B %d, %Y"),
-            "sections": {
-                "tech_updates": [],
-                "industry_news": [],
-                "emerging_trends": [],
-                "recommended_reads": []
-            }
+    def get_mock_updates(self, user_profile):
+        """Generate mock updates for testing without API calls"""
+        # Extract key interests from profile
+        skills = user_profile.get('skills', [])
+        job_preferences = user_profile.get('job_preferences', {})
+        roles = job_preferences.get('roles', [])
+        
+        interests = skills + roles
+        main_interests = interests[:3] if len(interests) > 3 else interests
+        
+        # Current date for mock data
+        today = datetime.now()
+        
+        # Generate mock data based on interests
+        mock_data = {
+            "New Technologies": [],
+            "Industry News": [],
+            "Emerging Trends": [],
+            "Recommended Reads": []
         }
         
-        # Parse the result text to extract each section
-        # This is a simplified approach; in a real system you might use 
-        # more robust parsing or have the agents return structured data
+        # Tech updates
+        tech_templates = [
+            "{} Introduces Revolutionary New Features",
+            "New Framework for {} Released This Week",
+            "Major Breakthrough in {} Technology Announced",
+            "Latest {} Tools That Are Changing Development",
+            "{} 2.0: The Next Generation Is Here"
+        ]
         
-        tech_section = self._extract_section(result, "technology updates", "industry news")
-        if tech_section:
-            knowledge_update["sections"]["tech_updates"] = self._parse_tech_updates(tech_section)
+        for interest in main_interests:
+            date = (today - timedelta(days=random.randint(0, 7))).strftime("%Y-%m-%d")
+            template = random.choice(tech_templates)
+            mock_data["New Technologies"].append({
+                "title": template.format(interest),
+                "description": f"This new development in {interest} promises to revolutionize how developers work with this technology.",
+                "url": f"https://example.com/tech/{interest.lower().replace(' ', '-')}",
+                "date": date,
+                "image": f"https://via.placeholder.com/300x200?text={interest.replace(' ', '+')}",
+                "personalization": f"As someone interested in {interest}, this will enhance your development workflow."
+            })
         
-        news_section = self._extract_section(result, "industry news", "emerging trends")
-        if news_section:
-            knowledge_update["sections"]["industry_news"] = self._parse_industry_news(news_section)
+        # News updates
+        news_templates = [
+            "Big Tech Companies Compete in {} Space",
+            "Industry Leaders Announce {} Initiative",
+            "Record Investment in {} Startups This Quarter",
+            "The Growing Market for {} Solutions",
+            "{} Conference Highlights Industry Direction"
+        ]
         
-        trends_section = self._extract_section(result, "emerging trends", "learning resources")
-        if trends_section:
-            knowledge_update["sections"]["emerging_trends"] = self._parse_trends(trends_section)
+        for interest in main_interests:
+            date = (today - timedelta(days=random.randint(0, 10))).strftime("%Y-%m-%d")
+            template = random.choice(news_templates)
+            mock_data["Industry News"].append({
+                "title": template.format(interest),
+                "description": f"Recent developments show how {interest} is becoming increasingly important in the tech industry.",
+                "url": f"https://example.com/news/{interest.lower().replace(' ', '-')}",
+                "date": date,
+                "image": f"https://via.placeholder.com/300x200?text={interest.replace(' ', '+')}+News",
+                "personalization": f"This news is directly relevant to your interest in {interest} and could impact your career path."
+            })
         
-        resources_section = self._extract_section(result, "learning resources", None)
-        if resources_section:
-            knowledge_update["sections"]["recommended_reads"] = self._parse_resources(resources_section)
+        # Emerging trends
+        trend_templates = [
+            "The Future of {} Is Here: What You Need to Know",
+            "{} Trends That Will Dominate Next Year",
+            "How {} Is Evolving: Industry Predictions",
+            "The Rise of {} in Enterprise Solutions",
+            "Why Everyone Is Talking About {} Now"
+        ]
         
-        return knowledge_update
-    
-    def _extract_section(self, text, start_marker, end_marker=None):
-        """Extract a section from text based on markers"""
-        # Find the section in the text (case insensitive)
-        pattern = r'(?i)(?:#+\s*|^).*' + re.escape(start_marker) + r'.*?(?=(?:#+\s*|^).*' 
-        if end_marker:
-            pattern += re.escape(end_marker)
-        else:
-            pattern += r'$)'
+        for interest in main_interests:
+            date = (today - timedelta(days=random.randint(0, 14))).strftime("%Y-%m-%d")
+            template = random.choice(trend_templates)
+            mock_data["Emerging Trends"].append({
+                "title": template.format(interest),
+                "description": f"Experts predict that {interest} will continue to grow in importance and adoption over the next year.",
+                "url": f"https://example.com/trends/{interest.lower().replace(' ', '-')}",
+                "date": date,
+                "image": f"https://via.placeholder.com/300x200?text={interest.replace(' ', '+')}+Trends",
+                "personalization": f"Staying ahead of these {interest} trends will give you a competitive advantage in your field."
+            })
         
-        match = re.search(pattern, text, re.DOTALL)
-        if match:
-            return match.group(0)
-        return ""
-    
-    def _parse_tech_updates(self, section):
-        """Parse technology updates from the section text"""
-        # Extract items that look like update entries
-        # This is a simplified parser; you might need to adjust based on actual output format
-        items = []
+        # Reading resources
+        resource_templates = [
+            "Essential {} Guide for 2025",
+            "Complete {} Tutorial for Advanced Developers",
+            "Research Paper: Innovations in {}",
+            "Learning {} Step by Step: Comprehensive Course",
+            "GitHub: Best {} Projects to Learn From"
+        ]
         
-        # Look for numbered items or headings
-        pattern = r'(?:^|\n)(?:##+\s*|\d+\.\s*|\*\s*)(.*?)(?=(?:^|\n)(?:##+\s*|\d+\.\s*|\*\s*)|$)'
-        matches = re.finditer(pattern, section, re.MULTILINE | re.DOTALL)
+        for interest in main_interests:
+            date = (today - timedelta(days=random.randint(0, 30))).strftime("%Y-%m-%d")
+            template = random.choice(resource_templates)
+            resource_type = random.choice(["Article", "Tutorial", "Research Paper", "Course", "GitHub Repository"])
+            mock_data["Recommended Reads"].append({
+                "title": template.format(interest),
+                "description": f"This {resource_type.lower()} covers everything you need to know about working with {interest}.",
+                "url": f"https://example.com/learn/{interest.lower().replace(' ', '-')}",
+                "type": resource_type,
+                "date": date,
+                "author": f"Expert in {interest}",
+                "personalization": f"This resource aligns perfectly with your skill level and interest in {interest}."
+            })
         
-        for match in matches:
-            item_text = match.group(1).strip()
-            if item_text:
-                # Try to extract headline and description
-                lines = item_text.split('\n', 1)
-                headline = lines[0].strip()
-                description = lines[1].strip() if len(lines) > 1 else ""
-                
-                items.append({
-                    "headline": headline,
-                    "description": description
-                })
-        
-        return items
-    
-    def _parse_industry_news(self, section):
-        """Parse industry news from the section text"""
-        # Similar approach to tech updates
-        return self._parse_tech_updates(section)  # Reuse the same parser for now
-    
-    def _parse_trends(self, section):
-        """Parse emerging trends from the section text"""
-        # Similar approach to tech updates
-        return self._parse_tech_updates(section)  # Reuse the same parser for now
-    
-    def _parse_resources(self, section):
-        """Parse recommended resources from the section text"""
-        # Similar approach to tech updates
-        return self._parse_tech_updates(section)  # Reuse the same parser for now
+        return mock_data
