@@ -386,9 +386,6 @@ def display_roadmap_page():
         if result["status"] == "success":
             profile_data = result["profile"]
             
-            # Display user information
-            st.markdown("Let’s build your personalized learning roadmap! 🚀")
-            
             # Profile Summary Section
             col1, col2 = st.columns(2)
             
@@ -423,7 +420,7 @@ def display_roadmap_page():
                 else:
                     st.info("Please complete your profile to view career goals")
                     
-            st.markdown("<br>", unsafe_allow_html=True)
+            st.markdown("<br><br>", unsafe_allow_html=True)
             
             # Learning goal input section
             st.markdown("### 📚 What's your learning goal?")
