@@ -1,3 +1,4 @@
+# resume_builder_agent.py
 from crewai import Agent, Task, Crew, Process
 import os
 from crewai import LLM
@@ -92,6 +93,8 @@ class ResumeBuilderCrew:
         tailor_resume = Task(
             description=f"""Using the job description analysis and the candidate's profile, create tailored content for each section of the resume.
             
+            IMPORTANT: This resume MUST fit on a single page. Be concise and focus on the most relevant information.
+            
             Candidate Profile:
             {json.dumps(user_profile, indent=2, cls=DateTimeEncoder)}
             
@@ -102,22 +105,24 @@ class ResumeBuilderCrew:
             {achievements}
             
             Focus on:
-            1. Creating a powerful professional summary that highlights relevant experience and skills
-            2. Tailoring experience descriptions to emphasize achievements relevant to the target job
-            3. Incorporating key skills and keywords from the job description
+            1. Creating a powerful but BRIEF professional summary (max 2-3 lines)
+            2. Limiting work experience to 3-4 most relevant positions with 2-3 bullet points each
+            3. Using concise language and removing unnecessary words
             4. Quantifying achievements with metrics where possible
-            5. Using action verbs and industry-specific terminology
+            5. Using action verbs and targeted keywords from the job description
+            6. Keeping all content highly relevant to the target position
             
-            Create content for each section that would be included in an ATS-friendly resume.
+            Make sure the final resume is compact enough to fit on a single page.
             """,
             agent=resume_expert,
             expected_output="""Complete content for each resume section, including:
-            - Professional summary
-            - Work experience with bullet points
-            - Education details
-            - Skills section
-            - Projects section with descriptions
-            - Achievements section
+            - Brief professional summary (2-3 lines)
+            - Work experience with 2-3 bullet points per position
+            - Education details (degree, institution, year only)
+            - Skills section (relevant skills only)
+            - Relevant projects with brief descriptions
+            - Key achievements section
+            All content should be compact and optimized for a single-page resume.
             """,
             dependencies=[analyze_job]
         )

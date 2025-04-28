@@ -1,3 +1,4 @@
+# resume_builder_page
 import streamlit as st
 from backend.database import get_profile
 from Resume.resume_builder_agent import ResumeBuilderCrew
@@ -20,7 +21,7 @@ from html.parser import HTMLParser
 import html
 
 class HTMLToReportLabParser(HTMLParser):
-    """Parser to convert HTML to ReportLab elements"""
+    """Parser to convert HTML to ReportLab elements optimized for single-page resumes"""
     
     def __init__(self):
         super().__init__()
@@ -32,15 +33,16 @@ class HTMLToReportLabParser(HTMLParser):
         self.in_heading = False
         self.heading_level = 0
         self.current_text = ""
+        self.in_style_tag = False
         
     def custom_styles(self):
-        """Define custom styles for the resume"""
+        """Define custom styles for a compact, single-page resume"""
         # Title style
         self.styles.add(ParagraphStyle(
             name='ResumeTitle',
             parent=self.styles['Title'],
-            fontSize=18,
-            spaceAfter=10,
+            fontSize=14,  # Reduced from 18
+            spaceAfter=6,  # Reduced from 10
             textColor=colors.darkblue
         ))
         
@@ -48,40 +50,45 @@ class HTMLToReportLabParser(HTMLParser):
         self.styles.add(ParagraphStyle(
             name='ResumeH1',
             parent=self.styles['Heading1'],
-            fontSize=16,
-            spaceAfter=8,
+            fontSize=12,  # Reduced from 16
+            spaceAfter=4,  # Reduced from 8
             textColor=colors.darkblue
         ))
         
         self.styles.add(ParagraphStyle(
             name='ResumeH2',
             parent=self.styles['Heading2'],
-            fontSize=14,
-            spaceAfter=6,
+            fontSize=11,  # Reduced from 14
+            spaceAfter=3,  # Reduced from 6
             textColor=colors.darkblue
         ))
         
-        # Section style
+        # Section style - compact
         self.styles.add(ParagraphStyle(
             name='ResumeSection',
             parent=self.styles['Normal'],
-            fontSize=11,
-            spaceAfter=6,
-            leading=14
+            fontSize=9,  # Reduced from 11
+            spaceAfter=3,  # Reduced from 6
+            leading=12  # Reduced from 14
         ))
         
         # Contact info style
         self.styles.add(ParagraphStyle(
             name='ContactInfo',
             parent=self.styles['Normal'],
-            fontSize=11,
+            fontSize=9,  # Reduced from 11
             alignment=1,  # Center
-            spaceAfter=12
+            spaceAfter=6  # Reduced from 12
         ))
     
     def handle_starttag(self, tag, attrs):
+        # Skip style tags completely
+        if tag == 'style':
+            self.in_style_tag = True
+            return
+            
         # Process any accumulated text before handling the new tag
-        if self.current_text.strip():
+        if self.current_text.strip() and not self.in_style_tag:
             self.handle_text_chunk()
         
         if tag == 'ul' or tag == 'ol':
@@ -92,8 +99,13 @@ class HTMLToReportLabParser(HTMLParser):
             self.heading_level = int(tag[1])
     
     def handle_endtag(self, tag):
+        if tag == 'style':
+            self.in_style_tag = False
+            self.current_text = ""  # Clear any style content
+            return
+            
         # Process any accumulated text before closing the tag
-        if self.current_text.strip():
+        if self.current_text.strip() and not self.in_style_tag:
             self.handle_text_chunk()
             
         if tag == 'ul' or tag == 'ol':
@@ -103,23 +115,24 @@ class HTMLToReportLabParser(HTMLParser):
                     self.list_items,
                     bulletType='bullet',
                     start=None,
-                    bulletFontSize=10,
-                    leftIndent=20,
+                    bulletFontSize=8,  # Reduced from 10
+                    leftIndent=15,     # Reduced from 20
                     bulletOffsetY=0
                 )
                 self.elements.append(bullet_list)
-                self.elements.append(Spacer(1, 0.1*inch))
+                self.elements.append(Spacer(1, 0.05*inch))  # Reduced from 0.1*inch
                 self.list_items = []
         elif tag in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']:
             self.in_heading = False
             self.heading_level = 0
         elif tag == 'p':
-            # Add spacing after paragraphs
-            self.elements.append(Spacer(1, 0.1*inch))
+            # Add minimal spacing after paragraphs
+            self.elements.append(Spacer(1, 0.05*inch))  # Reduced from 0.1*inch
     
     def handle_data(self, data):
-        # Accumulate text content
-        self.current_text += data
+        if not self.in_style_tag:
+            # Accumulate text content
+            self.current_text += data
     
     def handle_text_chunk(self):
         """Process accumulated text based on current context"""
@@ -136,36 +149,163 @@ class HTMLToReportLabParser(HTMLParser):
                 self.elements.append(Paragraph(text, self.styles['ResumeH1']))
             else:
                 self.elements.append(Paragraph(text, self.styles['ResumeH2']))
-            self.elements.append(Spacer(1, 0.1*inch))
+            self.elements.append(Spacer(1, 0.05*inch))  # Reduced from 0.1*inch
         elif self.in_list:
             list_item_style = self.styles['ResumeSection']
-            self.list_items.append(ListItem(Paragraph(text, list_item_style), leftIndent=20))
+            self.list_items.append(ListItem(Paragraph(text, list_item_style), leftIndent=15))  # Reduced from 20
         else:
             self.elements.append(Paragraph(text, self.styles['ResumeSection']))
     
     def close(self):
         super().close()
         # Process any remaining text
-        if self.current_text.strip():
+        if self.current_text.strip() and not self.in_style_tag:
             self.handle_text_chunk()
         return self.elements
 
+# Add these functions after the html_to_pdf function and before display_resume_builder_page
+
+def format_markdown_resume(markdown_content, user_profile):
+    """Clean and format markdown resume content to ensure proper rendering"""
+    # Remove any front matter or metadata if present
+    cleaned_content = re.sub(r'^---\s*\n(.*?)\n---\s*\n', '', markdown_content, flags=re.DOTALL)
+    
+    # Ensure proper heading levels (# for name, ## for sections)
+    lines = cleaned_content.split('\n')
+    formatted_lines = []
+    
+    for i, line in enumerate(lines):
+        # Fix name heading if it's not properly formatted
+        if i == 0 and not line.startswith('#'):
+            if re.match(r'^[\w\s]+$', line.strip()):  # If it looks like a name
+                formatted_lines.append(f"# {line.strip()}")
+                continue
+                
+        # Fix section headings if they're not properly formatted
+        if line.strip() and not line.startswith('#') and i > 0:
+            prev_line = lines[i-1].strip()
+            if prev_line == '' and re.match(r'^[A-Z][A-Za-z\s]+:?$', line.strip()):
+                formatted_lines.append(f"## {line.strip()}")
+                continue
+                
+        formatted_lines.append(line)
+    
+    formatted_content = '\n'.join(formatted_lines)
+    
+    # Ensure there's no "Resume" text in the header
+    if 'personal_info' in user_profile and 'name' in user_profile['personal_info']:
+        user_name = user_profile['personal_info']['name']
+        formatted_content = re.sub(r'^# .*Resume.*$', f"# {user_name}", 
+                                  formatted_content, flags=re.MULTILINE)
+    
+    return formatted_content
+
+def convert_to_clean_html(markdown_content):
+    """Convert markdown to clean HTML with proper styling for resumes"""
+    # Convert markdown to HTML
+    html_content = markdown.markdown(markdown_content)
+    
+    # Parse with BeautifulSoup for cleaning
+    soup = BeautifulSoup(html_content, 'html.parser')
+    
+    # Add minimal, clean styling
+    style_tag = soup.new_tag('style')
+    style_tag.string = """
+    body {
+        font-family: 'Arial', 'Helvetica', sans-serif;
+        font-size: 10pt;
+        line-height: 1.2;
+        margin: 0;
+        padding: 0;
+    }
+    h1 {
+        font-size: 14pt;
+        margin-bottom: 5px;
+        color: #2c3e50;
+        text-align: center;
+    }
+    h2 {
+        font-size: 12pt;
+        margin-top: 10px;
+        margin-bottom: 5px;
+        color: #2c3e50;
+        border-bottom: 1px solid #bdc3c7;
+    }
+    p {
+        margin: 3px 0;
+    }
+    ul {
+        margin: 5px 0;
+        padding-left: 20px;
+    }
+    li {
+        margin-bottom: 2px;
+    }
+    .contact-info {
+        text-align: center;
+        font-size: 9pt;
+        margin-bottom: 10px;
+    }
+    """
+    
+    # Insert style at the beginning of the document
+    if soup.head:
+        soup.head.append(style_tag)
+    else:
+        head_tag = soup.new_tag('head')
+        head_tag.append(style_tag)
+        soup.insert(0, head_tag)
+    
+    # Add contact info styling
+    contact_paragraphs = soup.find_all('p', limit=2)  # Assume first paragraphs might be contact info
+    for p in contact_paragraphs:
+        if '@' in p.text or 'Phone' in p.text or 'LinkedIn' in p.text:
+            p['class'] = 'contact-info'
+    
+    return str(soup)
+
+def clean_html_for_preview(html_content):
+    """Clean HTML to remove unwanted elements for preview"""
+    # Parse HTML
+    soup = BeautifulSoup(html_content, 'html.parser')
+    
+    # Remove style tags
+    for style_tag in soup.find_all('style'):
+        style_tag.decompose()
+    
+    # Remove any HTML/head/meta tags
+    if soup.head:
+        soup.head.decompose()
+    
+    # If there's an unwanted title that contains "- Resume body" text, remove it
+    for tag in soup.find_all(string=re.compile("- Resume body")):
+        parent = tag.parent
+        if parent:
+            parent.decompose()
+    
+    # Convert back to string
+    return str(soup)
 
 def html_to_pdf(html_content, filename):
-    """Convert HTML content to PDF using ReportLab"""
+    """Convert HTML content to PDF using ReportLab with single-page optimization"""
     buffer = BytesIO()
+    
+    # Set page size to letter with narrower margins to fit more content
     doc = SimpleDocTemplate(
         buffer, 
         pagesize=letter,
-        rightMargin=72, 
-        leftMargin=72,
-        topMargin=36, 
-        bottomMargin=36
+        rightMargin=0.5*inch,  # Reduced from 72pt (1 inch)
+        leftMargin=0.5*inch,   # Reduced from 72pt (1 inch)
+        topMargin=0.4*inch,    # Reduced from 36pt (0.5 inch) 
+        bottomMargin=0.4*inch  # Reduced from 36pt (0.5 inch)
     )
+    
+    # Clean HTML before parsing - remove any style tags and unwanted headers
+    cleaned_html = clean_html_for_pdf(html_content)
     
     # Parse HTML content
     parser = HTMLToReportLabParser()
-    parser.feed(html_content)
+    parser.feed(cleaned_html)
     elements = parser.close()
     
     # Build PDF
@@ -174,6 +314,28 @@ def html_to_pdf(html_content, filename):
     buffer.close()
     
     return pdf_data
+
+def clean_html_for_pdf(html_content):
+    """Clean HTML to remove unwanted elements before PDF conversion"""
+    # Parse HTML
+    soup = BeautifulSoup(html_content, 'html.parser')
+    
+    # Remove style tags
+    for style_tag in soup.find_all('style'):
+        style_tag.decompose()
+    
+    # Remove any HTML/head/meta tags
+    if soup.head:
+        soup.head.decompose()
+    
+    # If there's an unwanted title that contains "- Resume body" text, remove it
+    for tag in soup.find_all(string=re.compile("- Resume body")):
+        parent = tag.parent
+        if parent:
+            parent.decompose()
+    
+    # Convert back to string
+    return str(soup)
 
 
 def display_resume_builder_page():
@@ -306,17 +468,12 @@ def display_resume_builder_page():
                         projects=projects,
                         achievements=achievements
                     )
-                    
-                    # Save the resume content to session state
-                    st.session_state.resume_content = resume_content
-                    
-                    # Convert markdown to HTML for better display
-                    html_content = markdown.markdown(resume_content)
-                    
-                    # Clean the HTML to make it more parser-friendly
-                    soup = BeautifulSoup(html_content, 'html.parser')
-                    clean_html = str(soup)
-                    
+                    # Apply the formatting helpers:
+                    formatted_resume = format_markdown_resume(resume_content, formatted_user_profile)
+                    st.session_state.resume_content = formatted_resume
+
+                    # Convert markdown to clean HTML for better display
+                    clean_html = convert_to_clean_html(formatted_resume)
                     st.session_state.resume_html = clean_html
                     
                     st.success("Resume generated successfully!")
@@ -332,6 +489,9 @@ def display_resume_builder_page():
             # Create a container with styling for the resume preview
             preview_container = st.container()
             with preview_container:
+                # Clean the HTML before displaying it
+                display_html = clean_html_for_preview(st.session_state.resume_html)
+                
                 st.markdown("""
                 <style>
                 .resume-preview {
@@ -343,20 +503,37 @@ def display_resume_builder_page():
                     font-size: 0.9em;
                     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
                     margin-bottom: 20px;
+                    overflow-y: auto;
+                    max-height: 600px;
                 }
                 .resume-preview h1 {
-                    font-size: 1.6em;
+                    font-size: 1.4em;
                     margin-bottom: 5px;
+                    color: #2c3e50;
                 }
                 .resume-preview h2 {
-                    font-size: 1.3em;
+                    font-size: 1.2em;
                     border-bottom: 1px solid #eee;
-                    padding-bottom: 5px;
-                    margin-top: 15px;
+                    padding-bottom: 3px;
+                    margin-top: 10px;
+                    color: #2c3e50;
+                }
+                .resume-preview p {
+                    margin-bottom: 8px;
+                    font-size: 0.85em;
+                }
+                .resume-preview ul {
+                    margin-top: 5px;
+                    margin-bottom: 10px;
+                    padding-left: 20px;
+                }
+                .resume-preview li {
+                    margin-bottom: 3px;
+                    font-size: 0.85em;
                 }
                 </style>
                 <div class="resume-preview">
-                """ + st.session_state.resume_html + """
+                """ + display_html + """
                 </div>
                 """, unsafe_allow_html=True)
             
@@ -372,11 +549,13 @@ def display_resume_builder_page():
                     b64 = base64.b64encode(content.encode()).decode()
                     href = f'<a href="data:text/plain;base64,{b64}" download="{filename}.txt">Download as Text</a>'
                 elif format_type == "html":
-                    b64 = base64.b64encode(content.encode()).decode()
+                    # Clean HTML before download
+                    clean_content = clean_html_for_preview(content)
+                    b64 = base64.b64encode(clean_content.encode()).decode()
                     href = f'<a href="data:text/html;base64,{b64}" download="{filename}.html">Download as HTML</a>'
                 elif format_type == "pdf":
                     try:
-                        # Create PDF from HTML using ReportLab
+                        # Create PDF from clean HTML
                         pdf_data = html_to_pdf(st.session_state.resume_html, filename)
                         b64 = base64.b64encode(pdf_data).decode()
                         href = f'<a href="data:application/pdf;base64,{b64}" download="{filename}.pdf">Download as PDF</a>'
@@ -386,21 +565,45 @@ def display_resume_builder_page():
                 
                 return href
             
+            # Add a helper function for cleaning HTML
+            def clean_html_for_preview(html_content):
+                """Clean HTML to remove unwanted elements for preview"""
+                # Parse HTML
+                soup = BeautifulSoup(html_content, 'html.parser')
+                
+                # Remove style tags
+                for style_tag in soup.find_all('style'):
+                    style_tag.decompose()
+                
+                # Remove any HTML/head/meta tags
+                if soup.head:
+                    soup.head.decompose()
+                
+                # If there's an unwanted title that contains "- Resume body" text, remove it
+                for tag in soup.find_all(string=re.compile("- Resume body")):
+                    parent = tag.parent
+                    if parent:
+                        parent.decompose()
+                
+                # Convert back to string
+                return str(soup)
+            
             # Download buttons
             download_format = st.selectbox("Select format", ["PDF", "HTML", "Markdown", "Text"])
             
-            if download_format == "Markdown":
-                download_link = create_download_link(st.session_state.resume_content, "resume", "markdown")
-            elif download_format == "Text":
-                # Convert markdown to plain text
-                plain_text = re.sub(r'[#*_]', '', st.session_state.resume_content)
-                download_link = create_download_link(plain_text, "resume", "text")
-            elif download_format == "HTML":
-                download_link = create_download_link(st.session_state.resume_html, "resume", "html")
-            else:  # PDF
-                download_link = create_download_link(st.session_state.resume_html, "resume", "pdf")
-                
-            st.markdown(download_link, unsafe_allow_html=True)
+            if st.button("Download Resume", type="primary"):
+                if download_format == "Markdown":
+                    download_link = create_download_link(st.session_state.resume_content, "resume", "markdown")
+                elif download_format == "Text":
+                    # Convert markdown to plain text
+                    plain_text = re.sub(r'[#*_]', '', st.session_state.resume_content)
+                    download_link = create_download_link(plain_text, "resume", "text")
+                elif download_format == "HTML":
+                    download_link = create_download_link(st.session_state.resume_html, "resume", "html")
+                else:  # PDF
+                    download_link = create_download_link(st.session_state.resume_html, "resume", "pdf")
+                    
+                st.markdown(download_link, unsafe_allow_html=True)
             
         else:
             st.info("Fill in your details and generate your resume to see a preview here.")
