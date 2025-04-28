@@ -326,7 +326,7 @@ class KnowledgeUpdaterCrew:
             return {"error": str(e)}
     
     
-    def get_mock_updates(user_profile):
+    def get_mock_updates(self,user_profile):
         """Generate realistic mock updates with real links and images."""
         skills = user_profile.get('skills', [])
         job_preferences = user_profile.get('job_preferences', {})
