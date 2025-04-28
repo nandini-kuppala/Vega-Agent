@@ -4,11 +4,12 @@ import base64
 import tempfile
 import os
 import pandas as pd
-from resume_builder_agent import ResumeBuilderCrew
+from Resume.resume_builder_agent import ResumeBuilderCrew
 import markdown
 from bs4 import BeautifulSoup
 import re
 from backend.database import get_profile
+
 def display_resume_builder_page():
     """Display the resume builder page in Streamlit"""
     
