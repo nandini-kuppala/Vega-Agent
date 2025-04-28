@@ -304,7 +304,7 @@ def generate_learning_roadmap(user_profile, learning_goal_or_job):
     )
     
     # The final result will be a markdown report with all sections included
-    return result
+    return str(result)
 
 
 # Example usage
