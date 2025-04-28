@@ -174,12 +174,20 @@ def display_profile_modal():
             st.markdown('</div>', unsafe_allow_html=True)
             return            
         
-        res = get_profile(st.session_state['user_id'])
-        
-        if res["status"] == "success":
-            profile= res["profile"]
-        # Display profile information
-        profile = st.session_state.profile
+        # Get profile data
+        try:
+            res = get_profile(st.session_state['user_id'])
+            
+            if res["status"] == "success":
+                profile = res["profile"]
+            else:
+                st.error("Failed to retrieve profile data.")
+                st.markdown('</div>', unsafe_allow_html=True)
+                return
+        except Exception as e:
+            st.error(f"Error retrieving profile: {str(e)}")
+            st.markdown('</div>', unsafe_allow_html=True)
+            return
         
         # User header with avatar
         st.write(f"## {profile.get('name', 'User')}")
@@ -275,7 +283,6 @@ def display_profile_modal():
         
         st.markdown('</div>', unsafe_allow_html=True)
 
-
 def display_profile():
     """Display user profile information."""
     st.title("Your Profile")
@@ -284,12 +291,18 @@ def display_profile():
     if 'user_id' not in st.session_state:
         st.error("User ID not found in session state. Please log in again.")
         return
-    res = get_profile(st.session_state['user_id'])
         
-    if res["status"] == "success":
-        profile= res["profile"]
-        # Display profile information
-    profile = st.session_state.profile   
+    try:
+        res = get_profile(st.session_state['user_id'])
+        
+        if res["status"] == "success":
+            profile = res["profile"]
+        else:
+            st.error("Failed to retrieve profile data.")
+            return
+    except Exception as e:
+        st.error(f"Error retrieving profile: {str(e)}")
+        return
     
     col1, col2 = st.columns(2)
     
@@ -335,8 +348,6 @@ def display_profile():
         if community.get('wants_mentorship', False):
             st.write(f"**Mentorship Type:** {community.get('mentorship_type', 'Not specified')}")
         st.write(f"**Interested in Events:** {'Yes' if community.get('join_events', False) else 'No'}")
-
-
 def transcribe_audio(audio_data):
     """Transcribe audio using Sarvam AI API"""
     api_key = "0535ffaa-546d-4fd0-a380-ee76948e0d14"
