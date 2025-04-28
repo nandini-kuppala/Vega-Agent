@@ -361,7 +361,23 @@ def display_roadmap_page():
         st.rerun()
         return
     
-    st.title("Your Learning Roadmap")
+    st.markdown(
+        """
+        <h1 style="color: #4CAF50; text-align: center; font-family: 'Arial', sans-serif; font-size: 36px; font-weight: bold;">
+            Your Personalized Learning Roadmap Awaits! <span style="font-size: 40px;">🚀</span>
+        </h1>
+        <p style="text-align: center; font-family: 'Arial', sans-serif; font-size: 18px; color: #555;">
+            Ready to take your career to the next level? With our tailor-made roadmap, you’ll get a clear path forward, 
+            personalized just for you based on your skills, goals, and experience. Let’s start crafting the future you’ve always wanted! 
+        </p>
+        <div style="text-align: center;">
+            <img src="https://via.placeholder.com/400x200.png?text=Your+Learning+Journey+Starts+Here" 
+                alt="Learning Journey" 
+                style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+        </div>
+        """, unsafe_allow_html=True
+    )
+
     
     # Try to get user profile information
     try:
@@ -372,18 +388,19 @@ def display_roadmap_page():
             profile_data = result["profile"]
             
             # Display user information
-            st.markdown(f"### Hello! Let's build your personalized learning roadmap")
+            st.markdown("Hello! 👋 Let’s build your personalized learning roadmap! 🚀")
             
+            # Profile Summary Section
             col1, col2 = st.columns(2)
             
             with col1:
-                st.subheader("Your Profile Summary")
-                st.write(f"🎓 Education: {profile_data.get('education', 'Not specified')}")
-                st.write(f"💼 Experience: {profile_data.get('experience_years', 0)} years")
+                st.markdown(f"### 📋 Your Profile Summary")
+                st.write(f"🎓 **Education**: {profile_data.get('education', 'Not specified')}")
+                st.write(f"💼 **Experience**: {profile_data.get('experience_years', 0)} years")
                 
                 # Display skills as tags
                 if profile_data.get('skills'):
-                    st.write("🔧 Current Skills:")
+                    st.write("🔧 **Current Skills**:")
                     skill_html = "<div style='display: flex; flex-wrap: wrap; gap: 8px;'>"
                     for skill in profile_data.get('skills', []):
                         skill_html += f"<span style='background-color: #f0f0f0; padding: 5px 10px; border-radius: 20px; font-size: 14px;'>{skill}</span>"
@@ -391,14 +408,14 @@ def display_roadmap_page():
                     st.markdown(skill_html, unsafe_allow_html=True)
             
             with col2:
-                st.subheader("Career Goals")
+                st.markdown(f"### 🎯 Career Goals")
                 if 'job_preferences' in profile_data and profile_data['job_preferences']:
-                    st.write(f"🎯 Short-term: {profile_data['job_preferences'].get('short_term_goal', 'Not specified')}")
-                    st.write(f"🚀 Long-term: {profile_data['job_preferences'].get('long_term_goal', 'Not specified')}")
+                    st.write(f"🎯 **Short-term Goal**: {profile_data['job_preferences'].get('short_term_goal', 'Not specified')}")
+                    st.write(f"🚀 **Long-term Goal**: {profile_data['job_preferences'].get('long_term_goal', 'Not specified')}")
                     
                     # Display preferred roles
                     if 'roles' in profile_data['job_preferences']:
-                        st.write("👔 Preferred Roles:")
+                        st.write("👔 **Preferred Roles**:")
                         roles_html = "<div style='display: flex; flex-wrap: wrap; gap: 8px;'>"
                         for role in profile_data['job_preferences']['roles']:
                             roles_html += f"<span style='background-color: #e6f3ff; padding: 5px 10px; border-radius: 20px; font-size: 14px;'>{role}</span>"
@@ -406,14 +423,14 @@ def display_roadmap_page():
                         st.markdown(roles_html, unsafe_allow_html=True)
                 else:
                     st.info("Please complete your profile to view career goals")
+                    
+            st.markdown("<br><br>", unsafe_allow_html=True)
             
-            # Learning goal input
-            st.markdown("### What's your learning goal?")
+            # Learning goal input section
+            st.markdown("### 📚 What's your learning goal?")
             
             # Default learning goal based on profile
-            default_goal = ""
-            if 'job_preferences' in profile_data and profile_data['job_preferences'].get('short_term_goal'):
-                default_goal = profile_data['job_preferences'].get('short_term_goal')
+            default_goal = profile_data.get('job_preferences', {}).get('short_term_goal', "")
             
             # Add some predefined learning goals to choose from
             goal_options = [
@@ -425,7 +442,7 @@ def display_roadmap_page():
                 "Custom Goal"
             ]
             
-            # Goal selection
+            # Goal selection dropdown
             selected_goal = st.selectbox("Select a learning goal", options=goal_options)
             
             if selected_goal == "Custom Goal":
@@ -439,22 +456,22 @@ def display_roadmap_page():
             
             # Format the user profile data for the roadmap generator
             user_profile_text = f"""
-            Name: {st.session_state.get('username', 'User')}
-            Education: {profile_data.get('education', 'Not specified')}
+            **Name**: {st.session_state.get('username', 'User')}
+            **Education**: {profile_data.get('education', 'Not specified')}
             
-            Skills:
+            **Skills**:
             {', '.join(profile_data.get('skills', ['None specified']))}
             
-            Experience: {profile_data.get('experience_years', 0)} years
+            **Experience**: {profile_data.get('experience_years', 0)} years
             """
             
             if profile_data.get('last_job'):
                 user_profile_text += f"""
-                Last Job: {profile_data['last_job'].get('title', 'Not specified')} at {profile_data['last_job'].get('company', 'Not specified')}
+                **Last Job**: {profile_data['last_job'].get('title', 'Not specified')} at {profile_data['last_job'].get('company', 'Not specified')}
                 """
             
             # Generate roadmap button
-            if st.button("Generate Learning Roadmap", type="primary"):
+            if st.button("🔮 Generate Learning Roadmap", type="primary"):
                 if learning_goal:
                     with st.spinner("Generating your personalized learning roadmap... This may take a few minutes."):
                         try:
@@ -465,12 +482,12 @@ def display_roadmap_page():
                             st.session_state['current_roadmap'] = roadmap
                             
                             # Display the roadmap
-                            st.markdown("## Your Personalized Learning Roadmap")
+                            st.markdown("## 🗺️ Your Personalized Learning Roadmap")
                             st.markdown(roadmap)
                             
                             # Add a download button for the markdown file
                             st.download_button(
-                                label="Download Roadmap",
+                                label="📥 Download Roadmap",
                                 data=roadmap,
                                 file_name="my_learning_roadmap.md",
                                 mime="text/markdown"
@@ -483,12 +500,12 @@ def display_roadmap_page():
             
             # Display previously generated roadmap if it exists
             if 'current_roadmap' in st.session_state and not st.button:
-                st.markdown("## Your Personalized Learning Roadmap")
+                st.markdown("## 🗺️ Your Personalized Learning Roadmap")
                 st.markdown(st.session_state['current_roadmap'])
                 
                 # Add a download button for the markdown file
                 st.download_button(
-                    label="Download Roadmap", 
+                    label="📥 Download Roadmap", 
                     data=st.session_state['current_roadmap'],
                     file_name="my_learning_roadmap.md",
                     mime="text/markdown"
@@ -516,7 +533,6 @@ def display_roadmap_page():
         if st.button("Complete Your Profile"):
             st.session_state['page'] = 'questionnaire'
             st.rerun()
-
 
 def transcribe_audio(audio_data):
     """Transcribe audio using Sarvam AI API"""
@@ -1202,12 +1218,12 @@ def main():
         signup_page()
     elif page == 'questionnaire':
         questionnaire_page()
+    elif page == 'roadmap':
+        display_roadmap_page()
     elif page == 'home':
         display_home_page()
     elif page == 'chat':
-        display_chat_page()
-    elif page == 'roadmap':
-        display_roadmap_page()
+        display_chat_page()    
     else:
         st.error("Page not found!")
         st.session_state['page'] = 'login'
