@@ -806,28 +806,6 @@ def display_resume_builder_page():
                 
                 return href
             
-            # Add a helper function for cleaning HTML
-            def clean_html_for_preview(html_content):
-                """Clean HTML to remove unwanted elements for preview"""
-                # Parse HTML
-                soup = BeautifulSoup(html_content, 'html.parser')
-                
-                # Remove style tags
-                for style_tag in soup.find_all('style'):
-                    style_tag.decompose()
-                
-                # Remove any HTML/head/meta tags
-                if soup.head:
-                    soup.head.decompose()
-                
-                # If there's an unwanted title that contains "- Resume body" text, remove it
-                for tag in soup.find_all(string=re.compile("- Resume body")):
-                    parent = tag.parent
-                    if parent:
-                        parent.decompose()
-                
-                # Convert back to string
-                return str(soup)
             
             # Download section with better styling
             st.markdown("""
