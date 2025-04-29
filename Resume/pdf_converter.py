@@ -104,3 +104,18 @@ class LaTeXPDFConverter:
             href = f'<a href="data:text/plain;base64,{b64}" download="{filename}.{format_type}">Download as {format_type.upper()}</a>'
         
         return href
+    def convert(self, latex_content):
+        """
+        Compatibility method that calls convert_latex_to_pdf
+        
+        Args:
+            latex_content (str): LaTeX content to convert
+            
+        Returns:
+            bytes: PDF binary data (or None if conversion fails)
+        """
+        try:
+            pdf_binary, _, _ = self.convert_latex_to_pdf(latex_content)
+            return pdf_binary
+        except Exception:
+            return None

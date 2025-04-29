@@ -164,6 +164,7 @@ class ResumeBuilderCrew:
             expected_output="""Complete, properly formatted LaTeX code that:
             - Strictly follows the template structure
             - Fits all content on a single page
+
             - Includes all required sections properly organized
             - Is ready for immediate compilation
             - Maintains ATS-friendliness while having visual appeal
@@ -201,22 +202,28 @@ class ResumeBuilderCrew:
         )
         
         # Run the crew to get the result
-        result = crew.kickoff()
+        crew_result = crew.kickoff()
         
         # Extract LaTeX code from the result
-        latex_code = self._extract_latex_code(result)
+        latex_code = self._extract_latex_code(crew_result)
         
         # Format the LaTeX code with proper template and styling
         formatted_latex = self.latex_formatter.format(latex_code, user_profile)
         
-        # Convert to PDF
-        pdf_binary = self.pdf_converter.convert(formatted_latex)
-        
-        return {
-            "latex_code": formatted_latex,
-            "pdf_binary": pdf_binary
-        }
-    
+        # Try to convert to PDF, but handle if it fails
+        try:
+            pdf_binary, message, _ = self.pdf_converter.convert_latex_to_pdf(formatted_latex)
+            return {
+                "latex_code": formatted_latex,
+                "pdf_binary": pdf_binary,
+                "message": message
+            }
+        except Exception as e:
+            return {
+                "latex_code": formatted_latex,
+                "pdf_binary": None,
+                "message": str(e)
+            }
     def _extract_latex_code(self, crew_result):
         """
         Extract the LaTeX code from the crew result
@@ -235,8 +242,8 @@ class ResumeBuilderCrew:
         
         if matches:
             # Return the last LaTeX code block found
-            return str(matches[-1].strip())
+            return matches[-1].strip()
         else:
             # If no LaTeX code block is found, return the raw result
             # This assumes the entire result might be LaTeX code without code block formatting
-            return str(crew_result.strip())
+            return crew_result.strip()

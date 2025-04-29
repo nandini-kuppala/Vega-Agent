@@ -405,68 +405,46 @@ def display_resume_builder_page():
                                 projects_str += "\n"
                         
                         # Build resume using the crew
-                        crew_output = resume_builder.build_resume(
+                        crew_result = resume_builder.build_resume(
                             user_profile=processed_data['user_profile'],
                             job_description=st.session_state.job_description,
                             projects=projects_str,
                             achievements=achievements_str
                         )
-                        
+                        # Get the LaTeX code and PDF binary directly from the result
+                        if isinstance(crew_result, dict):
+                            # New version returning a dictionary
+                            latex_code = crew_result.get('latex_code', '')
+                            pdf_binary = crew_result.get('pdf_binary')
+                            result_message = crew_result.get('message', '')
+
+                            if result_message:
+                                st.info(result_message)
+                        else:
+                            # Handle the CrewOutput object
+                            st.write("Debug - Result type:", type(crew_result).__name__)
+                            
+                            # Extract LaTeX code from the CrewOutput
+                            latex_code = resume_builder._extract_latex_code(str(crew_result))
+                            
+                            # Format the LaTeX code
+                            latex_code = resume_builder.latex_formatter.format(latex_code, processed_data['user_profile'])
+                            
+                            # We'll generate PDF separately
+                            pdf_binary = None
                         # Debug output
-                        st.write("Debug - Result type:", type(crew_output).__name__)
-                        
-                        # Access the LaTeX formatter's final output directly
-                        latex_formatter_task = None
-                        
-                        # Try to find the LaTeX Formatter task's result
-                        if hasattr(crew_output, 'tasks'):
-                            for task in crew_output.tasks:
-                                if hasattr(task, 'agent') and 'LaTeX' in getattr(task.agent, 'name', ''):
-                                    latex_formatter_task = task
-                                    break
-                        
-                        # Get the LaTeX code
-                        latex_code = ""
-                        
-                        # If we found the LaTeX formatter task
-                        if latex_formatter_task and hasattr(latex_formatter_task, 'output'):
-                            if isinstance(latex_formatter_task.output, dict):
-                                latex_code = latex_formatter_task.output.get('latex_code', '')
-                            elif isinstance(latex_formatter_task.output, str):
-                                latex_code = latex_formatter_task.output
-                        
-                        # If we couldn't find the specific task, try to extract from the crew output directly
-                        if not latex_code:
-                            # Try to access as attributes or dict
-                            if hasattr(crew_output, 'output'):
-                                output_obj = crew_output.output
-                                if isinstance(output_obj, dict):
-                                    latex_code = output_obj.get('latex_code', '')
-                                elif isinstance(output_obj, str):
-                                    latex_code = output_obj
-                            elif hasattr(crew_output, 'latex_code'):
-                                latex_code = crew_output.latex_code
-                        
-                        # If we still don't have LaTeX code, log the structure
-                        if not latex_code:
-                            st.write("Debug - CrewOutput structure:", dir(crew_output))
-                            st.error("Could not extract LaTeX code from the result.")
-                            st.error("Please check the ResumeBuilderCrew implementation.")
-                            return
-                        
-                        # Store results in session state
                         st.session_state.latex_code = latex_code
-                        st.session_state.pdf_binary = None  # We'll generate PDF on the fly
-                        
+                        st.session_state.pdf_binary = pdf_binary
+
                         # Display message
                         st.success("Resume generated successfully!")
-                        
+
                         # Display tabs for viewing and downloading results
                         results_tabs = st.tabs(["LaTeX Code", "Download"])
-                        
+
                         with results_tabs[0]:
                             st.code(latex_code, language="latex")
-                        
+
                         with results_tabs[1]:
                             # Create converter for download links
                             pdf_converter = LaTeXPDFConverter()
@@ -482,21 +460,34 @@ def display_resume_builder_page():
                             )
                             st.markdown(latex_download, unsafe_allow_html=True)
                             
-                            # Try to generate PDF on-the-fly
-                            try:
-                                pdf_binary = pdf_converter.convert_latex_to_pdf(latex_code)
-                                if pdf_binary:
-                                    st.session_state.pdf_binary = pdf_binary
-                                    pdf_download = pdf_converter.create_download_link(
-                                        pdf_binary,
-                                        f"resume_{st.session_state.user_profile['name'].replace(' ', '_')}",
-                                        "pdf"
-                                    )
-                                    st.markdown(pdf_download, unsafe_allow_html=True)
-                                else:
-                                    st.warning("PDF generation failed. You can download the LaTeX code and compile it manually.")
-                            except Exception as pdf_err:
-                                st.warning(f"PDF generation failed: {str(pdf_err)}. You can download the LaTeX code and compile it manually.")
+                            # If we already have PDF binary
+                            if pdf_binary:
+                                pdf_download = pdf_converter.create_download_link(
+                                    pdf_binary,
+                                    f"resume_{st.session_state.user_profile['name'].replace(' ', '_')}",
+                                    "pdf"
+                                )
+                                st.markdown(pdf_download, unsafe_allow_html=True)
+                            else:
+                                # Try to generate PDF on-the-fly
+                                try:
+                                    pdf_binary, message, _ = pdf_converter.convert_latex_to_pdf(latex_code)
+                                    if pdf_binary:
+                                        st.session_state.pdf_binary = pdf_binary
+                                        pdf_download = pdf_converter.create_download_link(
+                                            pdf_binary,
+                                            f"resume_{st.session_state.user_profile['name'].replace(' ', '_')}",
+                                            "pdf"
+                                        )
+                                        st.markdown(pdf_download, unsafe_allow_html=True)
+                                        if message:
+                                            st.success(message)
+                                    else:
+                                        st.warning("PDF generation failed. You can download the LaTeX code and compile it manually.")
+                                except Exception as pdf_err:
+                                    st.warning(f"PDF generation failed: {str(pdf_err)}. You can download the LaTeX code and compile it manually.")
+
+
                             
                             # Instructions for manual compilation
                             with st.expander("How to compile LaTeX manually"):
