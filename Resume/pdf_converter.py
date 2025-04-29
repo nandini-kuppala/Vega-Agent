@@ -104,18 +104,22 @@ class LaTeXPDFConverter:
             href = f'<a href="data:text/plain;base64,{b64}" download="{filename}.{format_type}">Download as {format_type.upper()}</a>'
         
         return href
-    def convert(self, latex_content):
+    def convert(self, latex_content, filename="resume"):
         """
-        Compatibility method that calls convert_latex_to_pdf
+        Convert LaTeX content to PDF.
         
         Args:
-            latex_content (str): LaTeX content to convert
+            latex_content: String containing LaTeX document
+            filename: Output filename (without extension)
             
         Returns:
-            bytes: PDF binary data (or None if conversion fails)
+            PDF binary data or None if conversion fails
         """
         try:
-            pdf_binary, _, _ = self.convert_latex_to_pdf(latex_content)
-            return pdf_binary
-        except Exception:
+            # Try to convert LaTeX to PDF
+            pdf_data, _, _ = self.convert_latex_to_pdf(latex_content, filename)
+            return pdf_data
+        except Exception as e:
+            # If conversion fails, return None
+            print(f"PDF conversion failed: {str(e)}")
             return None

@@ -1,4 +1,3 @@
-# resume_builder_agent.py
 from crewai import Agent, Task, Crew, Process
 import os
 from crewai import LLM
@@ -164,7 +163,6 @@ class ResumeBuilderCrew:
             expected_output="""Complete, properly formatted LaTeX code that:
             - Strictly follows the template structure
             - Fits all content on a single page
-
             - Includes all required sections properly organized
             - Is ready for immediate compilation
             - Maintains ATS-friendliness while having visual appeal
@@ -202,28 +200,27 @@ class ResumeBuilderCrew:
         )
         
         # Run the crew to get the result
-        crew_result = crew.kickoff()
+        result = crew.kickoff()
         
         # Extract LaTeX code from the result
-        latex_code = self._extract_latex_code(crew_result)
+        latex_code = self._extract_latex_code(result)
         
         # Format the LaTeX code with proper template and styling
         formatted_latex = self.latex_formatter.format(latex_code, user_profile)
         
-        # Try to convert to PDF, but handle if it fails
+        # Convert to PDF
         try:
-            pdf_binary, message, _ = self.pdf_converter.convert_latex_to_pdf(formatted_latex)
-            return {
-                "latex_code": formatted_latex,
-                "pdf_binary": pdf_binary,
-                "message": message
-            }
+            pdf_data, _, _ = self.pdf_converter.convert_latex_to_pdf(formatted_latex)
+            pdf_binary = pdf_data
         except Exception as e:
-            return {
-                "latex_code": formatted_latex,
-                "pdf_binary": None,
-                "message": str(e)
-            }
+            # Handle PDF conversion failure
+            pdf_binary = None
+            print(f"PDF conversion failed: {str(e)}")
+        
+        return {
+            "latex_code": formatted_latex,
+            "pdf_binary": pdf_binary
+        }
     def _extract_latex_code(self, crew_result):
         """
         Extract the LaTeX code from the crew result
