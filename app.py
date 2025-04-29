@@ -32,9 +32,9 @@ from user_profile.signup import signup_page
 from user_profile.questionnaire import questionnaire_page
 
 from utils.design_utils import inject_global_styles
-from pages.home import display_home_page
-from pages.profile import display_profile_modal
-from pages.chat_page import display_chat_page
+from Screens.home import display_home_page
+from Screens.profile import display_profile_modal
+from Screens.chat_page import display_chat_page
 
 
 def main():
@@ -43,7 +43,7 @@ def main():
         page_title="ASHA AI Bot",
         page_icon="👩‍💼",
         layout="wide",
-        initial_sidebar_state="collapsed"
+        initial_sidebar_state="expanded"
     )
 
     # Apply global CSS
