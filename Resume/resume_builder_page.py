@@ -494,22 +494,19 @@ def _process_form_data(user_profile, education, experience, projects, skills, ac
     processed_experience = []
     for exp in experience:
         if exp['title'] and exp['company']:
+            exp_copy = exp.copy()
             # Filter out empty responsibilities
-            processed_resp = [r for r in exp['responsibilities'] if r]
-            if processed_resp:
-                exp_copy = exp.copy()
-                exp_copy['responsibilities'] = processed_resp
-                processed_experience.append(exp_copy)
-            else:
-                processed_experience.append(exp)
+            processed_resp = [r for r in exp.get('responsibilities', []) if r]
+            exp_copy['responsibilities'] = processed_resp
+            processed_experience.append(exp_copy)
     
     # Filter out empty projects and descriptions
     processed_projects = []
     for proj in projects:
         if proj['title']:
-            # Filter out empty descriptions
-            processed_desc = [d for d in proj['description'] if d]
             proj_copy = proj.copy()
+            # Filter out empty descriptions
+            processed_desc = [d for d in proj.get('description', []) if d]
             proj_copy['description'] = processed_desc
             processed_projects.append(proj_copy)
     
@@ -530,6 +527,7 @@ def _process_form_data(user_profile, education, experience, projects, skills, ac
         'skills': processed_skills,
         'achievements': processed_achievements
     }
+
 
 if __name__ == "__main__":
     display_resume_builder_page()
