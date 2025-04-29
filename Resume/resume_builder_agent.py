@@ -11,22 +11,21 @@ class ResumeBuilderCrew:
         """Initialize the Resume Builder Crew with API key"""
         self.llm = LLM(
             model="gemini/gemini-1.5-flash",
-            temperature=0.5,
+            temperature=0.7,
             api_key=api_key
         )
     
     def create_agents(self):
-        """Create the agents for the enhanced resume building process"""
+        """Create the agents for the resume building process"""
         
-        # Industry Research Agent
-        industry_researcher = Agent(
-            role="Industry Research Specialist",
-            goal="Research industry standards, trending skills, and specific employer requirements",
-            backstory="""You are an industry intelligence expert with deep knowledge of current market trends,
-            employer preferences, and hiring patterns across various sectors. You can quickly identify which skills,
-            experiences, and qualifications are most valued in specific industries and roles. Your research ensures
-            that resumes are aligned with current market expectations and contain the most relevant and impressive
-            information for the target position.""",
+        # Resume Expert Agent
+        resume_expert = Agent(
+            role="ATS Resume Expert",
+            goal="Create ATS-friendly resumes that maximize interview callback rates",
+            backstory="""You are a highly experienced resume writer with 15+ years of experience
+            helping candidates get past Applicant Tracking Systems (ATS) and land interviews.
+            You know exactly how to optimize resumes for relevant keywords, structure them properly,
+            and highlight achievements in a way that appeals to both ATS systems and human recruiters.""",
             verbose=True,
             llm=self.llm,
             allow_delegation=False
@@ -35,43 +34,11 @@ class ResumeBuilderCrew:
         # Job Description Analyzer Agent
         job_analyzer = Agent(
             role="Job Description Analyzer",
-            goal="Extract key requirements, identify hidden expectations, and map candidate qualifications to job needs",
+            goal="Extract key skills, requirements, and priorities from job descriptions",
             backstory="""You are an expert at analyzing job descriptions and identifying exactly what 
             employers are looking for. You can extract key requirements, must-have skills, preferred
-            qualifications, and the hidden priorities that aren't explicitly stated. You excel at 
-            reading between the lines to understand what would make a candidate truly stand out.
-            You're skilled at mapping candidate qualifications to job requirements and identifying
-            gaps that need to be addressed.""",
-            verbose=True,
-            llm=self.llm,
-            allow_delegation=True
-        )
-        
-        # Content Enhancement Agent
-        content_enhancer = Agent(
-            role="Resume Content Enhancer",
-            goal="Transform basic candidate information into compelling, achievement-focused content",
-            backstory="""You are a master at transforming ordinary job descriptions into compelling
-            achievement statements. You know how to take minimal information and expand it into
-            impressive bullet points that highlight skills, results, and value added. You're an expert
-            at reading between the lines of a candidate's experience to identify transferable skills
-            and hidden achievements. You excel at crafting stories that demonstrate impact and showcase
-            a candidate's potential even when they provide limited information.""",
-            verbose=True,
-            llm=self.llm,
-            allow_delegation=True
-        )
-        
-        # ATS Optimization Agent
-        ats_optimizer = Agent(
-            role="ATS Optimization Specialist",
-            goal="Ensure the resume passes through ATS filters and ranks highly in candidate screening",
-            backstory="""You are an ATS expert who understands how these systems parse, rank, and filter resumes.
-            You know exactly which keywords to include, how to format content, and what strategies to employ
-            to maximize a resume's ranking in ATS systems. You understand the technical aspects of how different
-            ATS platforms work, and can optimize a resume to perform well across multiple systems. You're also skilled
-            at balancing ATS optimization with human readability to ensure the resume appeals to both automated systems
-            and human recruiters.""",
+            qualifications, and even the hidden priorities that aren't explicitly stated. Your analysis
+            ensures resumes can be perfectly tailored to specific positions.""",
             verbose=True,
             llm=self.llm,
             allow_delegation=True
@@ -79,110 +46,54 @@ class ResumeBuilderCrew:
         
         # Resume Formatter Agent
         resume_formatter = Agent(
-            role="Resume Formatter & Design Expert",
-            goal="Create visually appealing, properly structured resumes that are both ATS-friendly and impressive to human recruiters",
+            role="Resume Formatter",
+            goal="Structure and format resumes for optimal ATS parsing and visual appeal",
             backstory="""You are a formatting and design expert who knows exactly how to structure
-            resumes for maximum impact. You understand the psychology of how recruiters scan resumes
-            and know exactly how to organize information to draw attention to the most impressive elements.
-            You're skilled at creating clean, modern designs that pass through ATS systems while still
-            standing out visually to human readers. You know how to optimize spacing, typography, and layout
-            to create a resume that looks professional and fits perfectly on a single page without appearing
-            cluttered or overwhelming.""",
+            resumes for maximum readability by both ATS systems and human recruiters. You understand
+            which formats work best, how to organize sections, and how to ensure all critical information
+            is presented in a way that's easy to scan and absorb.""",
             verbose=True,
             llm=self.llm,
             allow_delegation=True
         )
         
-        # Final Review Agent
-        final_reviewer = Agent(
-            role="Final Resume Reviewer",
-            goal="Provide a comprehensive final review to ensure the resume is flawless and optimized for success",
-            backstory="""You are a meticulous reviewer with an eye for detail and a strategic mindset.
-            You critically examine resumes from multiple perspectives: the ATS system, the recruiter who
-            will scan it for 6-10 seconds, the hiring manager who needs to see relevant experience, and
-            the candidate who needs to stand out from the competition. You're skilled at identifying
-            weaknesses or missed opportunities and providing specific recommendations for improvement.
-            You understand what makes a resume truly exceptional and know how to take it from good to outstanding.""",
-            verbose=True,
-            llm=self.llm,
-            allow_delegation=True
-        )
-        
-        return [industry_researcher, job_analyzer, content_enhancer, ats_optimizer, resume_formatter, final_reviewer]
+        return [resume_expert, job_analyzer, resume_formatter]
     
     def create_tasks(self, agents, user_profile, job_description, projects, achievements):
-        """Create tasks for the enhanced resume building process"""
+        """Create tasks for the resume building process"""
         
         # Unpack agents
-        industry_researcher, job_analyzer, content_enhancer, ats_optimizer, resume_formatter, final_reviewer = agents
+        resume_expert, job_analyzer, resume_formatter = agents
         
-        # Task 1: Industry and Role Research
-        research_task = Task(
-            description=f"""Research the industry standards, trending skills, and ideal qualifications for this role.
-            
-            Based on available information, identify:
-            1. The industry and specific sector this role belongs to
-            2. Current trending skills and qualifications in this field
-            3. Typical career progression paths for this role
-            4. What makes candidates stand out in this particular field
-            5. Relevant industry-specific terminology, tools, and technologies
+        # Task 1: Analyze Job Description
+        analyze_job = Task(
+            description=f"""Analyze the job description carefully to extract:
+            1. Required skills and qualifications
+            2. Preferred skills and experience
+            3. Key responsibilities
+            4. Industry-specific keywords and phrases
+            5. Soft skills that appear important for the role
             
             Job Description:
             {job_description}
             
-            User Profile Overview:
-            {json.dumps(user_profile, indent=2, cls=DateTimeEncoder)}
-            
-            Provide comprehensive insights that will help position this candidate as an ideal fit for the role.
+            Provide a structured analysis that can be used to optimize a resume.
             """,
-            agent=industry_researcher,
-            expected_output="""A detailed analysis of the industry standards including:
-            - Industry overview and current trends
-            - Most valued skills and qualifications for this specific role
-            - Industry-specific terminology and technologies
-            - What makes candidates stand out in this field
-            - Recommendations for positioning the candidate effectively
+            agent=job_analyzer,
+            expected_output="""A detailed analysis of the job description with lists of:
+            - Required technical skills
+            - Required soft skills
+            - Key responsibilities
+            - Important keywords
+            - Industry-specific terminology
             """
         )
         
-        # Task 2: Analyze Job Description
-        analyze_job = Task(
-            description=f"""Perform a deep analysis of the job description to extract:
-            1. Required skills, qualifications, and experience levels
-            2. Preferred/desired skills and experience
-            3. Key responsibilities and expected deliverables
-            4. Specific technical tools, software, or methodologies mentioned
-            5. Soft skills and personality traits indicated (directly or implied)
-            6. Company values and culture indicators
-            7. Hidden requirements and expectations not explicitly stated
-            8. Priority areas (what's mentioned first or repeatedly)
+        # Task 2: Tailor Resume Content
+        tailor_resume = Task(
+            description=f"""Using the job description analysis and the candidate's profile, create tailored content for each section of the resume.
             
-            Job Description:
-            {job_description}
-            
-            Industry Research:
-            {{research_task.output}}
-            
-            Provide a comprehensive analysis that maps exactly what this employer is looking for.
-            For each requirement, assign a priority level (Must-Have, Important, Nice-to-Have).
-            """,
-            agent=job_analyzer,
-            expected_output="""A detailed analysis of the job requirements including:
-            - Prioritized list of technical skills and qualifications
-            - Prioritized list of soft skills and traits
-            - Key responsibilities and expected results
-            - Company values and culture fit indicators
-            - Hidden requirements and expectations
-            - Industry-specific keywords and phrases to include
-            - Recommendations for areas to emphasize based on priority
-            """,
-            dependencies=[research_task]
-        )
-        
-        # Task 3: Enhance and Expand Candidate Content
-        enhance_content = Task(
-            description=f"""Based on the job analysis and the candidate's profile, enhance and expand their information
-            to create compelling, achievement-focused content that aligns with job requirements.
+            IMPORTANT: This resume MUST fit on a single page. Be concise and focus on the most relevant information.
             
             Candidate Profile:
             {json.dumps(user_profile, indent=2, cls=DateTimeEncoder)}
@@ -193,135 +104,59 @@ class ResumeBuilderCrew:
             Achievements:
             {achievements}
             
-            Job Analysis:
-            {{analyze_job.output}}
+            Focus on:
+            1. Creating a powerful but BRIEF professional summary (max 2-3 lines)
+            2. Limiting work experience to 3-4 most relevant positions with 2-3 bullet points each
+            3. Using concise language and removing unnecessary words
+            4. Quantifying achievements with metrics where possible
+            5. Using action verbs and targeted keywords from the job description
+            6. Keeping all content highly relevant to the target position
             
-            For each position and project:
-            1. Transform basic descriptions into powerful achievement statements
-            2. Add relevant metrics and quantifiable results (estimate reasonable metrics if not provided)
-            3. Highlight skills and experiences that directly match job requirements
-            4. Identify and add transferable skills that might not be obvious
-            5. Incorporate relevant industry terminology and keywords
-            6. Ensure each bullet point demonstrates value and impact
-            7. Fill in gaps in the candidate's experience with reasonable, implied accomplishments
-            
-            Focus on creating content that showcases the candidate as an ideal fit for the role,
-            even if their original information was limited or basic.
+            Make sure the final resume is compact enough to fit on a single page.
             """,
-            agent=content_enhancer,
-            expected_output="""Enhanced and expanded content including:
-            - Compelling professional summary
-            - Achievement-focused bullet points for each position
-            - Quantified results and metrics
-            - Highlighted relevant skills and experiences
-            - Added transferable skills and implied accomplishments
-            - Industry-specific terminology and keywords
-            All content should be truthful but presented in the most impressive light possible.
+            agent=resume_expert,
+            expected_output="""Complete content for each resume section, including:
+            - Brief professional summary (2-3 lines)
+            - Work experience with 2-3 bullet points per position
+            - Education details (degree, institution, year only)
+            - Skills section (relevant skills only)
+            - Relevant projects with brief descriptions
+            - Key achievements section
+            All content should be compact and optimized for a single-page resume.
             """,
             dependencies=[analyze_job]
         )
         
-        # Task 4: Optimize for ATS
-        optimize_ats = Task(
-            description=f"""Optimize the enhanced resume content for ATS systems to ensure it passes
-            through filters and ranks highly in candidate screening.
-            
-            Enhanced Content:
-            {{enhance_content.output}}
-            
-            Job Analysis:
-            {{analyze_job.output}}
-            
-            Perform the following optimizations:
-            1. Incorporate all high-priority keywords from the job description
-            2. Use exact terminology matches for skills, tools, and qualifications
-            3. Ensure proper section headers that ATS systems recognize
-            4. Balance keyword density (include keywords without keyword stuffing)
-            5. Check for any critical skills or requirements that might be missing
-            6. Verify that the resume structure follows ATS-friendly conventions
-            7. Ensure proper handling of abbreviations, acronyms, and technical terms
-            
-            Provide an ATS-optimized version of the resume content that maintains readability
-            and appeal for human reviewers.
-            """,
-            agent=ats_optimizer,
-            expected_output="""ATS-optimized resume content including:
-            - Strategic keyword placement
-            - Proper section headers
-            - Optimized skill sections
-            - Balanced keyword density
-            - Properly formatted technical terms and acronyms
-            - Recommendations for any missing critical keywords
-            """,
-            dependencies=[enhance_content]
-        )
-        
-        # Task 5: Format and Structure Resume
+        # Task 3: Format and Structure Resume
         format_resume = Task(
-            description=f"""Create a properly structured and formatted resume using the optimized content.
+            description="""Create a properly structured and formatted resume using the content provided.
             
-            ATS-Optimized Content:
-            {{optimize_ats.output}}
+            Follow these ATS-friendly formatting guidelines:
+            1. Use a clean, simple structure that can be easily parsed by ATS
+            2. Include clear section headers (Summary, Experience, Education, Skills, Projects, etc.)
+            3. Use a chronological or hybrid format depending on the candidate's experience
+            4. Ensure proper spacing and organization
+            5. Include all required contact information
+            6. Format the resume in a way that it can be presented as clean HTML/markdown
             
-            Follow these formatting guidelines:
-            1. Create a clean, modern design that passes ATS checks
-            2. Prioritize the most impressive and relevant information visually
-            3. Use strategic formatting to draw attention to key achievements
-            4. Organize sections in order of importance to this specific role
-            5. Ensure proper spacing and visual hierarchy
-            6. Include all required contact information
-            7. Format the resume to fit perfectly on a single page
-            8. Ensure formatting is consistent throughout
-            
-            The final resume should be both ATS-friendly and visually impressive to human recruiters.
-            Focus on creating a design that makes the candidate stand out while ensuring all content is
-            properly parsed by ATS systems.
+            Deliver a complete, formatted resume that is both ATS-friendly and visually appealing to human recruiters.
             """,
             agent=resume_formatter,
-            expected_output="""A complete, formatted resume with:
-            - Professional heading with contact information
-            - Strategic ordering of sections based on relevance
-            - Clean, modern design that passes ATS checks
-            - Proper spacing and visual hierarchy
-            - Consistent formatting throughout
-            - All content fitting perfectly on a single page
+            expected_output="""A complete, formatted resume with all sections properly organized, including:
+            - Contact information
+            - Professional summary
+            - Work experience
+            - Education
+            - Skills
+            - Projects
+            - Achievements
             
             The resume should be provided in a clean, structured format that can be easily rendered in HTML or markdown.
             """,
-            dependencies=[optimize_ats]
+            dependencies=[tailor_resume]
         )
         
-        # Task 6: Final Review and Optimization
-        final_review = Task(
-            description=f"""Perform a comprehensive final review of the resume to ensure it is flawless
-            and optimized for success.
-            
-            Formatted Resume:
-            {{format_resume.output}}
-            
-            Job Analysis:
-            {{analyze_job.output}}
-            
-            Review the resume for:
-            1. Overall impact and effectiveness at showcasing the candidate
-            2. Perfect alignment with job requirements
-            3. Compelling narrative that tells a clear story
-            4. Appropriate emphasis on most relevant skills and experiences
-            5. Proper balance of technical skills and soft skills
-            6. Any gaps or weaknesses that could be addressed
-            7. Any final optimizations for ATS or human appeal
-            8. Typos, grammatical errors, or inconsistencies
-            
-            Provide the final, polished resume along with 3-5 key strengths of this resume and
-            why it will help the candidate get selected for this role.
-            """,
-            agent=final_reviewer,
-            expected_output="""The resume should be provided in a clean, structured format that can be easily rendered in HTML or markdown.
-            """,
-            dependencies=[format_resume]
-        )
-        
-        return [research_task, analyze_job, enhance_content, optimize_ats, format_resume, final_review]
+        return [analyze_job, tailor_resume, format_resume]
     
     def build_resume(self, user_profile, job_description, projects, achievements):
         """Main function to build a resume"""
@@ -361,52 +196,16 @@ class ResumeBuilderCrew:
             # Fallback
             raise ValueError("Could not extract resume text from crew result")
         
-        # Clean and extract the resume portion
-        cleaned_result = self._clean_resume_text(result_text)
+        # Basic cleaning - this might need to be enhanced based on actual output
+        cleaned_result = result_text
         
-        return cleaned_result
-    
-    def _clean_resume_text(self, result_text):
-        """Clean up the resume text more thoroughly"""
-        # Remove any markdown code block markers
-        cleaned_result = re.sub(r'```(?:markdown|md|html)?\n', '', result_text)
+        # Remove any markdown code block markers if present
+        cleaned_result = re.sub(r'```(?:markdown|md|html)?\n', '', cleaned_result)
         cleaned_result = re.sub(r'```', '', cleaned_result)
         
-        # Extract just the resume portion if there's additional commentary
-        # Look for common resume section markers
-        resume_sections = [
-            "# RESUME", "# Resume", "# Professional Resume",
-            "CONTACT INFORMATION", "PROFESSIONAL SUMMARY", "SUMMARY",
-            "EXPERIENCE", "WORK EXPERIENCE", "SKILLS", "EDUCATION"
-        ]
-        
-        # Find the start of the resume content
-        resume_start = len(result_text)
-        for section in resume_sections:
-            pos = result_text.find(section)
-            if pos != -1 and pos < resume_start:
-                resume_start = pos
-        
-        # Find the end of the resume content (look for review sections or agent comments)
-        end_markers = [
-            "# Review", "# KEY STRENGTHS", "# RECOMMENDATIONS",
-            "Here are the key strengths", "This resume will help the candidate"
-        ]
-        
-        resume_end = len(result_text)
-        for marker in end_markers:
-            pos = result_text.find(marker, resume_start)
-            if pos != -1 and pos < resume_end:
-                resume_end = pos
-        
-        # Extract just the resume portion
-        if resume_start < len(result_text):
-            resume_text = result_text[resume_start:resume_end].strip()
-        else:
-            resume_text = cleaned_result
-        
         # Remove any agent commentary that might be present
-        resume_text = re.sub(r'As the Final Resume Reviewer,.*?(?=\n\n|\Z)', '', resume_text, flags=re.DOTALL)
-        resume_text = re.sub(r'As the Resume Formatter,.*?(?=\n\n|\Z)', '', resume_text, flags=re.DOTALL)
+        # This is a simple approach and might need refinement based on actual output patterns
+        if "# Resume" in cleaned_result:
+            cleaned_result = cleaned_result[cleaned_result.find("# Resume"):]
         
-        return resume_text.strip()
+        return cleaned_result
