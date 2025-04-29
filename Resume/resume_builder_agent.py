@@ -235,7 +235,7 @@ class ResumeBuilderCrew:
         
         if matches:
             # Return the last LaTeX code block found
-            return matches[-1].strip()
+            return str(matches[-1].strip())
         else:
             # If no LaTeX code block is found, return the raw result
             # This assumes the entire result might be LaTeX code without code block formatting
