@@ -1,507 +1,617 @@
 # resume_builder_page
 import streamlit as st
-import json
-import os
-from datetime import datetime
+from backend.database import get_profile
 from Resume.resume_builder_agent import ResumeBuilderCrew
-from Resume.latex_formatter import LaTeXResumeFormatter
-from Resume.pdf_converter import LaTeXPDFConverter
+import streamlit as st
+import json
+import base64
+import tempfile
+import os
+import pandas as pd
+import markdown
+from bs4 import BeautifulSoup
+import re
+from io import BytesIO
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, ListItem, ListFlowable
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.units import inch
+from reportlab.lib import colors
+from html.parser import HTMLParser
+import html
+
+class HTMLToReportLabParser(HTMLParser):
+    """Parser to convert HTML to ReportLab elements optimized for single-page resumes"""
+    
+    def __init__(self):
+        super().__init__()
+        self.styles = getSampleStyleSheet()
+        self.custom_styles()
+        self.elements = []
+        self.list_items = []
+        self.in_list = False
+        self.in_heading = False
+        self.heading_level = 0
+        self.current_text = ""
+        self.in_style_tag = False
+        
+    def custom_styles(self):
+        """Define custom styles for a compact, single-page resume"""
+        # Title style
+        self.styles.add(ParagraphStyle(
+            name='ResumeTitle',
+            parent=self.styles['Title'],
+            fontSize=14,  # Reduced from 18
+            spaceAfter=6,  # Reduced from 10
+            textColor=colors.darkblue
+        ))
+        
+        # Heading styles
+        self.styles.add(ParagraphStyle(
+            name='ResumeH1',
+            parent=self.styles['Heading1'],
+            fontSize=12,  # Reduced from 16
+            spaceAfter=4,  # Reduced from 8
+            textColor=colors.darkblue
+        ))
+        
+        self.styles.add(ParagraphStyle(
+            name='ResumeH2',
+            parent=self.styles['Heading2'],
+            fontSize=11,  # Reduced from 14
+            spaceAfter=3,  # Reduced from 6
+            textColor=colors.darkblue
+        ))
+        
+        # Section style - compact
+        self.styles.add(ParagraphStyle(
+            name='ResumeSection',
+            parent=self.styles['Normal'],
+            fontSize=9,  # Reduced from 11
+            spaceAfter=3,  # Reduced from 6
+            leading=12  # Reduced from 14
+        ))
+        
+        # Contact info style
+        self.styles.add(ParagraphStyle(
+            name='ContactInfo',
+            parent=self.styles['Normal'],
+            fontSize=9,  # Reduced from 11
+            alignment=1,  # Center
+            spaceAfter=6  # Reduced from 12
+        ))
+    
+    def handle_starttag(self, tag, attrs):
+        # Skip style tags completely
+        if tag == 'style':
+            self.in_style_tag = True
+            return
+            
+        # Process any accumulated text before handling the new tag
+        if self.current_text.strip() and not self.in_style_tag:
+            self.handle_text_chunk()
+        
+        if tag == 'ul' or tag == 'ol':
+            self.in_list = True
+            self.list_items = []
+        elif tag in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']:
+            self.in_heading = True
+            self.heading_level = int(tag[1])
+    
+    def handle_endtag(self, tag):
+        if tag == 'style':
+            self.in_style_tag = False
+            self.current_text = ""  # Clear any style content
+            return
+            
+        # Process any accumulated text before closing the tag
+        if self.current_text.strip() and not self.in_style_tag:
+            self.handle_text_chunk()
+            
+        if tag == 'ul' or tag == 'ol':
+            self.in_list = False
+            if self.list_items:
+                bullet_list = ListFlowable(
+                    self.list_items,
+                    bulletType='bullet',
+                    start=None,
+                    bulletFontSize=8,  # Reduced from 10
+                    leftIndent=15,     # Reduced from 20
+                    bulletOffsetY=0
+                )
+                self.elements.append(bullet_list)
+                self.elements.append(Spacer(1, 0.05*inch))  # Reduced from 0.1*inch
+                self.list_items = []
+        elif tag in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']:
+            self.in_heading = False
+            self.heading_level = 0
+        elif tag == 'p':
+            # Add minimal spacing after paragraphs
+            self.elements.append(Spacer(1, 0.05*inch))  # Reduced from 0.1*inch
+    
+    def handle_data(self, data):
+        if not self.in_style_tag:
+            # Accumulate text content
+            self.current_text += data
+    
+    def handle_text_chunk(self):
+        """Process accumulated text based on current context"""
+        text = self.current_text.strip()
+        self.current_text = ""
+        
+        if not text:
+            return
+            
+        if self.in_heading:
+            if self.heading_level == 1:
+                self.elements.append(Paragraph(text, self.styles['ResumeTitle']))
+            elif self.heading_level == 2:
+                self.elements.append(Paragraph(text, self.styles['ResumeH1']))
+            else:
+                self.elements.append(Paragraph(text, self.styles['ResumeH2']))
+            self.elements.append(Spacer(1, 0.05*inch))  # Reduced from 0.1*inch
+        elif self.in_list:
+            list_item_style = self.styles['ResumeSection']
+            self.list_items.append(ListItem(Paragraph(text, list_item_style), leftIndent=15))  # Reduced from 20
+        else:
+            self.elements.append(Paragraph(text, self.styles['ResumeSection']))
+    
+    def close(self):
+        super().close()
+        # Process any remaining text
+        if self.current_text.strip() and not self.in_style_tag:
+            self.handle_text_chunk()
+        return self.elements
+
+# Add these functions after the html_to_pdf function and before display_resume_builder_page
+
+def format_markdown_resume(markdown_content, user_profile):
+    """Clean and format markdown resume content to ensure proper rendering"""
+    # Remove any front matter or metadata if present
+    cleaned_content = re.sub(r'^---\s*\n(.*?)\n---\s*\n', '', markdown_content, flags=re.DOTALL)
+    
+    # Ensure proper heading levels (# for name, ## for sections)
+    lines = cleaned_content.split('\n')
+    formatted_lines = []
+    
+    for i, line in enumerate(lines):
+        # Fix name heading if it's not properly formatted
+        if i == 0 and not line.startswith('#'):
+            if re.match(r'^[\w\s]+$', line.strip()):  # If it looks like a name
+                formatted_lines.append(f"# {line.strip()}")
+                continue
+                
+        # Fix section headings if they're not properly formatted
+        if line.strip() and not line.startswith('#') and i > 0:
+            prev_line = lines[i-1].strip()
+            if prev_line == '' and re.match(r'^[A-Z][A-Za-z\s]+:?$', line.strip()):
+                formatted_lines.append(f"## {line.strip()}")
+                continue
+                
+        formatted_lines.append(line)
+    
+    formatted_content = '\n'.join(formatted_lines)
+    
+    # Ensure there's no "Resume" text in the header
+    if 'personal_info' in user_profile and 'name' in user_profile['personal_info']:
+        user_name = user_profile['personal_info']['name']
+        formatted_content = re.sub(r'^# .*Resume.*$', f"# {user_name}", 
+                                  formatted_content, flags=re.MULTILINE)
+    
+    return formatted_content
+
+def convert_to_clean_html(markdown_content):
+    """Convert markdown to clean HTML with proper styling for resumes"""
+    # Convert markdown to HTML
+    html_content = markdown.markdown(markdown_content)
+    
+    # Parse with BeautifulSoup for cleaning
+    soup = BeautifulSoup(html_content, 'html.parser')
+    
+    # Add minimal, clean styling
+    style_tag = soup.new_tag('style')
+    style_tag.string = """
+    body {
+        font-family: 'Arial', 'Helvetica', sans-serif;
+        font-size: 10pt;
+        line-height: 1.2;
+        margin: 0;
+        padding: 0;
+    }
+    h1 {
+        font-size: 14pt;
+        margin-bottom: 5px;
+        color: #2c3e50;
+        text-align: center;
+    }
+    h2 {
+        font-size: 12pt;
+        margin-top: 10px;
+        margin-bottom: 5px;
+        color: #2c3e50;
+        border-bottom: 1px solid #bdc3c7;
+    }
+    p {
+        margin: 3px 0;
+    }
+    ul {
+        margin: 5px 0;
+        padding-left: 20px;
+    }
+    li {
+        margin-bottom: 2px;
+    }
+    .contact-info {
+        text-align: center;
+        font-size: 9pt;
+        margin-bottom: 10px;
+    }
+    """
+    
+    # Insert style at the beginning of the document
+    if soup.head:
+        soup.head.append(style_tag)
+    else:
+        head_tag = soup.new_tag('head')
+        head_tag.append(style_tag)
+        soup.insert(0, head_tag)
+    
+    # Add contact info styling
+    contact_paragraphs = soup.find_all('p', limit=2)  # Assume first paragraphs might be contact info
+    for p in contact_paragraphs:
+        if '@' in p.text or 'Phone' in p.text or 'LinkedIn' in p.text:
+            p['class'] = 'contact-info'
+    
+    return str(soup)
+
+def clean_html_for_preview(html_content):
+    """Clean HTML to remove unwanted elements for preview"""
+    # Parse HTML
+    soup = BeautifulSoup(html_content, 'html.parser')
+    
+    # Remove style tags
+    for style_tag in soup.find_all('style'):
+        style_tag.decompose()
+    
+    # Remove any HTML/head/meta tags
+    if soup.head:
+        soup.head.decompose()
+    
+    # If there's an unwanted title that contains "- Resume body" text, remove it
+    for tag in soup.find_all(string=re.compile("- Resume body")):
+        parent = tag.parent
+        if parent:
+            parent.decompose()
+    
+    # Convert back to string
+    return str(soup)
+
+def html_to_pdf(html_content, filename):
+    """Convert HTML content to PDF using ReportLab with single-page optimization"""
+    buffer = BytesIO()
+    
+    # Set page size to letter with narrower margins to fit more content
+    doc = SimpleDocTemplate(
+        buffer, 
+        pagesize=letter,
+        rightMargin=0.5*inch,  # Reduced from 72pt (1 inch)
+        leftMargin=0.5*inch,   # Reduced from 72pt (1 inch)
+        topMargin=0.4*inch,    # Reduced from 36pt (0.5 inch) 
+        bottomMargin=0.4*inch  # Reduced from 36pt (0.5 inch)
+    )
+    
+    # Clean HTML before parsing - remove any style tags and unwanted headers
+    cleaned_html = clean_html_for_pdf(html_content)
+    
+    # Parse HTML content
+    parser = HTMLToReportLabParser()
+    parser.feed(cleaned_html)
+    elements = parser.close()
+    
+    # Build PDF
+    doc.build(elements)
+    pdf_data = buffer.getvalue()
+    buffer.close()
+    
+    return pdf_data
+
+def clean_html_for_pdf(html_content):
+    """Clean HTML to remove unwanted elements before PDF conversion"""
+    # Parse HTML
+    soup = BeautifulSoup(html_content, 'html.parser')
+    
+    # Remove style tags
+    for style_tag in soup.find_all('style'):
+        style_tag.decompose()
+    
+    # Remove any HTML/head/meta tags
+    if soup.head:
+        soup.head.decompose()
+    
+    # If there's an unwanted title that contains "- Resume body" text, remove it
+    for tag in soup.find_all(string=re.compile("- Resume body")):
+        parent = tag.parent
+        if parent:
+            parent.decompose()
+    
+    # Convert back to string
+    return str(soup)
+
 
 def display_resume_builder_page():
-    """
-    Display the resume builder page with form inputs and resume generation functionality
-    """
-    st.title("AI-Powered Resume Builder")
-    st.markdown("### Create an ATS-optimized resume tailored to your target job")
+    """Display the resume builder page in Streamlit"""
     
-    # Initialize session state for form data if it doesn't exist
-    if 'user_profile' not in st.session_state:
-        st.session_state.user_profile = {
-            'name': '',
-            'email': '',
-            'phone': '',
-            'linkedin': '',
-            'github': '',
-            'location': ''
-        }
+    # Check if user is authenticated
+    if not st.session_state.get('authenticated', False):
+        st.warning("Please sign in first")
+        st.session_state['page'] = 'login'
+        st.rerun()
+        return
     
-    if 'education' not in st.session_state:
-        st.session_state.education = [{
-            'institution': '',
-            'degree': '',
-            'year': '',
-            'location': '',
-            'gpa': ''
-        }]
+    st.title("ATS-Friendly Resume Builder")
     
-    if 'experience' not in st.session_state:
-        st.session_state.experience = [{
-            'title': '',
-            'company': '',
-            'duration': '',
-            'location': '',
-            'responsibilities': ['', '', '']
-        }]
+    # Initialize session state variables if they don't exist
+    if 'resume_content' not in st.session_state:
+        st.session_state.resume_content = None
+    if 'resume_html' not in st.session_state:
+        st.session_state.resume_html = None
     
-    if 'projects' not in st.session_state:
-        st.session_state.projects = [{
-            'title': '',
-            'link': '',
-            'description': ['', '']
-        }]
+    # Create a two-column layout for the input form and resume preview
+    col1, col2 = st.columns([3, 2])
     
-    if 'skills' not in st.session_state:
-        st.session_state.skills = {
-            'Programming Languages': '',
-            'Tools & Technologies': '',
-            'Soft Skills': ''
-        }
-    
-    if 'achievements' not in st.session_state:
-        st.session_state.achievements = ['', '']
-    
-    # Create tabs for different form sections
-    tabs = st.tabs([
-        "Basic Info",
-        "Job Description",
-        "Education",
-        "Experience",
-        "Skills",
-        "Projects & Achievements",
-        "Generate Resume"
-    ])
-    
-    # Tab 1: Basic Information
-    with tabs[0]:
-        st.header("Personal Information")
-        
-        col1, col2 = st.columns(2)
-        with col1:
-            st.session_state.user_profile['name'] = st.text_input("Full Name", st.session_state.user_profile['name'])
-            st.session_state.user_profile['email'] = st.text_input("Email", st.session_state.user_profile['email'])
-            st.session_state.user_profile['phone'] = st.text_input("Phone", st.session_state.user_profile['phone'])
-        
-        with col2:
-            st.session_state.user_profile['linkedin'] = st.text_input("LinkedIn URL", st.session_state.user_profile['linkedin'])
-            st.session_state.user_profile['github'] = st.text_input("GitHub URL", st.session_state.user_profile['github'])
-            st.session_state.user_profile['location'] = st.text_input("Location", st.session_state.user_profile['location'])
-    
-    # Tab 2: Job Description
-    with tabs[1]:
-        st.header("Target Job")
-        st.info("Paste the job description you're applying for. Our AI will analyze it to tailor your resume.")
-        
-        if 'job_description' not in st.session_state:
-            st.session_state.job_description = ""
+    with col1:
+        with st.expander("📋 Resume Information", expanded=True):
+            st.subheader("Let's build your ATS-friendly resume")
             
-        st.session_state.job_description = st.text_area(
-            "Job Description",
-            st.session_state.job_description,
-            height=300
-        )
-    
-    # Tab 3: Education
-    with tabs[2]:
-        st.header("Education")
-        
-        for i, edu in enumerate(st.session_state.education):
-            with st.container():
-                st.subheader(f"Education #{i+1}")
-                col1, col2 = st.columns(2)
-                
-                with col1:
-                    st.session_state.education[i]['institution'] = st.text_input(
-                        "Institution",
-                        edu['institution'],
-                        key=f"edu_inst_{i}"
-                    )
-                    st.session_state.education[i]['degree'] = st.text_input(
-                        "Degree",
-                        edu['degree'],
-                        key=f"edu_deg_{i}"
-                    )
-                    st.session_state.education[i]['gpa'] = st.text_input(
-                        "GPA (Optional)",
-                        edu['gpa'],
-                        key=f"edu_gpa_{i}"
-                    )
-                
-                with col2:
-                    st.session_state.education[i]['location'] = st.text_input(
-                        "Location",
-                        edu['location'],
-                        key=f"edu_loc_{i}"
-                    )
-                    st.session_state.education[i]['year'] = st.text_input(
-                        "Graduation Year",
-                        edu['year'],
-                        key=f"edu_year_{i}"
-                    )
-                
-                st.divider()
-        
-        # Add button to add more education entries
-        if st.button("Add Another Education"):
-            st.session_state.education.append({
-                'institution': '',
-                'degree': '',
-                'year': '',
-                'location': '',
-                'gpa': ''
-            })
-            st.rerun()
-        
-        # Remove education entry if there's more than one
-        if len(st.session_state.education) > 1:
-            if st.button("Remove Last Education Entry"):
-                st.session_state.education.pop()
-                st.rerun()
-    
-    # Tab 4: Work Experience
-    with tabs[3]:
-        st.header("Work Experience")
-        
-        for i, exp in enumerate(st.session_state.experience):
-            with st.container():
-                st.subheader(f"Experience #{i+1}")
-                col1, col2 = st.columns(2)
-                
-                with col1:
-                    st.session_state.experience[i]['title'] = st.text_input(
-                        "Job Title",
-                        exp['title'],
-                        key=f"exp_title_{i}"
-                    )
-                    st.session_state.experience[i]['company'] = st.text_input(
-                        "Company",
-                        exp['company'],
-                        key=f"exp_company_{i}"
-                    )
-                
-                with col2:
-                    st.session_state.experience[i]['duration'] = st.text_input(
-                        "Duration (e.g., Jan 2020 - Present)",
-                        exp['duration'],
-                        key=f"exp_duration_{i}"
-                    )
-                    st.session_state.experience[i]['location'] = st.text_input(
-                        "Location",
-                        exp['location'],
-                        key=f"exp_location_{i}"
-                    )
-                
-                st.write("Responsibilities/Achievements (Use action verbs and quantify when possible)")
-                
-                # Ensure responsibilities list exists and has at least 3 items
-                if 'responsibilities' not in st.session_state.experience[i]:
-                    st.session_state.experience[i]['responsibilities'] = ['', '', ''] 
-                
-                # Add responsibilities as text inputs
-                for j, resp in enumerate(st.session_state.experience[i]['responsibilities']):
-                    st.session_state.experience[i]['responsibilities'][j] = st.text_input(
-                        f"Bullet Point #{j+1}",
-                        resp if j < len(st.session_state.experience[i]['responsibilities']) else "",
-                        key=f"exp_resp_{i}_{j}"
-                    )
-                
-                # Add more bullet points button
-                if st.button(f"Add Bullet Point", key=f"add_bullet_{i}"):
-                    st.session_state.experience[i]['responsibilities'].append("")
-                    st.rerun()
-                
-                st.divider()
-        
-        # Add button to add more experience entries
-        if st.button("Add Another Experience"):
-            st.session_state.experience.append({
-                'title': '',
-                'company': '',
-                'duration': '',
-                'location': '',
-                'responsibilities': ['', '', '']
-            })
-            st.rerun()
-        
-        # Remove experience entry if there's more than one
-        if len(st.session_state.experience) > 1:
-            if st.button("Remove Last Experience Entry"):
-                st.session_state.experience.pop()
-                st.rerun()
-    
-    # Tab 5: Skills
-    with tabs[4]:
-        st.header("Skills")
-        st.info("Group your skills by category. Separate individual skills with commas.")
-        
-        # Loop through skill categories
-        for category, skills in st.session_state.skills.items():
-            st.session_state.skills[category] = st.text_area(
-                f"{category}",
-                skills,
-                help=f"Enter your {category.lower()} separated by commas",
-                key=f"skills_{category.replace(' ', '_').lower()}"
-            )
-        
-        # Add custom skill category
-        new_category = st.text_input("Add New Skill Category")
-        if new_category and new_category not in st.session_state.skills:
-            if st.button("Add Category"):
-                st.session_state.skills[new_category] = ""
-                st.rerun()
-    
-    # Tab 6: Projects and Achievements
-    with tabs[5]:
-        st.header("Projects")
-        
-        for i, proj in enumerate(st.session_state.projects):
-            with st.container():
-                st.subheader(f"Project #{i+1}")
-                
-                st.session_state.projects[i]['title'] = st.text_input(
-                    "Project Title",
-                    proj['title'],
-                    key=f"proj_title_{i}"
-                )
-                
-                st.session_state.projects[i]['link'] = st.text_input(
-                    "Project Link (Optional)",
-                    proj['link'],
-                    key=f"proj_link_{i}"
-                )
-                
-                st.write("Project Description (What did you build? What technologies did you use? What was the impact?)")
-                
-                # Ensure description list exists
-                if 'description' not in st.session_state.projects[i]:
-                    st.session_state.projects[i]['description'] = ['', '']
-                
-                # Add description points as text inputs
-                for j, desc in enumerate(st.session_state.projects[i]['description']):
-                    st.session_state.projects[i]['description'][j] = st.text_input(
-                        f"Description Point #{j+1}",
-                        desc if j < len(st.session_state.projects[i]['description']) else "",
-                        key=f"proj_desc_{i}_{j}"
-                    )
-                
-                # Add more description points button
-                if st.button(f"Add Description Point", key=f"add_desc_{i}"):
-                    st.session_state.projects[i]['description'].append("")
-                    st.rerun()
-                
-                st.divider()
-        
-        # Add button to add more project entries
-        if st.button("Add Another Project"):
-            st.session_state.projects.append({
-                'title': '',
-                'link': '',
-                'description': ['', '']
-            })
-            st.rerun()
-        
-        # Achievements section
-        st.header("Achievements")
-        st.info("List your certifications, awards, or other notable achievements.")
-        
-        for i, achievement in enumerate(st.session_state.achievements):
-            st.session_state.achievements[i] = st.text_input(
-                f"Achievement #{i+1}",
-                achievement,
-                key=f"achievement_{i}"
-            )
-        
-        # Add more achievements button
-        if st.button("Add Achievement"):
-            st.session_state.achievements.append("")
-            st.rerun()
-    
-    # Tab 7: Generate Resume
-    with tabs[6]:
-        st.header("Generate Your Resume")
-        
-        # Check if essential fields are filled
-        required_fields = [
-            st.session_state.user_profile['name'],
-            st.session_state.user_profile['email'],
-            st.session_state.job_description
-        ]
-        
-        # Check if at least one education entry is filled
-        has_education = False
-        for edu in st.session_state.education:
-            if edu['institution'] and edu['degree']:
-                has_education = True
-                break
-        
-        # Check if at least one experience entry is filled
-        has_experience = False
-        for exp in st.session_state.experience:
-            if exp['title'] and exp['company']:
-                has_experience = True
-                break
-        
-        if not all(required_fields) or not has_education:
-            st.warning("Please fill in all required fields (name, email, job description, and at least one education entry)")
-        else:
-            st.success("All required fields are filled. Ready to generate your resume!")
+            # Get user profile information if available
+            user_profile = None
+            if 'user_id' in st.session_state:
+                try:
+                    result = get_profile(st.session_state['user_id'])
+                    if result["status"] == "success":
+                        user_profile = result["profile"]
+                except Exception as e:
+                    st.error(f"Error retrieving profile: {str(e)}")
             
-            # Get API key from Streamlit secrets
-            api_key = st.secrets.get("GEMINI_API_KEY", "")
+            # Pre-fill form fields if we have user profile data
+            default_education = user_profile.get('education', '') if user_profile else ''
+            default_skills = ', '.join(user_profile.get('skills', [])) if user_profile else ''
+            default_experience = f"{user_profile.get('experience_years', '')} years" if user_profile else ''
+            default_job_title = user_profile.get('last_job', {}).get('title', '') if user_profile else ''
+            default_company = user_profile.get('last_job', {}).get('company', '') if user_profile else ''
             
-            # Generate button
-            # Replace this section in the "Generate Your Resume" tab
-            if st.button("🚀 Generate ATS-Optimized Resume"):
-                with st.spinner("Generating your resume... This may take a minute."):
-                    try:
-                        # Process and clean input data
-                        processed_data = _process_form_data(
-                            st.session_state.user_profile,
-                            st.session_state.education,
-                            st.session_state.experience,
-                            st.session_state.projects,
-                            st.session_state.skills,
-                            st.session_state.achievements
-                        )
-                        
-                        # Initialize resume builder crew
-                        resume_builder = ResumeBuilderCrew(api_key=api_key)
-                        
-                        # Format achievements as string
-                        achievements_str = "\n".join([a for a in st.session_state.achievements if a])
-                        
-                        # Format projects as string
-                        projects_str = ""
-                        for proj in st.session_state.projects:
-                            if proj['title']:
-                                projects_str += f"{proj['title']}"
-                                if proj['link']:
-                                    projects_str += f" (Link: {proj['link']})"
-                                projects_str += "\n"
-                                
-                                for desc in proj['description']:
-                                    if desc:
-                                        projects_str += f"{desc}\n"
-                                projects_str += "\n"
-                        
-                        # Build resume using the crew
-                        result = resume_builder.build_resume(
-                            user_profile=processed_data['user_profile'],
-                            job_description=st.session_state.job_description,
-                            projects=projects_str,
-                            achievements=achievements_str
-                        )
-                        
-                        # Get the LaTeX code and PDF binary from the result
-                        latex_code = result.get('latex_code', '')
-                        pdf_binary = result.get('pdf_binary')
-                        
-                        # Store results in session state
-                        st.session_state.latex_code = latex_code
-                        st.session_state.pdf_binary = pdf_binary
-                        
-                        # Display message
-                        st.success("Resume generated successfully!")
-                        
-                        # Display tabs for viewing and downloading results
-                        results_tabs = st.tabs(["LaTeX Code", "Download"])
-                        
-                        with results_tabs[0]:
-                            st.code(latex_code, language="latex")
-                        
-                        with results_tabs[1]:
-                            # Create converter for download links
-                            pdf_converter = LaTeXPDFConverter()
-                            
-                            # Download options
-                            st.markdown("### Download Options")
-                            
-                            # LaTeX download
-                            latex_download = pdf_converter.create_download_link(
-                                latex_code,
-                                f"resume_{st.session_state.user_profile['name'].replace(' ', '_')}",
-                                "latex"
-                            )
-                            st.markdown(latex_download, unsafe_allow_html=True)
-                            
-                            # PDF download if available
-                            if pdf_binary:
-                                pdf_download = pdf_converter.create_download_link(
-                                    pdf_binary,
-                                    f"resume_{st.session_state.user_profile['name'].replace(' ', '_')}",
-                                    "pdf"
-                                )
-                                st.markdown(pdf_download, unsafe_allow_html=True)
-                            else:
-                                st.warning("PDF generation failed. You can download the LaTeX code and compile it manually.")
-                            
-                            # Instructions for manual compilation
-                            with st.expander("How to compile LaTeX manually"):
-                                st.markdown("""
-                                1. Copy the LaTeX code from the tab above
-                                2. Go to [Overleaf](https://www.overleaf.com/) and create a new project
-                                3. Paste the LaTeX code into the editor
-                                4. Click the "Compile" button to generate your PDF
-                                5. Download the PDF from Overleaf
-                                """)
+            # Personal Information
+            st.markdown("#### Personal Information")
+            full_name = st.text_input("Full Name")
+            email = st.text_input("Email Address")
+            phone = st.text_input("Phone Number")
+            linkedin = st.text_input("LinkedIn URL (optional)")
+            location = st.text_input("Location", 
+                                    value=user_profile.get('location', {}).get('city', '') if user_profile else '')
+            
+            # Education
+            st.markdown("#### Education")
+            education = st.text_area("Education Details", 
+                                    height=100, 
+                                    value=default_education,
+                                    help="Enter each education entry with degree, institution, and year")
+            
+            # Work Experience
+            st.markdown("#### Work Experience")
+            experience = st.text_area("Work Experience", 
+                                     height=150,
+                                     value=f"Title: {default_job_title}\nCompany: {default_company}\nDuration: {default_experience}\n\nResponsibilities and achievements:",
+                                     help="Enter details about your work experience")
+            
+            # Skills
+            st.markdown("#### Skills")
+            skills = st.text_area("Skills", 
+                                 height=100,
+                                 value=default_skills,
+                                 help="Enter your skills, separated by commas")
+            
+            # Projects
+            st.markdown("#### Projects")
+            projects = st.text_area("Projects", 
+                                  height=150,
+                                  help="Enter details about relevant projects")
+            
+            # Achievements
+            st.markdown("#### Achievements")
+            achievements = st.text_area("Achievements", 
+                                      height=100,
+                                      help="Enter notable achievements and awards")
+            
+            # Job Description
+            st.markdown("#### Target Job")
+            job_description = st.text_area("Paste the Job Description", 
+                                         height=200,
+                                         help="Paste the complete job description to tailor your resume")
+        
+        # Generate Resume Button
+        if st.button("Generate ATS-Friendly Resume", type="primary", use_container_width=True):
+            if not job_description:
+                st.error("Please enter a job description to generate a tailored resume.")
+                return
+            
+            # Format user data into a profile dictionary
+            formatted_user_profile = {
+                "personal_info": {
+                    "name": full_name,
+                    "email": email,
+                    "phone": phone,
+                    "linkedin": linkedin,
+                    "location": location
+                },
+                "education": education,
+                "experience": experience,
+                "skills": skills.split(",") if skills else []
+            }
+            
+            # Add user profile data if available
+            if user_profile:
+                formatted_user_profile.update({
+                    "education": user_profile.get('education', education),
+                    "experience_years": user_profile.get('experience_years', ''),
+                    "last_job": user_profile.get('last_job', {}),
+                    "skills": user_profile.get('skills', skills.split(",") if skills else []),
+                    "location": user_profile.get('location', {})
+                })
+            
+            with st.spinner("Building your ATS-friendly resume... This may take a minute or two."):
+                try:
+                    # Create and run the resume builder crew
+                    resume_builder = ResumeBuilderCrew(api_key=st.secrets["GEMINI_API_KEY"])
+                    resume_content = resume_builder.build_resume(
+                        user_profile=formatted_user_profile,
+                        job_description=job_description,
+                        projects=projects,
+                        achievements=achievements
+                    )
+                    # Apply the formatting helpers:
+                    formatted_resume = format_markdown_resume(resume_content, formatted_user_profile)
+                    st.session_state.resume_content = formatted_resume
+
+                    # Convert markdown to clean HTML for better display
+                    clean_html = convert_to_clean_html(formatted_resume)
+                    st.session_state.resume_html = clean_html
                     
+                    st.success("Resume generated successfully!")
+                    
+                except Exception as e:
+                    st.error(f"Error generating resume: {str(e)}")
+    
+    with col2:
+        st.subheader("Resume Preview")
+        
+        # Display the resume preview if available
+        if st.session_state.resume_html:
+            # Create a container with styling for the resume preview
+            preview_container = st.container()
+            with preview_container:
+                # Clean the HTML before displaying it
+                display_html = clean_html_for_preview(st.session_state.resume_html)
+                
+                st.markdown("""
+                <style>
+                .resume-preview {
+                    border: 1px solid #ddd;
+                    padding: 20px;
+                    border-radius: 5px;
+                    background-color: white;
+                    font-family: 'Arial', sans-serif;
+                    font-size: 0.9em;
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                    margin-bottom: 20px;
+                    overflow-y: auto;
+                    max-height: 600px;
+                }
+                .resume-preview h1 {
+                    font-size: 1.4em;
+                    margin-bottom: 5px;
+                    color: #2c3e50;
+                }
+                .resume-preview h2 {
+                    font-size: 1.2em;
+                    border-bottom: 1px solid #eee;
+                    padding-bottom: 3px;
+                    margin-top: 10px;
+                    color: #2c3e50;
+                }
+                .resume-preview p {
+                    margin-bottom: 8px;
+                    font-size: 0.85em;
+                }
+                .resume-preview ul {
+                    margin-top: 5px;
+                    margin-bottom: 10px;
+                    padding-left: 20px;
+                }
+                .resume-preview li {
+                    margin-bottom: 3px;
+                    font-size: 0.85em;
+                }
+                </style>
+                <div class="resume-preview">
+                """ + display_html + """
+                </div>
+                """, unsafe_allow_html=True)
+            
+            # Download options
+            st.markdown("#### Download Resume")
+            
+            # Function to create download links
+            def create_download_link(content, filename, format_type):
+                if format_type == "markdown":
+                    b64 = base64.b64encode(content.encode()).decode()
+                    href = f'<a href="data:text/plain;base64,{b64}" download="{filename}.md">Download as Markdown</a>'
+                elif format_type == "text":
+                    b64 = base64.b64encode(content.encode()).decode()
+                    href = f'<a href="data:text/plain;base64,{b64}" download="{filename}.txt">Download as Text</a>'
+                elif format_type == "html":
+                    # Clean HTML before download
+                    clean_content = clean_html_for_preview(content)
+                    b64 = base64.b64encode(clean_content.encode()).decode()
+                    href = f'<a href="data:text/html;base64,{b64}" download="{filename}.html">Download as HTML</a>'
+                elif format_type == "pdf":
+                    try:
+                        # Create PDF from clean HTML
+                        pdf_data = html_to_pdf(st.session_state.resume_html, filename)
+                        b64 = base64.b64encode(pdf_data).decode()
+                        href = f'<a href="data:application/pdf;base64,{b64}" download="{filename}.pdf">Download as PDF</a>'
                     except Exception as e:
-                        st.error(f"Error generating resume: {str(e)}")
-                        st.error("Please check your inputs and try again.")
-
-def _process_form_data(user_profile, education, experience, projects, skills, achievements):
-    """
-    Process and clean form data for the resume builder
-    
-    Returns:
-        dict: Dictionary with processed data
-    """
-    # Create a copy of user profile
-    processed_profile = user_profile.copy()
-    
-    # Filter out empty education entries
-    processed_education = []
-    for edu in education:
-        if edu['institution'] and edu['degree']:
-            processed_education.append(edu)
-    
-    # Filter out empty experience entries and responsibilities
-    processed_experience = []
-    for exp in experience:
-        if exp['title'] and exp['company']:
-            exp_copy = exp.copy()
-            # Filter out empty responsibilities
-            processed_resp = [r for r in exp.get('responsibilities', []) if r]
-            exp_copy['responsibilities'] = processed_resp
-            processed_experience.append(exp_copy)
-    
-    # Filter out empty projects and descriptions
-    processed_projects = []
-    for proj in projects:
-        if proj['title']:
-            proj_copy = proj.copy()
-            # Filter out empty descriptions
-            processed_desc = [d for d in proj.get('description', []) if d]
-            proj_copy['description'] = processed_desc
-            processed_projects.append(proj_copy)
-    
-    # Process skills - remove empty categories
-    processed_skills = {}
-    for category, skills_list in skills.items():
-        if skills_list.strip():
-            processed_skills[category] = skills_list.strip()
-    
-    # Filter out empty achievements
-    processed_achievements = [a for a in achievements if a]
-    
-    return {
-        'user_profile': processed_profile,
-        'education': processed_education,
-        'experience': processed_experience,
-        'projects': processed_projects,
-        'skills': processed_skills,
-        'achievements': processed_achievements
-    }
-
-
-if __name__ == "__main__":
-    display_resume_builder_page()
+                        st.error(f"Failed to create PDF: {str(e)}")
+                        href = '<span style="color:red;">PDF creation failed, please try another format</span>'
+                
+                return href
+            
+            # Add a helper function for cleaning HTML
+            def clean_html_for_preview(html_content):
+                """Clean HTML to remove unwanted elements for preview"""
+                # Parse HTML
+                soup = BeautifulSoup(html_content, 'html.parser')
+                
+                # Remove style tags
+                for style_tag in soup.find_all('style'):
+                    style_tag.decompose()
+                
+                # Remove any HTML/head/meta tags
+                if soup.head:
+                    soup.head.decompose()
+                
+                # If there's an unwanted title that contains "- Resume body" text, remove it
+                for tag in soup.find_all(string=re.compile("- Resume body")):
+                    parent = tag.parent
+                    if parent:
+                        parent.decompose()
+                
+                # Convert back to string
+                return str(soup)
+            
+            # Download buttons
+            download_format = st.selectbox("Select format", ["PDF", "HTML", "Markdown", "Text"])
+            
+            if st.button("Download Resume", type="primary"):
+                if download_format == "Markdown":
+                    download_link = create_download_link(st.session_state.resume_content, "resume", "markdown")
+                elif download_format == "Text":
+                    # Convert markdown to plain text
+                    plain_text = re.sub(r'[#*_]', '', st.session_state.resume_content)
+                    download_link = create_download_link(plain_text, "resume", "text")
+                elif download_format == "HTML":
+                    download_link = create_download_link(st.session_state.resume_html, "resume", "html")
+                else:  # PDF
+                    download_link = create_download_link(st.session_state.resume_html, "resume", "pdf")
+                    
+                st.markdown(download_link, unsafe_allow_html=True)
+            
+        else:
+            st.info("Fill in your details and generate your resume to see a preview here.")
+            
+            # Show placeholder preview
+            st.markdown("""
+            <div style="border: 1px dashed #ddd; padding: 20px; border-radius: 5px; text-align: center; color: #888;">
+                <i class="fas fa-file-alt" style="font-size: 2em;"></i>
+                <p>Your ATS-friendly resume will appear here</p>
+            </div>
+            """, unsafe_allow_html=True)
