@@ -203,32 +203,24 @@ class ResumeBuilderCrew:
         result = crew.kickoff()
         
         # Extract LaTeX code from the result
-        latex_code = self._extract_latex_code(result)
+        latex_code = self._extract_latex_code(str(result))
         
-        # Generate a properly formatted LaTeX document using the formatter
-        # Modified to use generate_latex instead of format
-        formatted_latex = self.latex_formatter.generate_latex(
-            user_info=user_profile,
-            experience=user_profile.get('experience', []),
-            education=user_profile.get('education', []),
-            projects=projects,
-            skills=user_profile.get('skills', {}),
-            achievements=achievements
-        )
+        # Format the LaTeX code with proper template and styling
+        formatted_latex = self.latex_formatter.format(latex_code, user_profile)
         
         # Convert to PDF
         try:
-            pdf_data, message, _ = self.pdf_converter.convert_latex_to_pdf(formatted_latex)
+            pdf_data, _, _ = self.pdf_converter.convert_latex_to_pdf(formatted_latex)
             pdf_binary = pdf_data
         except Exception as e:
+            # Handle PDF conversion failure
             pdf_binary = None
+            print(f"PDF conversion failed: {str(e)}")
         
         return {
             "latex_code": formatted_latex,
             "pdf_binary": pdf_binary
         }
-    
-    
     def _extract_latex_code(self, crew_result):
         """
         Extract the LaTeX code from the crew result
