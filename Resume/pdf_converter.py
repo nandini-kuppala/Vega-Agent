@@ -106,20 +106,19 @@ class LaTeXPDFConverter:
         return href
     def convert(self, latex_content, filename="resume"):
         """
-        Convert LaTeX content to PDF.
+        Wrapper for convert_latex_to_pdf that matches the expected interface.
         
         Args:
             latex_content: String containing LaTeX document
             filename: Output filename (without extension)
-            
+        
         Returns:
-            PDF binary data or None if conversion fails
+            PDF binary data
         """
         try:
-            # Try to convert LaTeX to PDF
             pdf_data, _, _ = self.convert_latex_to_pdf(latex_content, filename)
             return pdf_data
         except Exception as e:
-            # If conversion fails, return None
-            print(f"PDF conversion failed: {str(e)}")
+            # Log the error but return None instead of raising
+            print(f"Error converting LaTeX to PDF: {str(e)}")
             return None

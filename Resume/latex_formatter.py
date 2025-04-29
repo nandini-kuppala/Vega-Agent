@@ -436,3 +436,38 @@ class LaTeXResumeFormatter:
         
         section += "\\resumeItemListEnd\n\n"
         return section
+    
+
+    def format(self, latex_content, user_profile):
+        """
+        Format the provided LaTeX content with proper template and styling.
+        This is a compatibility method that either uses the provided LaTeX content
+        or generates new content based on the user profile.
+        
+        Args:
+            latex_content (str): LaTeX content to format
+            user_profile (dict): User profile information
+            
+        Returns:
+            str: Formatted LaTeX content
+        """
+        # If latex_content appears to be a complete LaTeX document, use it
+        if "\\documentclass" in latex_content and "\\begin{document}" in latex_content:
+            return latex_content
+        
+        # Otherwise, generate a new document using the user_profile
+        experience = user_profile.get('experience', [])
+        education = user_profile.get('education', [])
+        skills = user_profile.get('skills', {})
+        projects = ""  # We don't have projects in user_profile
+        achievements = ""  # We don't have achievements in user_profile
+        
+        # Generate a LaTeX document from scratch
+        return self.generate_latex(
+            user_info=user_profile,
+            experience=experience,
+            education=education,
+            projects=projects,
+            skills=skills,
+            achievements=achievements
+        )
