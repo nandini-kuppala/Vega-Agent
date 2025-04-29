@@ -38,7 +38,7 @@ def signup_page():
         signup_button = st.button("Sign Up", key="signup_button")
         if signup_button:
             if not name or not email or not phone or not city or not password or not confirm_password:
-                st.error("Please fill in all fields")
+                st.error("Please fill in all fields, please do not Autofill")
             elif password != confirm_password:
                 st.error("Passwords do not match")
             else:
