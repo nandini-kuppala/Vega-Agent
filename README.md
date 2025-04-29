@@ -47,6 +47,10 @@ Asha AI is a **multi-agent** chatbot system designed to **revolutionize career d
 
 ![Architecture Diagram](https://github.com/user-attachments/assets/51645ab1-85bf-4767-9753-dfe994d2a4f6)
 
+## 🧠 Memeory Management and Multi-turn Conversation Handling 🔄
+
+![image](https://github.com/user-attachments/assets/8418b9e1-b5be-4c82-9728-49d6ae420a02)
+
 ---
 
 ## 💫 Features
