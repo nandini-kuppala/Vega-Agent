@@ -338,6 +338,7 @@ def display_resume_builder_page():
             st.rerun()
     
     # Tab 7: Generate Resume
+    # Tab 7: Generate Resume
     with tabs[6]:
         st.header("Generate Your Resume")
         
@@ -367,113 +368,116 @@ def display_resume_builder_page():
         else:
             st.success("All required fields are filled. Ready to generate your resume!")
             
-            # API Key input (you can use environment variables instead in production)
-            api_key = st.text_input("Enter your API Key", 
-                                   value=os.environ.get("API_KEY", ""),
-                                   type="password",
-                                   help="Enter your API key for the LLM service")
+            # Get API key from Streamlit secrets
+            api_key = st.secrets.get("GEMINI_API_KEY", "")
             
             # Generate button
             if st.button("🚀 Generate ATS-Optimized Resume"):
-                if not api_key:
-                    st.error("Please enter an API key to generate your resume")
-                else:
-                    with st.spinner("Generating your resume... This may take a minute."):
-                        try:
-                            # Process and clean input data
-                            processed_data = _process_form_data(
-                                st.session_state.user_profile,
-                                st.session_state.education,
-                                st.session_state.experience,
-                                st.session_state.projects,
-                                st.session_state.skills,
-                                st.session_state.achievements
-                            )
-                            
-                            # Initialize resume builder crew
-                            resume_builder = ResumeBuilderCrew(api_key=api_key)
-                            
-                            # Format achievements as string
-                            achievements_str = "\n".join([a for a in st.session_state.achievements if a])
-                            
-                            # Format projects as string
-                            projects_str = ""
-                            for proj in st.session_state.projects:
-                                if proj['title']:
-                                    projects_str += f"{proj['title']}"
-                                    if proj['link']:
-                                        projects_str += f" (Link: {proj['link']})"
-                                    projects_str += "\n"
-                                    
-                                    for desc in proj['description']:
-                                        if desc:
-                                            projects_str += f"{desc}\n"
-                                    projects_str += "\n"
-                            
-                            # Build resume using the crew
-                            result = resume_builder.build_resume(
-                                user_profile=processed_data['user_profile'],
-                                job_description=st.session_state.job_description,
-                                projects=projects_str,
-                                achievements=achievements_str
-                            )
-                            
-                            # Extract LaTeX code
-                            latex_code = result.get('latex_code', '')
-                            
-                            # Store results in session state
-                            st.session_state.latex_code = latex_code
-                            st.session_state.pdf_binary = result.get('pdf_binary')
-                            
-                            # Display message
-                            st.success("Resume generated successfully!")
-                            
-                            # Display tabs for viewing and downloading results
-                            results_tabs = st.tabs(["LaTeX Code", "Download"])
-                            
-                            with results_tabs[0]:
-                                st.code(latex_code, language="latex")
-                            
-                            with results_tabs[1]:
-                                # Create converters for download links
-                                pdf_converter = LaTeXPDFConverter()
-                                
-                                # Download options
-                                st.markdown("### Download Options")
-                                
-                                # LaTeX download
-                                latex_download = pdf_converter.create_download_link(
-                                    latex_code,
-                                    f"resume_{st.session_state.user_profile['name'].replace(' ', '_')}",
-                                    "latex"
-                                )
-                                st.markdown(latex_download, unsafe_allow_html=True)
-                                
-                                # PDF download if available
-                                if st.session_state.pdf_binary:
-                                    pdf_download = pdf_converter.create_download_link(
-                                        st.session_state.pdf_binary,
-                                        f"resume_{st.session_state.user_profile['name'].replace(' ', '_')}",
-                                        "pdf"
-                                    )
-                                    st.markdown(pdf_download, unsafe_allow_html=True)
-                                else:
-                                    st.warning("PDF generation failed. You can download the LaTeX code and compile it manually.")
-                                    
-                                # Instructions for manual compilation
-                                with st.expander("How to compile LaTeX manually"):
-                                    st.markdown("""
-                                    1. Copy the LaTeX code from the tab above
-                                    2. Go to [Overleaf](https://www.overleaf.com/) and create a new project
-                                    3. Paste the LaTeX code into the editor
-                                    4. Click the "Compile" button to generate your PDF
-                                    5. Download the PDF from Overleaf
-                                    """)
+                with st.spinner("Generating your resume... This may take a minute."):
+                    try:
+                        # Process and clean input data
+                        processed_data = _process_form_data(
+                            st.session_state.user_profile,
+                            st.session_state.education,
+                            st.session_state.experience,
+                            st.session_state.projects,
+                            st.session_state.skills,
+                            st.session_state.achievements
+                        )
                         
-                        except Exception as e:
-                            st.error(f"Error generating resume: {str(e)}")
-                            st.error("Please check your inputs and try again.")
+                        # Initialize resume builder crew
+                        resume_builder = ResumeBuilderCrew(api_key=api_key)
+                        
+                        # Format achievements as string
+                        achievements_str = "\n".join([a for a in st.session_state.achievements if a])
+                        
+                        # Format projects as string
+                        projects_str = ""
+                        for proj in st.session_state.projects:
+                            if proj['title']:
+                                projects_str += f"{proj['title']}"
+                                if proj['link']:
+                                    projects_str += f" (Link: {proj['link']})"
+                                projects_str += "\n"
+                                
+                                for desc in proj['description']:
+                                    if desc:
+                                        projects_str += f"{desc}\n"
+                                projects_str += "\n"
+                        
+                        # Build resume using the crew
+                        result = resume_builder.build_resume(
+                            user_profile=processed_data['user_profile'],
+                            job_description=st.session_state.job_description,
+                            projects=projects_str,
+                            achievements=achievements_str
+                        )
+                        
+                        # Extract results from CrewOutput object
+                        if hasattr(result, 'output'):
+                            result_dict = result.output
+                        elif isinstance(result, dict):
+                            result_dict = result
+                        else:
+                            result_dict = {'latex_code': '', 'pdf_binary': None}
+                        
+                        # Extract LaTeX code
+                        latex_code = result_dict.get('latex_code', '')
+                        
+                        # Store results in session state
+                        st.session_state.latex_code = latex_code
+                        st.session_state.pdf_binary = result_dict.get('pdf_binary')
+                        
+                        # Display message
+                        st.success("Resume generated successfully!")
+                        
+                        # Display tabs for viewing and downloading results
+                        results_tabs = st.tabs(["LaTeX Code", "Download"])
+                        
+                        with results_tabs[0]:
+                            st.code(latex_code, language="latex")
+                        
+                        with results_tabs[1]:
+                            # Create converters for download links
+                            pdf_converter = LaTeXPDFConverter()
+                            
+                            # Download options
+                            st.markdown("### Download Options")
+                            
+                            # LaTeX download
+                            latex_download = pdf_converter.create_download_link(
+                                latex_code,
+                                f"resume_{st.session_state.user_profile['name'].replace(' ', '_')}",
+                                "latex"
+                            )
+                            st.markdown(latex_download, unsafe_allow_html=True)
+                            
+                            # PDF download if available
+                            if st.session_state.pdf_binary:
+                                pdf_download = pdf_converter.create_download_link(
+                                    st.session_state.pdf_binary,
+                                    f"resume_{st.session_state.user_profile['name'].replace(' ', '_')}",
+                                    "pdf"
+                                )
+                                st.markdown(pdf_download, unsafe_allow_html=True)
+                            else:
+                                st.warning("PDF generation failed. You can download the LaTeX code and compile it manually.")
+                                
+                            # Instructions for manual compilation
+                            with st.expander("How to compile LaTeX manually"):
+                                st.markdown("""
+                                1. Copy the LaTeX code from the tab above
+                                2. Go to [Overleaf](https://www.overleaf.com/) and create a new project
+                                3. Paste the LaTeX code into the editor
+                                4. Click the "Compile" button to generate your PDF
+                                5. Download the PDF from Overleaf
+                                """)
+                    
+                    except Exception as e:
+                        st.error(f"Error generating resume: {str(e)}")
+                        st.error("Please check your inputs and try again.")
 
+                        
 def _process_form_data(user_profile, education, experience, projects, skills, achievements):
     """
     Process and clean form data for the resume builder
