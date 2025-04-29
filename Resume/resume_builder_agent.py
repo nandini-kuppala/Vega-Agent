@@ -203,7 +203,7 @@ class ResumeBuilderCrew:
         result = crew.kickoff()
         
         # Extract LaTeX code from the result
-        latex_code = self._extract_latex_code(result)
+        latex_code = self._extract_latex_code(str(result))
         
         # Format the LaTeX code with proper template and styling
         formatted_latex = self.latex_formatter.format(latex_code, user_profile)
