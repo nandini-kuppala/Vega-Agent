@@ -11,7 +11,7 @@ class ResumeBuilderCrew:
         """Initialize the Resume Builder Crew with API key"""
         self.llm = LLM(
             model="gemini/gemini-1.5-flash",
-            temperature=0.7,
+            temperature=0.5,
             api_key=api_key
         )
     
@@ -316,13 +316,7 @@ class ResumeBuilderCrew:
             why it will help the candidate get selected for this role.
             """,
             agent=final_reviewer,
-            expected_output="""The final, polished resume with:
-            - Any last improvements or optimizations
-            - 3-5 key strengths of the resume
-            - Explanation of why this resume will help the candidate get selected
-            - Confidence level in the resume's effectiveness
-            
-            The resume should be provided in a clean, structured format that can be easily rendered in HTML or markdown.
+            expected_output="""The resume should be provided in a clean, structured format that can be easily rendered in HTML or markdown.
             """,
             dependencies=[format_resume]
         )
