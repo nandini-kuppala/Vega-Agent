@@ -171,13 +171,13 @@ def display_resume_builder_page():
                 'location': '',
                 'gpa': ''
             })
-            st.experimental_rerun()
+            st.rerun()
         
         # Remove education entry if there's more than one
         if len(st.session_state.education) > 1:
             if st.button("Remove Last Education Entry"):
                 st.session_state.education.pop()
-                st.experimental_rerun()
+                st.rerun()
     
     # Tab 4: Work Experience
     with tabs[3]:
@@ -229,7 +229,7 @@ def display_resume_builder_page():
                 # Add more bullet points button
                 if st.button(f"Add Bullet Point", key=f"add_bullet_{i}"):
                     st.session_state.experience[i]['responsibilities'].append("")
-                    st.experimental_rerun()
+                    st.rerun()
                 
                 st.divider()
         
@@ -242,13 +242,13 @@ def display_resume_builder_page():
                 'location': '',
                 'responsibilities': ['', '', '']
             })
-            st.experimental_rerun()
+            st.rerun()
         
         # Remove experience entry if there's more than one
         if len(st.session_state.experience) > 1:
             if st.button("Remove Last Experience Entry"):
                 st.session_state.experience.pop()
-                st.experimental_rerun()
+                st.rerun()
     
     # Tab 5: Skills
     with tabs[4]:
@@ -269,7 +269,7 @@ def display_resume_builder_page():
         if new_category and new_category not in st.session_state.skills:
             if st.button("Add Category"):
                 st.session_state.skills[new_category] = ""
-                st.experimental_rerun()
+                st.rerun()
     
     # Tab 6: Projects and Achievements
     with tabs[5]:
@@ -308,7 +308,7 @@ def display_resume_builder_page():
                 # Add more description points button
                 if st.button(f"Add Description Point", key=f"add_desc_{i}"):
                     st.session_state.projects[i]['description'].append("")
-                    st.experimental_rerun()
+                    st.rerun()
                 
                 st.divider()
         
@@ -319,7 +319,7 @@ def display_resume_builder_page():
                 'link': '',
                 'description': ['', '']
             })
-            st.experimental_rerun()
+            st.rerun()
         
         # Achievements section
         st.header("Achievements")
@@ -335,7 +335,7 @@ def display_resume_builder_page():
         # Add more achievements button
         if st.button("Add Achievement"):
             st.session_state.achievements.append("")
-            st.experimental_rerun()
+            st.rerun()
     
     # Tab 7: Generate Resume
     with tabs[6]:
