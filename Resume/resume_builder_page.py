@@ -599,11 +599,31 @@ def display_resume_builder_page():
                                      placeholder="- Employee of the Month (June 2023)\n- Increased team productivity by 25% through process improvements\n- Published research paper on AI ethics")
         
         with tabs[6]:
-            st.markdown('<div class="section-header">Target Job</div>', unsafe_allow_html=True)
-            st.warning("Paste the job description to tailor your resume for better ATS performance")
+            # Job Description Card - separate and prominent
+            st.markdown('<div class="card" style="border-left: 4px solid #3498db; margin-top: 20px;">', unsafe_allow_html=True)
+            st.markdown("""
+                <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                    <span style="background-color: #3498db; color: white; border-radius: 50%; width: 28px; height: 28px; 
+                    display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                        <span style="font-size: 0.85rem; font-weight: bold;">🎯</span>
+                    </span>
+                    <h3 style="margin: 0; color: #2c3e50;">Target Job Description</h3>
+                </div>
+            """, unsafe_allow_html=True)
+
+            st.warning("Paste the complete job description below to optimize your resume for ATS systems")
             job_description = st.text_area("Job Description", 
-                                        height=200,
-                                        placeholder="Paste the complete job description here...")
+                                    height=200,
+                                    placeholder="Paste the complete job description here to help tailor your resume to match the job requirements...")
+
+            st.markdown("""
+                <div style="background-color: #f0f8ff; padding: 10px; border-radius: 6px; font-size: 0.85rem; margin-top: 10px;">
+                    <i class="fas fa-lightbulb" style="color: #3498db;"></i> 
+                    <strong>Pro Tip:</strong> Including the full job description helps the AI match your skills and experience with the employer's requirements.
+                </div>
+            """, unsafe_allow_html=True)
+
+            st.markdown('</div>', unsafe_allow_html=True)
         
         # Generate Resume Button (outside tabs, at bottom of form)
         st.markdown('<div style="margin-top: 1.5rem;">', unsafe_allow_html=True)
