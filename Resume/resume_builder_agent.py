@@ -239,4 +239,4 @@ class ResumeBuilderCrew:
         else:
             # If no LaTeX code block is found, return the raw result
             # This assumes the entire result might be LaTeX code without code block formatting
-            return crew_result.strip()
+            return str(crew_result.strip())
