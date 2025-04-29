@@ -11,7 +11,7 @@ class ResumeBuilderCrew:
         """Initialize the Resume Builder Crew with API key"""
         self.llm = LLM(
             model="gemini/gemini-1.5-flash",
-            temperature=0.7,
+            temperature=0.4,
             api_key=api_key
         )
     
