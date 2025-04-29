@@ -348,8 +348,6 @@ def display_resume_builder_page():
         st.rerun()
         return
     
-    # Set page configuration and styling
-    st.set_page_config(layout="wide", page_title="ATS-Friendly Resume Builder")
     
     # Add custom CSS for overall page styling
     st.markdown("""
