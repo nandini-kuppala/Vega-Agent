@@ -43,7 +43,7 @@ def main():
         page_title="ASHA AI Bot",
         page_icon="👩‍💼",
         layout="wide",
-        initial_sidebar_state="expanded"
+        initial_sidebar_state="collapsed"
     )
 
     # Apply global CSS
