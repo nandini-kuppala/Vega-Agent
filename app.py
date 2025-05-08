@@ -67,7 +67,8 @@ def main():
             'page': st.session_state.get('page', 'home')
         }
         # Use JSON to store complex data
-        st.query_params(session=json.dumps(session_data))
+        st.query_params.update({"session": json.dumps(session_data)})
+
     
     # Check for cached authentication on page load
     query_params = st.query_params
