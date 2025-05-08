@@ -5,6 +5,8 @@ import traceback
 import logging
 from datetime import datetime
 from st_audiorec import st_audiorec
+from backend.database import save_chat_history, get_chat_history
+import json
 
 # Configure logging
 logging.basicConfig(
@@ -196,12 +198,26 @@ def display_chat_page():
         return
     
     st.title("ASHA AI Chat")
-    
+
+    user_id = st.session_state.get('user_id')
+
     # Initialize chat history if it doesn't exist
     if 'messages' not in st.session_state:
-        st.session_state.messages = [
-            {"role": "assistant", "content": "Hi! I'm ASHA, your career assistant powered by AI. How can I help you today?", "feedback": None}
-        ]
+        # Try to load chat history from MongoDB
+        if user_id:
+            chat_history = get_chat_history(user_id)
+            if chat_history["status"] == "success" and chat_history["messages"]:
+                st.session_state.messages = chat_history["messages"]
+            else:
+                # Default welcome message if no chat history found
+                st.session_state.messages = [
+                    {"role": "assistant", "content": "Hi! I'm ASHA, your career assistant powered by AI. How can I help you today?", "feedback": None}
+                ]
+        else:
+            # Default welcome message if no user_id
+            st.session_state.messages = [
+                {"role": "assistant", "content": "Hi! I'm ASHA, your career assistant powered by AI. How can I help you today?", "feedback": None}
+            ]
     
     # Create a container for the chat messages to ensure they stay above the input
     chat_container = st.container()
@@ -289,6 +305,9 @@ def display_chat_page():
                         response = assistant._get_job_recommendations()
                         st.session_state.messages.append({"role": "user", "content": "Find me latest job postings for you"})
                         st.session_state.messages.append({"role": "assistant", "content": response, "feedback": None})
+                        if st.session_state.get('user_id'):
+                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                        
                         st.rerun()
                     except Exception as e:
                         st.error(f"Error finding jobs: {str(e)}")
@@ -301,6 +320,9 @@ def display_chat_page():
                         response = assistant._get_event_recommendations()
                         st.session_state.messages.append({"role": "user", "content": "Find upcoming events for you"})
                         st.session_state.messages.append({"role": "assistant", "content": response, "feedback": None})
+                        
+                        if st.session_state.get('user_id'):
+                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
                         st.rerun()
                     except Exception as e:
                         st.error(f"Error finding events: {str(e)}")
@@ -313,6 +335,9 @@ def display_chat_page():
                         response = assistant._get_community_recommendations()
                         st.session_state.messages.append({"role": "user", "content": "Find community groups for you"})
                         st.session_state.messages.append({"role": "assistant", "content": response, "feedback": None})
+                        
+                        if st.session_state.get('user_id'):
+                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
                         st.rerun()
                     except Exception as e:
                         st.error(f"Error finding community groups: {str(e)}")
@@ -325,7 +350,10 @@ def display_chat_page():
                         response = assistant._get_session_recommendations()
                         st.session_state.messages.append({"role": "user", "content": "Find Workshops and sessions for you"})
                         st.session_state.messages.append({"role": "assistant", "content": response, "feedback": None})
-                        st.rerun()
+                        
+                        if st.session_state.get('user_id'):
+                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
+
                     except Exception as e:
                         st.error(f"Error finding Workshops and sessions: {str(e)}")
         
@@ -361,6 +389,9 @@ def display_chat_page():
                                 "feedback": "positive",
                                 "timestamp": datetime.now().isoformat()
                             })
+                            if st.session_state.get('user_id'):
+                                save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                                        
                             st.rerun()
                         
                         # Thumbs down button
@@ -376,6 +407,9 @@ def display_chat_page():
                                 "feedback": "negative",
                                 "timestamp": datetime.now().isoformat()
                             })
+                            if st.session_state.get('user_id'):
+                                save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                             
                             st.rerun()
     
     # Create a spacer to ensure content is visible above the fixed input bar
@@ -452,7 +486,8 @@ def display_chat_page():
                                             "content": display_response,
                                             "feedback": None
                                         })
-                                        
+                                        if st.session_state.get('user_id'):
+                                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
                                         st.rerun()
                                     except Exception as e:
                                         error_msg = f"I'm sorry, I encountered an error: {str(e)}"
@@ -508,6 +543,9 @@ def display_chat_page():
                             "content": display_response,
                             "feedback": None
                         })
+                        if st.session_state.get('user_id'):
+                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                                        
                         st.rerun()
                         
                     except Exception as e:

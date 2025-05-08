@@ -152,3 +152,47 @@ def get_profile(user_id):
         return {"status": "success", "profile": profile_dict}
     except Exception as e:
         return {"status": "error", "message": f"Error retrieving profile: {str(e)}"}
+
+
+# Add these functions to your database.py file:
+
+# Chat Storage Functions
+def save_chat_history(user_id, messages):
+    """
+    Save or update chat history for a user in MongoDB
+    """
+    # Check if chat history already exists for this user
+    existing_chat = db["chats"].find_one({"user_id": user_id})
+    
+    if existing_chat:
+        # Update existing chat history
+        db["chats"].update_one(
+            {"user_id": user_id},
+            {
+                "$set": {
+                    "messages": messages,
+                    "updated_at": datetime.utcnow()
+                }
+            }
+        )
+    else:
+        # Create new chat history
+        db["chats"].insert_one({
+            "user_id": user_id,
+            "messages": messages,
+            "created_at": datetime.utcnow(),
+            "updated_at": datetime.utcnow()
+        })
+    
+    return {"status": "success", "message": "Chat history saved"}
+
+def get_chat_history(user_id):
+    """
+    Retrieve chat history for a user from MongoDB
+    """
+    chat_history = db["chats"].find_one({"user_id": user_id})
+    
+    if not chat_history:
+        return {"status": "success", "messages": []}
+    
+    return {"status": "success", "messages": chat_history.get("messages", [])}

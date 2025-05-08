@@ -57,18 +57,31 @@ def main():
         st.session_state['init_done'] = True
     
     # Use session state for authentication persistence
-    # Store authentication in browser cache to persist across page refreshes
+    # Enhanced session persistence with browser local storage
     if 'authenticated' in st.session_state and st.session_state['authenticated']:
-        st.session_state['user_authenticated'] = True
-        st.session_state['user_id'] = st.session_state.get('user_id', '')
-        st.session_state['token'] = st.session_state.get('token', '')
+        # Store authentication in browser storage for persistence
+        session_data = {
+            'authenticated': True,
+            'user_id': st.session_state.get('user_id', ''),
+            'token': st.session_state.get('token', ''),
+            'page': st.session_state.get('page', 'home')
+        }
+        # Use JSON to store complex data
+        st.experimental_set_query_params(session=json.dumps(session_data))
     
     # Check for cached authentication on page load
-    if not st.session_state.get('authenticated') and st.session_state.get('user_authenticated'):
-        st.session_state['authenticated'] = True
-        st.session_state['user_id'] = st.session_state.get('user_id', '')
-        st.session_state['token'] = st.session_state.get('token', '')
-        st.session_state['page'] = st.session_state.get('page', 'home')
+    query_params = st.experimental_get_query_params()
+    if 'session' in query_params and not st.session_state.get('authenticated'):
+        try:
+            session_data = json.loads(query_params['session'][0])
+            if session_data.get('authenticated'):
+                st.session_state['authenticated'] = True
+                st.session_state['user_id'] = session_data.get('user_id', '')
+                st.session_state['token'] = session_data.get('token', '')
+                st.session_state['page'] = session_data.get('page', 'home')
+        except:
+            # If there's an error parsing the session data, don't restore the session
+            pass
 
     # Apply custom CSS
     st.markdown("""
