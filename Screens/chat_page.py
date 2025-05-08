@@ -189,14 +189,7 @@ def process_user_query(prompt):
 
 def display_chat_page():
     """Display a chat interface with ASHA AI with quick action options and voice input"""
-    
-    # Check if user is authenticated
-    if not st.session_state.get('authenticated', False):
-        st.warning("Please sign in first")
-        st.session_state['page'] = 'login'
-        st.rerun()
-        return
-    
+        
     st.title("ASHA AI Chat")
 
     user_id = st.session_state.get('user_id')
