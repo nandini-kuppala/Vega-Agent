@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 import bcrypt
 import jwt
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from bson import ObjectId
 
 # Load environment variables from .env file
@@ -29,9 +29,9 @@ profiles_collection = db["profiles"]
 def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
     if expires_delta:
-        expire = datetime.utcnow() + expires_delta
+        expire = datetime.now(timezone.utc) + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
@@ -50,7 +50,7 @@ def signup_user(email, password, name, phone=None, city=None):
         "email": email,
         "name": name,
         "hashed_password": hashed_password,
-        "created_at": datetime.utcnow()
+        "created_at": datetime.now(timezone.utc)
     }
     
     # Add optional fields if provided
@@ -171,7 +171,7 @@ def save_chat_history(user_id, messages):
             {
                 "$set": {
                     "messages": messages,
-                    "updated_at": datetime.utcnow()
+                    "updated_at": datetime.now(timezone.utc)
                 }
             }
         )
@@ -180,8 +180,8 @@ def save_chat_history(user_id, messages):
         db["chats"].insert_one({
             "user_id": user_id,
             "messages": messages,
-            "created_at": datetime.utcnow(),
-            "updated_at": datetime.utcnow()
+            "created_at": datetime.now(timezone.utc),
+            "updated_at": datetime.now(timezone.utc)
         })
     
     return {"status": "success", "message": "Chat history saved"}
