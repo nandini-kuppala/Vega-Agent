@@ -377,5 +377,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 Built with ❤️ to empower women in their professional journeys.
 
 
-👥 Contributor - 
-Nandini Kuppala
+👥 Contributor -- Nandini Kuppala
