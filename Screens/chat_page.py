@@ -197,7 +197,6 @@ def process_user_query(prompt):
                 logger.error(traceback.format_exc())
 
 def display_chat_page():
-    
     """Display a chat interface with ASHA AI with quick action options and voice input"""
     
     # Check if user is authenticated
@@ -228,53 +227,29 @@ def display_chat_page():
             st.session_state.messages = [
                 {"role": "assistant", "content": "Hi! I'm ASHA, your career assistant powered by AI. How can I help you today?", "feedback": None}
             ]
-
-    # Set up the page structure with fixed height containers
+    
+    # Apply custom CSS for fixed positioning and auto-scrolling
     st.markdown("""
     <style>
-    .main .block-container {
-        padding-bottom: 0rem;
-        padding-top: 1rem;
-        max-width: 100%;
-    }
-    
-    #chat-container {
-        height: calc(100vh - 220px);
-        overflow-y: auto;
-        padding-right: 1rem;
-        margin-bottom: 70px; /* Space for input container */
-    }
-    
-    .stChatInputContainer {
-        position: fixed !important;
-        bottom: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        background-color: white !important;
-        padding: 1rem 1rem !important;
-        z-index: 999 !important;
-        box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.1) !important;
-    }
-    
-    .input-container {
+    /* Main container styles */
+    .main-container {
         display: flex;
-        align-items: center;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        padding: 10px;
-        background-color: white;
-        z-index: 1000;
-        border-top: 1px solid #ccc;
+        flex-direction: column;
+        height: calc(100vh - 80px);
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
     }
     
-    /* For quick actions */
+    /* Quick actions bar styles */
     .quick-actions {
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
         margin-bottom: 15px;
+        padding: 10px 0;
+        background-color: white;
+        z-index: 98;
     }
     .quick-action-button {
         background-color: #f0f0f0;
@@ -288,6 +263,36 @@ def display_chat_page():
     .quick-action-button:hover {
         background-color: #e0e0e0;
     }
+    
+    /* Chat container styles */
+    .chat-container {
+        flex-grow: 1;
+        overflow-y: auto;
+        padding: 10px;
+        margin-bottom: 70px; /* Space for fixed input bar */
+    }
+    
+    /* Fixed input bar styles */
+    .input-area {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: white;
+        padding: 10px 5%;
+        display: flex;
+        box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+        z-index: 100;
+    }
+    
+    /* Voice button styles */
+    .voice-button-container {
+        width: 40px;
+        margin-left: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
     .voice-button {
         background-color: #f0f0f0;
         border-radius: 50%;
@@ -299,7 +304,6 @@ def display_chat_page():
         cursor: pointer;
         border: none;
         transition: background-color 0.3s;
-        margin-right: 10px;
     }
     .voice-button:hover {
         background-color: #e0e0e0;
@@ -307,103 +311,163 @@ def display_chat_page():
     .voice-button.recording {
         background-color: #ff5252;
     }
-    .stAudioRecorderWrapper {
-        display: none !important;
-    }
+    
+    /* Recording indicator */
     .custom-recording-indicator {
         color: red;
         font-weight: bold;
-        margin-top: 5px;
+        font-size: 10px;
+        text-align: center;
+    }
+    
+    /* Hide Streamlit's audio recorder */
+    .stAudioRecorderWrapper {
+        display: none !important;
+    }
+    
+    /* Other styles */
+    .chat-input-container {
+        flex-grow: 1;
+    }
+    
+    /* Auto-scroll script */
+    #auto-scroll {
+        height: 1px;
+        width: 1px;
+    }
+    
+    /* Make buttons in the chat have consistent width */
+    .stButton button {
+        width: 100%;
+    }
+    
+    /* Streamlit chat input container - force it to use our custom styling */
+    .stChatInputContainer, .stChatMessageContent {
+        width: 100% !important;
+    }
+    
+    /* Override any Streamlit styling that might interfere */
+    .stApp {
+        overflow: hidden;
+    }
+    
+    /* Make content area full height */
+    [data-testid="stAppViewContainer"] > div:first-child {
+        height: 100vh;
     }
     </style>
     
-    <!-- Auto-scroll JavaScript for the chat container -->
+    <!-- Auto-scroll script -->
     <script>
-    // Function to scroll to the bottom of the chat container
-    function scrollToBottom() {
-        const chatContainer = document.getElementById('chat-container');
-        if (chatContainer) {
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+        function scrollToBottom() {
+            const chatContainer = document.querySelector('.chat-container');
+            if (chatContainer) {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
         }
-    }
-    
-    // Set a small delay to ensure content is rendered before scrolling
-    setTimeout(scrollToBottom, 100);
+        
+        // Try to scroll immediately and also after a short delay to ensure content is loaded
+        window.onload = function() {
+            scrollToBottom();
+            setTimeout(scrollToBottom, 100);
+            setTimeout(scrollToBottom, 500);
+            setTimeout(scrollToBottom, 1000);
+        }
+        
+        // Add mutation observer to detect new messages
+        const observer = new MutationObserver(function(mutations) {
+            scrollToBottom();
+        });
+        
+        // Start observing after a delay to ensure the chat container exists
+        setTimeout(function() {
+            const chatContainer = document.querySelector('.chat-container');
+            if (chatContainer) {
+                observer.observe(chatContainer, { childList: true, subtree: true });
+            }
+        }, 1000);
     </script>
+    
+    <div class="main-container">
+        <div id="quick-actions-area"></div>
+        <div class="chat-container" id="chat-container"></div>
+        <div id="auto-scroll"></div>
+    </div>
     """, unsafe_allow_html=True)
     
-    # Display quick action buttons above chat messages
-    st.markdown('<div class="quick-actions">', unsafe_allow_html=True)
-    
-    col1, col2, col3, col4 = st.columns(4)
-    
-    with col1:
-        if st.button("🔍 Find Latest Job Postings", key="find_jobs"):
-            with st.spinner("Searching for jobs..."):
-                try:
-                    assistant = st.session_state.get('assistant')
-                    response = assistant._get_job_recommendations()
-                    st.session_state.messages.append({"role": "user", "content": "Find me latest job postings for you"})
-                    st.session_state.messages.append({"role": "assistant", "content": response, "feedback": None})
-                    if st.session_state.get('user_id'):
-                        save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                    
-                    st.rerun()
-                except Exception as e:
-                    st.error(f"Error finding jobs: {str(e)}")
-    
-    with col2:
-        if st.button("🎯 Find Upcoming Events", key="find_events"):
-            with st.spinner("Discovering events..."):
-                try:
-                    assistant = st.session_state.get('assistant')
-                    response = assistant._get_event_recommendations()
-                    st.session_state.messages.append({"role": "user", "content": "Find upcoming events for you"})
-                    st.session_state.messages.append({"role": "assistant", "content": response, "feedback": None})
-                    
-                    if st.session_state.get('user_id'):
-                        save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                    st.rerun()
-                except Exception as e:
-                    st.error(f"Error finding events: {str(e)}")
-    
-    with col3:
-        if st.button("👥 Find Community Groups", key="find_groups"):
-            with st.spinner("Discovering community groups..."):
-                try:
-                    assistant = st.session_state.get('assistant')
-                    response = assistant._get_community_recommendations()
-                    st.session_state.messages.append({"role": "user", "content": "Find community groups for you"})
-                    st.session_state.messages.append({"role": "assistant", "content": response, "feedback": None})
-                    
-                    if st.session_state.get('user_id'):
-                        save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                    st.rerun()
-                except Exception as e:
-                    st.error(f"Error finding community groups: {str(e)}")
+    # Quick actions area
+    with st.container():
+        st.markdown('<div id="quick-actions-area" class="quick-actions">', unsafe_allow_html=True)
+        
+        col1, col2, col3, col4 = st.columns(4)
+        
+        with col1:
+            if st.button("🔍 Find Latest Job Postings", key="find_jobs"):
+                with st.spinner("Searching for jobs..."):
+                    try:
+                        assistant = st.session_state.get('assistant')
+                        response = assistant._get_job_recommendations()
+                        st.session_state.messages.append({"role": "user", "content": "Find me latest job postings for you"})
+                        st.session_state.messages.append({"role": "assistant", "content": response, "feedback": None})
+                        if st.session_state.get('user_id'):
+                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                        
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"Error finding jobs: {str(e)}")
+        
+        with col2:
+            if st.button("🎯 Find Upcoming Events", key="find_events"):
+                with st.spinner("Discovering events..."):
+                    try:
+                        assistant = st.session_state.get('assistant')
+                        response = assistant._get_event_recommendations()
+                        st.session_state.messages.append({"role": "user", "content": "Find upcoming events for you"})
+                        st.session_state.messages.append({"role": "assistant", "content": response, "feedback": None})
+                        
+                        if st.session_state.get('user_id'):
+                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"Error finding events: {str(e)}")
+        
+        with col3:
+            if st.button("👥 Find Community Groups", key="find_groups"):
+                with st.spinner("Discovering community groups..."):
+                    try:
+                        assistant = st.session_state.get('assistant')
+                        response = assistant._get_community_recommendations()
+                        st.session_state.messages.append({"role": "user", "content": "Find community groups for you"})
+                        st.session_state.messages.append({"role": "assistant", "content": response, "feedback": None})
+                        
+                        if st.session_state.get('user_id'):
+                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"Error finding community groups: {str(e)}")
 
-    with col4:
-        if st.button("🧑‍🏫 Find Workshops and sessions", key="find_sessions"):
-            with st.spinner("Discovering sessions..."):
-                try:
-                    assistant = st.session_state.get('assistant')
-                    response = assistant._get_session_recommendations()
-                    st.session_state.messages.append({"role": "user", "content": "Find Workshops and sessions for you"})
-                    st.session_state.messages.append({"role": "assistant", "content": response, "feedback": None})
-                    
-                    if st.session_state.get('user_id'):
-                        save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                    st.rerun()
-                except Exception as e:
-                    st.error(f"Error finding Workshops and sessions: {str(e)}")
+        with col4:
+            if st.button("🧑‍🏫 Find Workshops and sessions", key="find_sessions"):
+                with st.spinner("Discovering sessions..."):
+                    try:
+                        assistant = st.session_state.get('assistant')
+                        response = assistant._get_session_recommendations()
+                        st.session_state.messages.append({"role": "user", "content": "Find Workshops and sessions for you"})
+                        st.session_state.messages.append({"role": "assistant", "content": response, "feedback": None})
+                        
+                        if st.session_state.get('user_id'):
+                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"Error finding Workshops and sessions: {str(e)}")
+        
+        st.markdown('</div>', unsafe_allow_html=True)
     
-    st.markdown('</div>', unsafe_allow_html=True)
-    
-    # Create a scrollable container for chat messages with a fixed ID for JavaScript scrolling
-    chat_container = st.container()
-    st.markdown('<div id="chat-container">', unsafe_allow_html=True)
-    
-    with chat_container:
+    # Chat container for messages - wrap in a container with the chat-container class
+    chat_area = st.container()
+    with chat_area:
+        st.markdown('<div id="chat-container" class="chat-container">', unsafe_allow_html=True)
+        
         # Display chat messages with feedback buttons
         for i, message in enumerate(st.session_state.messages):
             with st.chat_message(message["role"], avatar="👩‍💼" if message["role"] == "assistant" else None):
@@ -460,41 +524,40 @@ def display_chat_page():
                             if st.session_state.get('user_id'):
                                 save_chat_history(st.session_state['user_id'], st.session_state.messages)
                             st.rerun()
+        
+        # Add an empty div for auto-scrolling target
+        st.markdown('<div id="auto-scroll"></div>', unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
     
-    # Add an invisible anchor to scroll to
-    st.markdown("<div id='bottom-chat-anchor'></div>", unsafe_allow_html=True)
-
-    # Inject JavaScript to scroll to the anchor on page load
-    scroll_script = """
-    <script>
-        const anchor = document.getElementById("bottom-chat-anchor");
-        if (anchor) {
-            anchor.scrollIntoView({ behavior: "smooth", block: "end" });
-        }
-    </script>
-    """
-    st.markdown(scroll_script, unsafe_allow_html=True)
+    # Fixed input area at the bottom
+    st.markdown('<div class="input-area">', unsafe_allow_html=True)
     
-    # Close the chat container div
-    st.markdown('</div>', unsafe_allow_html=True)
+    # Use columns for the input bar layout
+    input_cols = st.columns([0.95, 0.05])
     
-    # Fixed input bar at bottom
-    st.markdown('<div class="input-container">', unsafe_allow_html=True)
+    # Chat input in the first column
+    with input_cols[0]:
+        prompt = st.chat_input("What would you like help with?", key="chat_input")
     
-    # Create columns for the chat input and voice button
-    col1, col2 = st.columns([0.9, 0.1])
-    
-    with col2:
+    # Voice button in the second column
+    with input_cols[1]:
         # Initialize recording state
         if 'is_recording' not in st.session_state:
             st.session_state.is_recording = False
             st.session_state.audio_recorder_key = 0
         
         # Voice button with different style based on recording state
-        button_style = "background-color: #ff5252;" if st.session_state.is_recording else "background-color: #f0f0f0;"
+        button_style = "voice-button recording" if st.session_state.is_recording else "voice-button"
         button_text = "🛑" if st.session_state.is_recording else "🎤"
         
-        if st.button(button_text, key="voice_button", help="Toggle voice recording"):
+        st.markdown(f"""
+        <div class="voice-button-container">
+            <button id="voice-button" class="{button_style}">{button_text}</button>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # The actual button that Streamlit can interact with (hidden but functional)
+        if st.button("Voice", key="voice_button", help="Toggle voice recording"):
             st.session_state.is_recording = not st.session_state.is_recording
             st.session_state.audio_recorder_key += 1
             st.rerun()
@@ -568,71 +631,70 @@ def display_chat_page():
             except Exception as e:
                 st.error(f"Error with audio recording: {str(e)}")
     
-    with col1:
-        prompt = st.chat_input("What would you like help with?")
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    # Process text input if provided
+    if prompt:
+        # Add user message to chat history
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        if st.session_state.get('user_id'):
+            save_chat_history(st.session_state['user_id'], st.session_state.messages)
         
-        if prompt:
-            # Add user message to chat history
-            st.session_state.messages.append({"role": "user", "content": prompt})
+        # Check if user is set
+        if not st.session_state.get('user_id'):
+            content = "It seems you're not logged in. Please log in first so I can provide personalized assistance."
+            st.session_state.messages.append({"role": "assistant", "content": content, "feedback": None})
             if st.session_state.get('user_id'):
                 save_chat_history(st.session_state['user_id'], st.session_state.messages)
-            
-            # Check if user is set
-            if not st.session_state.get('user_id'):
-                content = "It seems you're not logged in. Please log in first so I can provide personalized assistance."
-                st.session_state.messages.append({"role": "assistant", "content": content, "feedback": None})
+            st.rerun()
+        
+        # Detect language of the input
+        detected_lang = detect_language(prompt)
+        st.session_state.detected_language = detected_lang
+        
+        # Translate to English if needed
+        if detected_lang != "en-IN":
+            english_prompt = translate_text(prompt, detected_lang, "en-IN")
+        else:
+            english_prompt = prompt
+        
+        # Generate response with the assistant
+        with st.spinner("Thinking..."):
+            try:
+                # Process the query using our CareerGuidanceChatbot
+                assistant = st.session_state.get('assistant')
+                response = assistant.process_query(english_prompt)
+                response = sanitize_response(response)
+                # Translate back to original language if needed
+                if detected_lang != "en-IN":
+                    translated_response = translate_text(response, "en-IN", detected_lang)
+                    display_response = translated_response
+                else:
+                    display_response = response
+                
+                # Update chat history
+                st.session_state.messages.append({
+                    "role": "assistant", 
+                    "content": display_response,
+                    "feedback": None
+                })
+                
                 if st.session_state.get('user_id'):
                     save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                
                 st.rerun()
-            
-            # Detect language of the input
-            detected_lang = detect_language(prompt)
-            st.session_state.detected_language = detected_lang
-            
-            # Translate to English if needed
-            if detected_lang != "en-IN":
-                english_prompt = translate_text(prompt, detected_lang, "en-IN")
-            else:
-                english_prompt = prompt
-            
-            # Generate response with the assistant
-            with st.spinner("Thinking..."):
-                try:
-                    # Process the query using our CareerGuidanceChatbot
-                    assistant = st.session_state.get('assistant')
-                    response = assistant.process_query(english_prompt)
-                    response = sanitize_response(response)
-                    # Translate back to original language if needed
-                    if detected_lang != "en-IN":
-                        translated_response = translate_text(response, "en-IN", detected_lang)
-                        display_response = translated_response
-                    else:
-                        display_response = response
-                    
-                    # Update chat history
-                    st.session_state.messages.append({
-                        "role": "assistant", 
-                        "content": display_response,
-                        "feedback": None
-                    })
-
-                    if st.session_state.get('user_id'):
-                        save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                    st.rerun()
-                    
-                except Exception as e:
-                    error_msg = f"I'm sorry, I encountered an error: {str(e)}"
-                    st.session_state.messages.append({
-                        "role": "assistant", 
-                        "content": error_msg,
-                        "feedback": None
-                    })
-
-                    if st.session_state.get('user_id'):
-                        save_chat_history(st.session_state['user_id'], st.session_state.messages)
-
-                    logger.error(f"Error generating response: {str(e)}")
-                    logger.error(traceback.format_exc())
-                    st.rerun()
-                    
-    st.markdown('</div>', unsafe_allow_html=True)
+                
+            except Exception as e:
+                error_msg = f"I'm sorry, I encountered an error: {str(e)}"
+                st.session_state.messages.append({
+                    "role": "assistant", 
+                    "content": error_msg,
+                    "feedback": None
+                })
+                
+                if st.session_state.get('user_id'):
+                    save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                
+                logger.error(f"Error generating response: {str(e)}")
+                logger.error(traceback.format_exc())
+                st.rerun()
