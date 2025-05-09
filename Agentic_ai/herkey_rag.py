@@ -184,6 +184,7 @@ def create_profile_analysis_task(profile_analyzer_agent, candidate_profile):
         agent=profile_analyzer_agent,
         expected_output="A structured JSON with comprehensive candidate profile analysis"
     )
+
 def create_job_recommendation_task(job_recommender_agent, candidate_analysis, jobs_data):
     """Create a task to recommend jobs with URLs"""
     return Task(

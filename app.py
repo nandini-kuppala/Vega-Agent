@@ -1,6 +1,8 @@
 #app.py
 import sys
 import os
+import pickle
+import uuid
 
 # Try to import pysqlite3 only if it's installed
 try:
@@ -14,10 +16,8 @@ import requests
 import json
 import sys
 import os
-import sys
 import traceback
 import logging
-import json
 from datetime import datetime
 from Roadmap.roadmap_page import display_roadmap_page
 from skill_assessment import skill
@@ -36,6 +36,57 @@ from Screens.home import display_home_page
 from Screens.profile import display_profile_modal
 from Screens.chat_page import display_chat_page
 
+# Improved session persistence function
+def setup_session_persistence():
+    # Create a sessions directory if it doesn't exist
+    if not os.path.exists("sessions"):
+        os.makedirs("sessions")
+    
+    # Get or create a session ID
+    if "session_id" not in st.session_state:
+        # Generate a unique session ID (could be based on user_id if authenticated)
+        if st.session_state.get("user_id"):
+            st.session_state["session_id"] = f"user_{st.session_state['user_id']}"
+        else:
+            st.session_state["session_id"] = str(uuid.uuid4())
+    
+    session_file = f"sessions/{st.session_state['session_id']}.pickle"
+    
+    # If user is authenticated, save their session
+    if st.session_state.get("authenticated"):
+        # Save session data
+        session_data = {
+            "authenticated": st.session_state["authenticated"],
+            "user_id": st.session_state.get("user_id"),
+            "token": st.session_state.get("token"),
+            "page": st.session_state.get("page", "home")
+        }
+        
+        with open(session_file, "wb") as f:
+            pickle.dump(session_data, f)
+    
+    # If there's a saved session, try to restore it
+    elif os.path.exists(session_file):
+        try:
+            with open(session_file, "rb") as f:
+                session_data = pickle.load(f)
+                
+            # Restore session state
+            for key, value in session_data.items():
+                st.session_state[key] = value
+                
+            # If we restored authentication, initialize the assistant
+            if st.session_state.get("authenticated") and "assistant" not in st.session_state:
+                firecrawl_api_key = st.secrets["FIRECRAWL_API_KEY"]
+                groq_api_key = st.secrets["GROQ_API_KEY"]
+                st.session_state['assistant'] = CareerGuidanceChatbot(
+                    firecrawl_api_key=firecrawl_api_key,
+                    groq_api_key=groq_api_key
+                )
+                if st.session_state.get('user_id'):
+                    st.session_state['assistant'].load_profile(user_id=st.session_state['user_id'])
+        except Exception as e:
+            st.error(f"Error restoring session: {str(e)}")
 
 def main():
     # Configure page
@@ -51,38 +102,38 @@ def main():
 
     # Initialize session state variables if they don't exist
     if 'init_done' not in st.session_state:
-        for var in ['page', 'authenticated', 'user_id', 'token', 'show_profile']:
-            if var not in st.session_state:
-                st.session_state[var] = False if var != 'page' else 'login'
+        # Only initialize default values for non-existent keys
+        defaults = {
+            'page': 'login',
+            'authenticated': False,
+            'user_id': None,
+            'token': None,
+            'show_profile': False
+        }
+        
+        for key, default_value in defaults.items():
+            if key not in st.session_state:
+                st.session_state[key] = default_value
+        
         st.session_state['init_done'] = True
     
-    # Use session state for authentication persistence
-    # Enhanced session persistence with browser local storage
-    if 'authenticated' in st.session_state and st.session_state['authenticated']:
-        # Store authentication in browser storage for persistence
-        session_data = {
-            'authenticated': True,
-            'user_id': st.session_state.get('user_id', ''),
-            'token': st.session_state.get('token', ''),
-            'page': st.session_state.get('page', 'home')
-        }
-        # Use JSON to store complex data
-        st.query_params.update({"session": json.dumps(session_data)})
+    # Setup session persistence
+    setup_session_persistence()
 
-    
-    # Check for cached authentication on page load
-    query_params = st.query_params
-    if 'session' in query_params and not st.session_state.get('authenticated'):
+    # Assistant Initialization
+    if st.session_state.get('authenticated') and 'assistant' not in st.session_state:
         try:
-            session_data = json.loads(query_params['session'][0])
-            if session_data.get('authenticated'):
-                st.session_state['authenticated'] = True
-                st.session_state['user_id'] = session_data.get('user_id', '')
-                st.session_state['token'] = session_data.get('token', '')
-                st.session_state['page'] = session_data.get('page', 'home')
-        except:
-            # If there's an error parsing the session data, don't restore the session
-            pass
+            firecrawl_api_key = st.secrets["FIRECRAWL_API_KEY"]
+            groq_api_key = st.secrets["GROQ_API_KEY"]
+            st.session_state['assistant'] = CareerGuidanceChatbot(
+                firecrawl_api_key=firecrawl_api_key,
+                groq_api_key=groq_api_key
+            )
+            if st.session_state.get('user_id'):
+                st.session_state['assistant'].load_profile(user_id=st.session_state['user_id'])
+        except Exception as e:
+            st.error(f"Error initializing assistant: {str(e)}")
+            print(traceback.format_exc())
 
     # Apply custom CSS
     st.markdown("""
@@ -117,21 +168,6 @@ def main():
             }
         </style>
     """, unsafe_allow_html=True)
-
-    # Assistant Initialization
-    if st.session_state.get('authenticated') and 'assistant' not in st.session_state:
-        try:
-            firecrawl_api_key = st.secrets["FIRECRAWL_API_KEY"]
-            groq_api_key = st.secrets["GROQ_API_KEY"]
-            st.session_state['assistant'] = CareerGuidanceChatbot(
-                firecrawl_api_key=firecrawl_api_key,
-                groq_api_key=groq_api_key
-            )
-            if st.session_state.get('user_id'):
-                st.session_state['assistant'].load_profile(user_id=st.session_state['user_id'])
-        except Exception as e:
-            st.error(f"Error initializing assistant: {str(e)}")
-            print(traceback.format_exc())
 
     # Top Header
     if st.session_state.get('authenticated'):
@@ -176,8 +212,6 @@ def main():
                 st.session_state['show_profile'] = False
                 st.rerun()
 
-            
-
             st.markdown(
                 """
                 <a href="https://skillassessment.streamlit.app/" target="_blank">
@@ -200,14 +234,18 @@ def main():
                 unsafe_allow_html=True
             )
 
-            
-
             st.markdown("---")
 
             if st.button("🚪 Logout", key="logout_btn", use_container_width=True):
-                # Clear session storage to completely log out
-                for key in list(st.session_state.keys()):
-                    del st.session_state[key]
+                # Remove session file on logout
+                if "session_id" in st.session_state:
+                    session_file = f"sessions/{st.session_state['session_id']}.pickle"
+                    if os.path.exists(session_file):
+                        try:
+                            os.remove(session_file)
+                        except Exception as e:
+                            print(f"Error removing session file: {e}")
+                
                 # Clear session state
                 for key in list(st.session_state.keys()):
                     del st.session_state[key]
@@ -223,7 +261,6 @@ def main():
             
             The longer you allow ASHA to think, the more accurate 🎯 and valuable 💎 your recommendations will be!
             """)
-
 
     # Show Profile Modal
     if st.session_state.get('show_profile') and st.session_state.get('authenticated'):
@@ -248,12 +285,10 @@ def main():
         display_resume_builder_page() 
     elif page == 'knowledge_dose':
         display_daily_knowledge_page()
-    
     else:
         st.error("Page not found!")
         st.session_state['page'] = 'login'
         st.rerun()
-
 
 if __name__ == "__main__":
     main()
