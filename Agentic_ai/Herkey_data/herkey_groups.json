@@ -25,9 +25,8 @@
         "name": "RestartHer Academy",
         "type": "private",
         "member_count": 34442,
-        "featured": true,
+        "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/RestartHer.jpg",
-        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/RestartHer_Academy_Banner.jpg",
         "category": "trending",
         "joinable": true,
         "join_button_text": "Join"
@@ -36,9 +35,8 @@
         "name": "Women on a Career Break",
         "type": "public",
         "member_count": 36445,
-        "featured": true,
+        "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women-Career-break.jpg",
-        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Women_on_a_Career_Break_Banner.jpg",
         "category": "most active",
         "joinable": true,
         "join_button_text": "Join"
@@ -47,9 +45,8 @@
         "name": "Women's March",
         "type": "public",
         "member_count": 6066,
-        "featured": true,
+        "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/women_march_icon.jpg",
-        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Womens_March_Groups.jpg",
         "category": "trending",
         "joinable": true,
         "join_button_text": "Join"
@@ -58,9 +55,8 @@
         "name": "Career Growth",
         "type": "public",
         "member_count": 21940,
-        "featured": true,
+        "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Career_Growth_Icon.jpg",
-        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Career_Growth_Banner_Trust.jpg",
         "category": "most active",
         "joinable": true,
         "join_button_text": "Join"
@@ -69,9 +65,8 @@
         "name": "Work -Life Balance",
         "type": "public",
         "member_count": 1751,
-        "featured": true,
+        "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Work_Life_Balance_Icon.jpg",
-        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Work_Life_Balance_Banner.jpg",
         "category": "most active",
         "joinable": true,
         "join_button_text": "Join"
@@ -80,9 +75,8 @@
         "name": "Work-From- Home",
         "type": "public",
         "member_count": 179015,
-        "featured": true,
+        "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Work_From_Home_Icon.jpg",
-        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Work_From_Home_Banner.jpg",
         "category": "trending",
         "joinable": true,
         "join_button_text": "Join"
@@ -91,9 +85,8 @@
         "name": "Women in Tech",
         "type": "public",
         "member_count": 26590,
-        "featured": true,
+        "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_in_Tech_Icon.jpg",
-        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Finastra-&-Cargill_Banner.jpg",
         "category": "trending",
         "joinable": true,
         "join_button_text": "Join"
@@ -102,9 +95,8 @@
         "name": "HerStart",
         "type": "public",
         "member_count": 48,
-        "featured": true,
+        "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/HerStart_Icon.jpg",
-        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/HerStart_Bannerv2.jpg",
         "joinable": true,
         "join_button_text": "Join"
     },
@@ -121,9 +113,8 @@
         "name": "Women Entrepreneurs",
         "type": "public",
         "member_count": 3040,
-        "featured": true,
+        "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_Entrepreneurs_Icon.jpg",
-        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Women_Enterprise_Banner_Trust.jpg",
         "category": "most active",
         "joinable": true,
         "join_button_text": "Join"
@@ -132,9 +123,8 @@
         "name": "Women Freelancers",
         "type": "public",
         "member_count": 95637,
-        "featured": true,
+        "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_Freelancerss_Icon.jpg",
-        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Women_Freelancerss_Banner.jpg",
         "category": "trending",
         "joinable": true,
         "join_button_text": "Join"
@@ -143,9 +133,8 @@
         "name": "HerTech Academy",
         "type": "private",
         "member_count": 29,
-        "featured": true,
+        "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/HerTech_Icon.jpg",
-        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/HerTech_GB(D).jpg",
         "joinable": true,
         "join_button_text": "Join"
     },
@@ -153,9 +142,8 @@
         "name": "herShakti",
         "type": "private",
         "member_count": 49,
-        "featured": true,
+        "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/herShakti_Icon.jpg",
-        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/herShakti_Groups_banner.jpg",
         "category": "trending",
         "joinable": true,
         "join_button_text": "Join"
@@ -574,9 +562,8 @@
         "name": "Women in Supply Chain",
         "type": "public",
         "member_count": 26,
-        "featured": true,
+        "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_in_Supply_Chain_Icon.jpg",
-        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Women_in_Supply_Chain_Groups.jpg",
         "joinable": true,
         "join_button_text": "Join"
     },
@@ -584,9 +571,8 @@
         "name": "Women in Agriculture",
         "type": "public",
         "member_count": 132,
-        "featured": true,
+        "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_in_agriculture_Icon.jpg",
-        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Women_in_agriculture_Groups.jpg",
         "joinable": true,
         "join_button_text": "Join"
     },
@@ -599,11 +585,11 @@
         "join_button_text": "Join"
     },
     {
-        "name": "Unversus Moms",
+        "name": "PowerMoms",
         "type": "private",
         "featured": true,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Unversus_Icon.jpg",
-        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Unversus_Groups_Banner.jpg",
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/PowerMoms-icon.jpg",
+        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/PowerMoms-creatives_Group_Banner.jpg",
         "joinable": true,
         "join_button_text": "Join"
     },
@@ -798,9 +784,8 @@
     {
         "name": "HERFuture in Manufacturing",
         "type": "public",
-        "featured": true,
+        "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/HerFuture-in-manufacture-Logo-icon.jpg",
-        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/HerFuture-Group-banner-manufacture.jpg",
         "joinable": true,
         "join_button_text": "Join"
     },
@@ -816,18 +801,16 @@
     {
         "name": "HERFuture in Semicon",
         "type": "public",
-        "featured": true,
+        "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/HerFuture-in-semicom-Logo-icon.jpg",
-        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/HerFuture-in-semicom-Group-banner.jpg",
         "joinable": true,
         "join_button_text": "Join"
     },
     {
         "name": "HERFuture in IT",
         "type": "public",
-        "featured": true,
+        "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/HerFuture-in-IT-Logo-icon.jpg",
-        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/HerFuture-in-IT-Group-banner.jpg",
         "joinable": true,
         "join_button_text": "Join"
     },
@@ -846,15 +829,6 @@
         "member_count": 2,
         "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/RHA_Icon.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Prayaas",
-        "type": "private",
-        "featured": true,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Essilor_14_Feb_Group_Icon.jpg",
-        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/GB.png",
         "joinable": true,
         "join_button_text": "Join"
     },
@@ -921,7 +895,7 @@
         "type": "private",
         "featured": true,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Artboard 1 copy-100.jpg",
-        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Artboard 1-100.jpg",
+        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Ashoka_University_Deliverables_Group_Banner.jpg",
         "joinable": true,
         "join_button_text": "Join"
     },
@@ -931,17 +905,6 @@
         "featured": true,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/Hertech_Logo_Group_Banner.jpg",
         "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Hertech_Simplilearn_Group_Banner_10_Mar.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Test Ambassadors Club",
-        "type": "private",
-        "member_count": 2,
-        "featured": true,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Ambassadors.jpg",
-        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Ambassador_Club_Banner_Trust.jpg",
-        "category": "most active",
         "joinable": true,
         "join_button_text": "Join"
     },

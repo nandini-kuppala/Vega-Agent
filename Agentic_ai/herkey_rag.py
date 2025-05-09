@@ -64,7 +64,7 @@ def load_data(data_type=None):
 def create_profile_analyzer_agent():
     """Create an agent to analyze candidate profiles"""
     llm = ChatLiteLLM(
-        model="gemini/gemini-1.5-flash",
+        model="gemini/gemini-2.0-flash-lite",
         api_key=GEMINI_API_KEY,
         temperature=0.2
     )
@@ -83,7 +83,7 @@ def create_profile_analyzer_agent():
 def create_job_recommender_agent():
     """Create an agent to recommend jobs"""
     llm = ChatLiteLLM(
-        model="gemini/gemini-1.5-flash",
+        model="gemini/gemini-2.0-flash-lite",
         api_key=GEMINI_API_KEY,
         temperature=0.2
     )
@@ -103,7 +103,7 @@ def create_job_recommender_agent():
 def create_event_recommender_agent():
     """Create an agent to recommend events"""
     llm = ChatLiteLLM(
-        model="gemini/gemini-1.5-flash",
+        model="gemini/gemini-2.0-flash-lite",
         api_key=GEMINI_API_KEY,
         temperature=0.2
     )
@@ -123,7 +123,7 @@ def create_event_recommender_agent():
 def create_session_recommender_agent():
     """Create an agent to recommend sessions"""
     llm = ChatLiteLLM(
-        model="gemini/gemini-1.5-flash",
+        model="gemini/gemini-2.0-flash-lite",
         api_key=GEMINI_API_KEY,
         temperature=0.2
     )
@@ -143,7 +143,7 @@ def create_session_recommender_agent():
 def create_community_recommender_agent():
     """Create an agent to recommend community groups"""
     llm = ChatLiteLLM(
-        model="gemini/gemini-1.5-flash",
+        model="gemini/gemini-2.0-flash-lite",
         api_key=GEMINI_API_KEY,
         temperature=0.2
     )

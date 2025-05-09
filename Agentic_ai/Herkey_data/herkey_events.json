@@ -1,21 +1,5 @@
 [
     {
-        "title": "Advance Your Career with a Premier Executive MBA from Great Lakes",
-        "date": "16th Apr, 2025 to 30th Apr, 2025",
-        "time": "10:00am to 6:00pm",
-        "location": "Any",
-        "event_type": "Online",
-        "categories": [
-            "Career Development",
-            "event"
-        ],
-        "registration_status": "Open",
-        "registration_text": "Register",
-        "price": "Free",
-        "url": "https://events.herkey.com/events/advance-your-career-with-a-premier-executive-mba-from-great-lakes/1669",
-        "featured": true
-    },
-    {
         "title": "Back to Work - RestartHer with MS office",
         "date": "16th Apr, 2025 to 14th May, 2025",
         "time": "12:00pm to 11:00pm",
@@ -43,6 +27,38 @@
         "registration_text": "Register",
         "price": "Free",
         "url": "https://events.herkey.com/events/skillreboot-program:-restart-your-career-journey/1663",
+        "featured": true
+    },
+    {
+        "title": "HerFreshStart: Scholarships of up to 75% for Mothers Returning to Work",
+        "date": "8th May, 2025 to 25th May, 2025",
+        "time": "3:43pm to 6:00pm",
+        "location": "India",
+        "event_type": "Offline",
+        "categories": [
+            "Career Development",
+            "Diversity Drive"
+        ],
+        "registration_status": "Open",
+        "registration_text": "Register",
+        "price": "Free",
+        "url": "https://events.herkey.com/events/herfreshstart:-scholarships-of-up-to-75%-for-mothers-returning-to-work/1670",
+        "featured": true
+    },
+    {
+        "title": "Advance Your Career with a Premier Executive MBA from Great Lakes",
+        "date": "16th Apr, 2025 to 31st May, 2025",
+        "time": "10:00am to 6:00pm",
+        "location": "Chennai",
+        "event_type": "Online",
+        "categories": [
+            "Career Development",
+            "event"
+        ],
+        "registration_status": "Open",
+        "registration_text": "Register",
+        "price": "Free",
+        "url": "https://events.herkey.com/events/advance-your-career-with-a-premier-executive-mba-from-great-lakes/1669",
         "featured": true
     },
     {

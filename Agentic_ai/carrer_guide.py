@@ -16,7 +16,7 @@ GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
 
 def general_purpose_agent():
     llm = ChatLiteLLM(
-        model="gemini/gemini-1.5-flash",
+        model="gemini/gemini-2.0-flash-lite",
         api_key=GEMINI_API_KEY,
         temperature=0.2
     )

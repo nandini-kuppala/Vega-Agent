@@ -1,103 +1,113 @@
 [
     {
-        "title": "English Trainer",
-        "company": "FRND App",
-        "location": "Any",
-        "work_type": "Work From Home",
-        "experience": "0-10 Yr",
-        "skills": "Teaching English • Communication Skill +2",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/ebcdd02ef7b6e06a071d9ccfb5010d9ace7650f5087d41f95a.png"
-    },
-    {
-        "title": "Senior Engineering Manager - Merchant Experie...",
-        "company": "GoDaddy",
-        "location": "Pune",
+        "title": "Full Stack Engineering Manager",
+        "company": "dunnhumby",
+        "location": "Gurgaon",
         "work_type": "Work From Office",
-        "experience": "8-12 Yr",
-        "skills": "Nodejs • Reactjs +4",
+        "experience": "10-13 Yr",
+        "skills": "Reactjs • Angular +5",
         "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/9bfe49f33eba189c2592505e715fffc5e5273bd55cf3387391.png"
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/4e90d23db811e0d2ff0292dc3f6c5f07539983d2d84140dec3.jpg"
     },
     {
-        "title": "Staff/Senior Mechanical/Thermal Engineer",
-        "company": "Micron",
-        "location": "Hyderabad",
-        "work_type": "Work From Office",
-        "experience": "10-20 Yr",
-        "skills": "Flotherm • Solidworks +1",
-        "easy_apply": false,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/749cc80e855a2ad6e564cbb419384321fe703d65d17a4fe1ab.jpg"
-    },
-    {
-        "title": "Senior Financial Data Analyst",
-        "company": "MOODY'S",
+        "title": "Assistant Manager- Inside Sales",
+        "company": "HerKey",
         "location": "Bangalore",
         "work_type": "Hybrid",
-        "experience": "1-3 Yr",
-        "skills": "Credit Data Reporting • Finance Data Analysis +2",
-        "easy_apply": false,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/2a2695f18566b16f42959d934b0783fab48b52921fdb29f53e.png"
+        "experience": "3-5 Yr",
+        "skills": "Sales",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/c8dc717b169103af90ddc1ce3c5b389d9983119a584262ccb7.jpg"
     },
     {
-        "title": "Software Engineer",
-        "company": "Amdocs.com",
+        "title": "Associate - Talent & OD",
+        "company": "Leaping Frog Consulting...",
+        "location": "Any",
+        "work_type": "Work From Home",
+        "experience": "5-15 Yr",
+        "skills": "People Hr • Planning +8",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/49d81c39d209649a6f7de51517bbf2900df5ae0dd2b8708b25.png"
+    },
+    {
+        "title": "VP Finance",
+        "company": "HerKey",
+        "location": "Bangalore",
+        "work_type": "Hybrid",
+        "experience": "15-18 Yr",
+        "skills": "Financial Plan • Budgeting +2",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/c8dc717b169103af90ddc1ce3c5b389d9983119a584262ccb7.jpg"
+    },
+    {
+        "title": "Principal Change Analyst",
+        "company": "Deutsche Bank Group",
+        "location": "Bangalore",
+        "work_type": "Work From Office",
+        "experience": "9-13 Yr",
+        "skills": "Business Process Re-Engineering • Lean Ux +6",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/ecc00870c1a811b1ff43ca16ab8753e8185a4804b102d3d728.jpg"
+    },
+    {
+        "title": "Administrator III - System & Application Admi...",
+        "company": "Cencora",
         "location": "Pune",
         "work_type": "Work From Office",
-        "experience": "2-6 Yr",
-        "skills": "Rest Api • Linux +2",
+        "experience": "7-10 Yr",
+        "skills": "Azure Devops • Ci / Cd +5",
         "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/5ae6e2c46c3f7bb540a78197b9558a.jpg"
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/5156e77065156404f41f3d7234a0dce1b309ba36cc1b9e3100.jpg"
     },
     {
-        "title": "Senior Hardware Design DFMEA Engineer",
-        "company": "Micron",
-        "location": "Hyderabad",
+        "title": "Engineer III - Software Engineering (IN) - Se...",
+        "company": "Cencora",
+        "location": "Pune",
         "work_type": "Work From Office",
-        "experience": "10-20 Yr",
-        "skills": "Dfmea • Hardwaredesign +2",
-        "easy_apply": false,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/749cc80e855a2ad6e564cbb419384321fe703d65d17a4fe1ab.jpg"
+        "experience": "5-8 Yr",
+        "skills": "Vue Js • Mvc +1",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/5156e77065156404f41f3d7234a0dce1b309ba36cc1b9e3100.jpg"
     },
     {
-        "title": "Software Engineer",
-        "company": "Finastra",
+        "title": "Lead - Multi-Asset Investment Research (SMA)",
+        "company": "Fidelity International",
+        "location": "Gurgaon",
+        "work_type": "Work From Office",
+        "experience": "3-7 Yr",
+        "skills": "Powerbi • Tableau +2",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/3bb5af1294b8d88baef15109ff6f2f5ec515da00259610ee94.png"
+    },
+    {
+        "title": "Administrator I - System & Applications Admin...",
+        "company": "Cencora",
         "location": "Pune",
         "work_type": "Work From Office",
         "experience": "2-5 Yr",
-        "skills": "C# • Javascript +8",
+        "skills": "Risk Analysis • Service Now +1",
         "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/8f0a2945e5e3d3960c7e7f6b02ad7de08c4649e1682ea44d01.jpg"
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/5156e77065156404f41f3d7234a0dce1b309ba36cc1b9e3100.jpg"
     },
     {
-        "title": "Software Engineer (Java and Microservices)",
-        "company": "Finastra",
+        "title": "Account Manager",
+        "company": "HerKey",
         "location": "Bangalore",
-        "work_type": "Work From Office",
-        "experience": "3-5 Yr",
-        "skills": "Java • Java Ee +6",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/8f0a2945e5e3d3960c7e7f6b02ad7de08c4649e1682ea44d01.jpg"
-    },
-    {
-        "title": "Risk Analyst",
-        "company": "Pluralsight",
-        "location": "India",
         "work_type": "Hybrid",
-        "experience": "5-10 Yr",
-        "skills": "Manage Information Security Risk • Business Impact Analysis +1",
+        "experience": "3-5 Yr",
+        "skills": "Sales Strategy • Market Research +1",
         "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/3ffda22a4ed073b5b3b373c43365d81e80ea17090e68ae456f.png"
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/c8dc717b169103af90ddc1ce3c5b389d9983119a584262ccb7.jpg"
     },
     {
-        "title": "Software Engineer",
-        "company": "Finastra",
-        "location": "Bangalore",
-        "work_type": "Work From Office",
-        "experience": "5-10 Yr",
-        "skills": "Java • J2ee +4",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/8f0a2945e5e3d3960c7e7f6b02ad7de08c4649e1682ea44d01.jpg"
+        "title": "Data Entry Executive",
+        "company": "Cars24",
+        "location": "Any",
+        "work_type": "Work From Home",
+        "experience": "1-3 Yr",
+        "skills": "Office Administration • Performance Appraisal",
+        "easy_apply": false,
+        "company_logo": "https://herkey-images.s3.ap-south-1.amazonaws.com/public/images/default-thumb-suitcase.png"
     },
     {
         "title": "Online Research Participants (Remote/Part-Tim...",
@@ -118,6 +128,16 @@
         "skills": "Communication Skills • Analyze-Problem +1",
         "easy_apply": true,
         "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/employer/1894/hsr-it-solutions-pvt-ltd-logo-1479786147.png"
+    },
+    {
+        "title": "Data Entry Executive (work from home)",
+        "company": "Busibud Solutions",
+        "location": "Any",
+        "work_type": "Work From Home",
+        "experience": "0-3 Yr",
+        "skills": "Data Entry • Manage Data Entry",
+        "easy_apply": true,
+        "company_logo": "https://herkey-images.s3.ap-south-1.amazonaws.com/public/images/default-thumb-suitcase.png"
     },
     {
         "title": "Freelance Content Writer",
@@ -170,26 +190,6 @@
         "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/6c4b0701f3f10b85228fb11f5ebabfac3430af177a6fd1fcd2.jpg"
     },
     {
-        "title": "Marketing Content Specialist –Editor and Writ...",
-        "company": "Nextworld Consumer",
-        "location": "Any",
-        "work_type": "1-5 Yr",
-        "experience": "",
-        "skills": "Communication Skills • English +1",
-        "easy_apply": true,
-        "company_logo": "https://herkey-images.s3.ap-south-1.amazonaws.com/public/images/default-thumb-suitcase.png"
-    },
-    {
-        "title": "Influencer Marketing Manager",
-        "company": "DRIM",
-        "location": "Any",
-        "work_type": "Work From Home",
-        "experience": "0-9 Yr",
-        "skills": "Good Communication • Team Work +7",
-        "easy_apply": false,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/ab8a534f72bf04c9695d6673e1543c.jpg"
-    },
-    {
         "title": "HR Assistant",
         "company": "Carnivore Style",
         "location": "Any",
@@ -200,403 +200,403 @@
         "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/cdfd4881a43c3fd08660f92dda84a31b055046aed77c738756.jpg"
     },
     {
-        "title": "English Trainer",
-        "company": "FRND App",
+        "title": "Full Stack Engineering Manager",
+        "company": "dunnhumby",
+        "location": "Gurgaon",
+        "work_type": "Work From Office",
+        "experience": "10-13 Yr",
+        "skills": "Reactjs • Angular +5",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/4e90d23db811e0d2ff0292dc3f6c5f07539983d2d84140dec3.jpg"
+    },
+    {
+        "title": "Assistant Manager- Inside Sales",
+        "company": "HerKey",
+        "location": "Bangalore",
+        "work_type": "Hybrid",
+        "experience": "3-5 Yr",
+        "skills": "Sales",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/c8dc717b169103af90ddc1ce3c5b389d9983119a584262ccb7.jpg"
+    },
+    {
+        "title": "Associate - Talent & OD",
+        "company": "Leaping Frog Consulting...",
         "location": "Any",
         "work_type": "Work From Home",
-        "experience": "0-10 Yr",
-        "skills": "Teaching English • Communication Skill +2",
+        "experience": "5-15 Yr",
+        "skills": "People Hr • Planning +8",
         "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/ebcdd02ef7b6e06a071d9ccfb5010d9ace7650f5087d41f95a.png"
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/49d81c39d209649a6f7de51517bbf2900df5ae0dd2b8708b25.png"
     },
     {
-        "title": "Senior Engineering Manager - Merchant Experie...",
-        "company": "GoDaddy",
-        "location": "Pune",
-        "work_type": "Work From Office",
-        "experience": "8-12 Yr",
-        "skills": "Nodejs • Reactjs +4",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/9bfe49f33eba189c2592505e715fffc5e5273bd55cf3387391.png"
-    },
-    {
-        "title": "Staff/Senior Mechanical/Thermal Engineer",
-        "company": "Micron",
-        "location": "Hyderabad",
-        "work_type": "Work From Office",
-        "experience": "10-20 Yr",
-        "skills": "Flotherm • Solidworks +1",
-        "easy_apply": false,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/749cc80e855a2ad6e564cbb419384321fe703d65d17a4fe1ab.jpg"
-    },
-    {
-        "title": "Senior Financial Data Analyst",
-        "company": "MOODY'S",
+        "title": "VP Finance",
+        "company": "HerKey",
         "location": "Bangalore",
         "work_type": "Hybrid",
-        "experience": "1-3 Yr",
-        "skills": "Credit Data Reporting • Finance Data Analysis +2",
-        "easy_apply": false,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/2a2695f18566b16f42959d934b0783fab48b52921fdb29f53e.png"
+        "experience": "15-18 Yr",
+        "skills": "Financial Plan • Budgeting +2",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/c8dc717b169103af90ddc1ce3c5b389d9983119a584262ccb7.jpg"
     },
     {
-        "title": "Software Engineer",
-        "company": "Amdocs.com",
+        "title": "Principal Change Analyst",
+        "company": "Deutsche Bank Group",
+        "location": "Bangalore",
+        "work_type": "Work From Office",
+        "experience": "9-13 Yr",
+        "skills": "Business Process Re-Engineering • Lean Ux +6",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/ecc00870c1a811b1ff43ca16ab8753e8185a4804b102d3d728.jpg"
+    },
+    {
+        "title": "Administrator III - System & Application Admi...",
+        "company": "Cencora",
         "location": "Pune",
         "work_type": "Work From Office",
-        "experience": "2-6 Yr",
-        "skills": "Rest Api • Linux +2",
+        "experience": "7-10 Yr",
+        "skills": "Azure Devops • Ci / Cd +5",
         "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/5ae6e2c46c3f7bb540a78197b9558a.jpg"
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/5156e77065156404f41f3d7234a0dce1b309ba36cc1b9e3100.jpg"
     },
     {
-        "title": "Senior Hardware Design DFMEA Engineer",
-        "company": "Micron",
-        "location": "Hyderabad",
-        "work_type": "Work From Office",
-        "experience": "10-20 Yr",
-        "skills": "Dfmea • Hardwaredesign +2",
-        "easy_apply": false,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/749cc80e855a2ad6e564cbb419384321fe703d65d17a4fe1ab.jpg"
-    },
-    {
-        "title": "Software Engineer",
-        "company": "Finastra",
+        "title": "Engineer III - Software Engineering (IN) - Se...",
+        "company": "Cencora",
         "location": "Pune",
-        "work_type": "Work From Office",
-        "experience": "2-5 Yr",
-        "skills": "C# • Javascript +8",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/8f0a2945e5e3d3960c7e7f6b02ad7de08c4649e1682ea44d01.jpg"
-    },
-    {
-        "title": "Software Engineer (Java and Microservices)",
-        "company": "Finastra",
-        "location": "Bangalore",
-        "work_type": "Work From Office",
-        "experience": "3-5 Yr",
-        "skills": "Java • Java Ee +6",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/8f0a2945e5e3d3960c7e7f6b02ad7de08c4649e1682ea44d01.jpg"
-    },
-    {
-        "title": "Risk Analyst",
-        "company": "Pluralsight",
-        "location": "India",
-        "work_type": "Hybrid",
-        "experience": "5-10 Yr",
-        "skills": "Manage Information Security Risk • Business Impact Analysis +1",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/3ffda22a4ed073b5b3b373c43365d81e80ea17090e68ae456f.png"
-    },
-    {
-        "title": "Software Engineer",
-        "company": "Finastra",
-        "location": "Bangalore",
-        "work_type": "Work From Office",
-        "experience": "5-10 Yr",
-        "skills": "Java • J2ee +4",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/8f0a2945e5e3d3960c7e7f6b02ad7de08c4649e1682ea44d01.jpg"
-    },
-    {
-        "title": "Sr TL Regu & Compl - Statu App",
-        "company": "Jio-bp",
-        "location": "Mumbai",
-        "work_type": "Work From Office",
-        "experience": "6-10 Yr",
-        "skills": "Project Management • Regulatory Compliance",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/c1889e49d57ee1ed08195e37d345b88d3e083071b33acbba59.jpg"
-    },
-    {
-        "title": "Associate Software Engineer",
-        "company": "Finastra",
-        "location": "Bangalore",
-        "work_type": "Work From Office",
-        "experience": "1-5 Yr",
-        "skills": "C++ • Stl +6",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/8f0a2945e5e3d3960c7e7f6b02ad7de08c4649e1682ea44d01.jpg"
-    },
-    {
-        "title": "Senior Operations Analyst - Security Referenc...",
-        "company": "Fidelity International",
-        "location": "Bangalore",
         "work_type": "Work From Office",
         "experience": "5-8 Yr",
-        "skills": "Financial Instruments",
+        "skills": "Vue Js • Mvc +1",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/5156e77065156404f41f3d7234a0dce1b309ba36cc1b9e3100.jpg"
+    },
+    {
+        "title": "Lead - Multi-Asset Investment Research (SMA)",
+        "company": "Fidelity International",
+        "location": "Gurgaon",
+        "work_type": "Work From Office",
+        "experience": "3-7 Yr",
+        "skills": "Powerbi • Tableau +2",
         "easy_apply": true,
         "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/3bb5af1294b8d88baef15109ff6f2f5ec515da00259610ee94.png"
     },
     {
-        "title": "Senior Analyst – Business Analytics (Brand & ...",
-        "company": "Sanofi",
-        "location": "Hyderabad",
-        "work_type": "Work From Office",
-        "experience": "4-7 Yr",
-        "skills": "Sql • Power Bi +1",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/4811dee31ae4fcf8008e0ea8c543a5b7f03f494f772096eb6c.jpg"
-    },
-    {
-        "title": "Team Lead - Customer Facing Effectiveness (Fi...",
-        "company": "Sanofi",
-        "location": "Hyderabad",
-        "work_type": "Work From Office",
-        "experience": "10-20 Yr",
-        "skills": "Business Administration • Customer Excellence +4",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/4811dee31ae4fcf8008e0ea8c543a5b7f03f494f772096eb6c.jpg"
-    },
-    {
-        "title": "Lifestyle Expert",
-        "company": "FRND App",
-        "location": "Any",
-        "work_type": "Work From Home",
-        "experience": "0-10 Yr",
-        "skills": "Communicate • Good Communication +3",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/ebcdd02ef7b6e06a071d9ccfb5010d9ace7650f5087d41f95a.png"
-    },
-    {
-        "title": "Tamil Listener",
-        "company": "FRND App",
-        "location": "Any",
-        "work_type": "Work From Home",
-        "experience": "0-10 Yr",
-        "skills": "Communication • Effective Listening +1",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/ebcdd02ef7b6e06a071d9ccfb5010d9ace7650f5087d41f95a.png"
-    },
-    {
-        "title": "Senior Analyst - Market Research",
-        "company": "Sanofi",
-        "location": "Hyderabad",
-        "work_type": "Work From Office",
-        "experience": "5-8 Yr",
-        "skills": "Quantitative Studies • Primary Market Research +2",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/4811dee31ae4fcf8008e0ea8c543a5b7f03f494f772096eb6c.jpg"
-    },
-    {
-        "title": "Senior Analyst - Competitive Intelligence",
-        "company": "Sanofi",
-        "location": "Hyderabad",
-        "work_type": "Work From Office",
-        "experience": "5-8 Yr",
-        "skills": "Market Research • Competitive Analysis",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/4811dee31ae4fcf8008e0ea8c543a5b7f03f494f772096eb6c.jpg"
-    },
-    {
-        "title": "AVP - IT",
-        "company": "DMI Finance",
-        "location": "Noida",
-        "work_type": "Work From Office",
-        "experience": "13-18 Yr",
-        "skills": "Project Management • Stakeholder Management",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/208bd5a0b83559b3c761b44d942620a91d07491cc99ba7a901.png"
-    },
-    {
-        "title": "HR Head",
-        "company": "Magicians of Wellness (...",
-        "location": "Mumbai",
-        "work_type": "Work From Office",
-        "experience": "3-5 Yr",
-        "skills": "Hr Ops • Culture Mgmt +8",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/688ef1dbfca5f705f293555f18562e3577aa169d05f71e0c21.jpeg"
-    },
-    {
-        "title": "SAP PI/PO Developer",
+        "title": "Administrator I - System & Applications Admin...",
         "company": "Cencora",
         "location": "Pune",
         "work_type": "Work From Office",
-        "experience": "6-8 Yr",
-        "skills": "Sap Netweaver • Sap Pi/Po +3",
+        "experience": "2-5 Yr",
+        "skills": "Risk Analysis • Service Now +1",
         "easy_apply": true,
         "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/5156e77065156404f41f3d7234a0dce1b309ba36cc1b9e3100.jpg"
     },
     {
-        "title": "Analyst II - IT Solutions",
-        "company": "Cencora",
-        "location": "Pune",
-        "work_type": "Work From Office",
+        "title": "Account Manager",
+        "company": "HerKey",
+        "location": "Bangalore",
+        "work_type": "Hybrid",
         "experience": "3-5 Yr",
-        "skills": "Data Visualization • Bi Tools +3",
+        "skills": "Sales Strategy • Market Research +1",
         "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/5156e77065156404f41f3d7234a0dce1b309ba36cc1b9e3100.jpg"
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/c8dc717b169103af90ddc1ce3c5b389d9983119a584262ccb7.jpg"
     },
     {
-        "title": "Manager - Software Engineer",
+        "title": "Application Performance Architect - Software ...",
         "company": "Cencora",
         "location": "Pune",
         "work_type": "Work From Office",
         "experience": "10-13 Yr",
-        "skills": "Blazor • Razorsql +7",
+        "skills": "Full Stack Development • Dynatrace +2",
         "easy_apply": true,
         "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/5156e77065156404f41f3d7234a0dce1b309ba36cc1b9e3100.jpg"
     },
     {
-        "title": "Engineer II - Software Engineering",
+        "title": "Application Developer - Technical lead",
         "company": "Cencora",
         "location": "Pune",
-        "work_type": "Work From Office",
-        "experience": "3-4 Yr",
-        "skills": "Data Analytics • Data Management +3",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/5156e77065156404f41f3d7234a0dce1b309ba36cc1b9e3100.jpg"
-    },
-    {
-        "title": "Application Developer III",
-        "company": "Cencora",
-        "location": "Pune",
-        "work_type": "Work From Office",
-        "experience": "5-8 Yr",
-        "skills": "Blazor • Razorsql +5",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/5156e77065156404f41f3d7234a0dce1b309ba36cc1b9e3100.jpg"
-    },
-    {
-        "title": "Azure Cloud Data Engineer",
-        "company": "Cencora",
-        "location": "Pune",
-        "work_type": "Work From Office",
-        "experience": "5-8 Yr",
-        "skills": "Ms Azure • Analytical Skill +4",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/5156e77065156404f41f3d7234a0dce1b309ba36cc1b9e3100.jpg"
-    },
-    {
-        "title": "Senior Salesforce Developer",
-        "company": "Cencora",
-        "location": "Pune",
-        "work_type": "Work From Office",
-        "experience": "5-8 Yr",
-        "skills": "Salesforce • Apex +4",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/5156e77065156404f41f3d7234a0dce1b309ba36cc1b9e3100.jpg"
-    },
-    {
-        "title": "Telugu Social Interaction Coach",
-        "company": "FRND App",
-        "location": "Any",
         "work_type": "Work From Home",
-        "experience": "0-10 Yr",
-        "skills": "Communication Skills • Listening +1",
+        "experience": "5-8 Yr",
+        "skills": "Application Architecture • Clm",
         "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/ebcdd02ef7b6e06a071d9ccfb5010d9ace7650f5087d41f95a.png"
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/5156e77065156404f41f3d7234a0dce1b309ba36cc1b9e3100.jpg"
     },
     {
-        "title": "Social Interaction Coach",
-        "company": "FRND App",
-        "location": "Any",
-        "work_type": "Work From Home",
-        "experience": "0-10 Yr",
-        "skills": "Communication Skills • Listening +1",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/ebcdd02ef7b6e06a071d9ccfb5010d9ace7650f5087d41f95a.png"
-    },
-    {
-        "title": "Tamil Social Interaction Coach",
-        "company": "FRND App",
-        "location": "Any",
-        "work_type": "Work From Home",
-        "experience": "0-10 Yr",
-        "skills": "Communication Skills • Listening +1",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/ebcdd02ef7b6e06a071d9ccfb5010d9ace7650f5087d41f95a.png"
-    },
-    {
-        "title": "Software Developer - Application Development ...",
-        "company": "Micron",
-        "location": "Hyderabad",
+        "title": "Engineer II - Fullstack Engineering",
+        "company": "Cencora",
+        "location": "Pune",
         "work_type": "Work From Office",
         "experience": "4-7 Yr",
-        "skills": "Web Development • Javascript +7",
+        "skills": "Sql Development • Couchbase +1",
         "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/749cc80e855a2ad6e564cbb419384321fe703d65d17a4fe1ab.jpg"
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/5156e77065156404f41f3d7234a0dce1b309ba36cc1b9e3100.jpg"
     },
     {
-        "title": "Software Developer - Java",
+        "title": "Construction Manager",
+        "company": "Amazon",
+        "location": "Hyderabad",
+        "work_type": "Work From Office",
+        "experience": "3-15 Yr",
+        "skills": "Construction Qa • Negotiation +1",
+        "easy_apply": false,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/d035a0b2e895dba83b87beca1c8d00.jpg"
+    },
+    {
+        "title": "Senior Technical Lead",
         "company": "Ericsson",
         "location": "Bangalore",
         "work_type": "Hybrid",
-        "experience": "2-8 Yr",
-        "skills": "Java • Spring Boot +3",
+        "experience": "7-10 Yr",
+        "skills": "C++ • Imsdb +1",
         "easy_apply": true,
         "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/e77e219b9680d11514b7769941a22e69779cd497376956f512.jpg"
     },
     {
-        "title": "Software Developer - Java",
-        "company": "Ericsson",
-        "location": "Gurgaon",
-        "work_type": "Hybrid",
-        "experience": "2-8 Yr",
-        "skills": "Java • Spring Boot +3",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/e77e219b9680d11514b7769941a22e69779cd497376956f512.jpg"
-    },
-    {
-        "title": "Associate Architect",
-        "company": "Ericsson",
-        "location": "Gurgaon",
-        "work_type": "Hybrid",
-        "experience": "9-14 Yr",
-        "skills": "Java • Oops +6",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/e77e219b9680d11514b7769941a22e69779cd497376956f512.jpg"
-    },
-    {
-        "title": "Data Scientist",
-        "company": "Ericsson",
-        "location": "Kolkata",
-        "work_type": "Hybrid",
-        "experience": "8-12 Yr",
-        "skills": "Machine Learning • Deep Learning +4",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/e77e219b9680d11514b7769941a22e69779cd497376956f512.jpg"
-    },
-    {
-        "title": "Software Developer - Java",
-        "company": "Ericsson",
-        "location": "Pune",
-        "work_type": "Hybrid",
-        "experience": "2-8 Yr",
-        "skills": "Java • Spring Boot +3",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/e77e219b9680d11514b7769941a22e69779cd497376956f512.jpg"
-    },
-    {
-        "title": "Data Scientist",
+        "title": "DevSecOps Engineer",
         "company": "Ericsson",
         "location": "Noida",
         "work_type": "Hybrid",
-        "experience": "8-12 Yr",
-        "skills": "Machine Learning • Deep Learning +4",
+        "experience": "5-12 Yr",
+        "skills": "Python • Go Lang +6",
         "easy_apply": true,
         "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/e77e219b9680d11514b7769941a22e69779cd497376956f512.jpg"
     },
     {
-        "title": "Senior Security Specialist",
+        "title": "Software Development Engineer in Test",
+        "company": "GoDaddy",
+        "location": "Pune",
+        "work_type": "Hybrid",
+        "experience": "3-8 Yr",
+        "skills": "Kotlin • Java +3",
+        "easy_apply": false,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/9bfe49f33eba189c2592505e715fffc5e5273bd55cf3387391.png"
+    },
+    {
+        "title": "Senior Program Manager",
+        "company": "GoDaddy",
+        "location": "India",
+        "work_type": "Work From Home",
+        "experience": "5-10 Yr",
+        "skills": "Financial Business Process • Workday +2",
+        "easy_apply": false,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/9bfe49f33eba189c2592505e715fffc5e5273bd55cf3387391.png"
+    },
+    {
+        "title": "Test Engineer",
         "company": "Ericsson",
         "location": "Bangalore",
         "work_type": "Hybrid",
-        "experience": "7-12 Yr",
-        "skills": "Cloud Security • Incident Response +4",
+        "experience": "3-5 Yr",
+        "skills": "Test Automation Tools • Selenium +5",
         "easy_apply": true,
         "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/e77e219b9680d11514b7769941a22e69779cd497376956f512.jpg"
     },
     {
-        "title": "Data Scientist",
+        "title": "Senior Manager Digital Product – Advocate Pro...",
+        "company": "Optum",
+        "location": "Gurgaon",
+        "work_type": "Work From Office",
+        "experience": "10-13 Yr",
+        "skills": "Product Management • Analytical Skill +1",
+        "easy_apply": false,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/718e54f828e09b346553ee4a2ab5dfa8a5c2f71331f8102e45.jpg"
+    },
+    {
+        "title": "Frontend Developer",
         "company": "Ericsson",
         "location": "Bangalore",
         "work_type": "Hybrid",
-        "experience": "8-12 Yr",
-        "skills": "Machine Learning • Deep Learning +4",
+        "experience": "4-7 Yr",
+        "skills": "Reactjs • Front End +3",
         "easy_apply": true,
         "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/e77e219b9680d11514b7769941a22e69779cd497376956f512.jpg"
+    },
+    {
+        "title": "Business Process Manager",
+        "company": "Ericsson",
+        "location": "Noida",
+        "work_type": "Hybrid",
+        "experience": "5-12 Yr",
+        "skills": "Process Management • Aris +1",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/e77e219b9680d11514b7769941a22e69779cd497376956f512.jpg"
+    },
+    {
+        "title": "Solution Architect",
+        "company": "Ericsson",
+        "location": "Noida",
+        "work_type": "Hybrid",
+        "experience": "9-15 Yr",
+        "skills": "Ip Networking • Mysql 5 +7",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/e77e219b9680d11514b7769941a22e69779cd497376956f512.jpg"
+    },
+    {
+        "title": "RDS – G2",
+        "company": "dunnhumby",
+        "location": "Gurgaon",
+        "work_type": "Work From Office",
+        "experience": "2-4 Yr",
+        "skills": "Data Science • Python +4",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/4e90d23db811e0d2ff0292dc3f6c5f07539983d2d84140dec3.jpg"
+    },
+    {
+        "title": "Technical Project Manager",
+        "company": "Ericsson",
+        "location": "Noida",
+        "work_type": "Hybrid",
+        "experience": "9-15 Yr",
+        "skills": "Project Management • Stakeholder Management +7",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/e77e219b9680d11514b7769941a22e69779cd497376956f512.jpg"
+    },
+    {
+        "title": "ADS – G2",
+        "company": "dunnhumby",
+        "location": "Gurgaon",
+        "work_type": "Work From Office",
+        "experience": "2-4 Yr",
+        "skills": "Python • Sql +3",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/4e90d23db811e0d2ff0292dc3f6c5f07539983d2d84140dec3.jpg"
+    },
+    {
+        "title": "ADS – G3",
+        "company": "dunnhumby",
+        "location": "Gurgaon",
+        "work_type": "Work From Office",
+        "experience": "5-8 Yr",
+        "skills": "Python • Sql +4",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/4e90d23db811e0d2ff0292dc3f6c5f07539983d2d84140dec3.jpg"
+    },
+    {
+        "title": "Finance Analyst – G2",
+        "company": "dunnhumby",
+        "location": "Gurgaon",
+        "work_type": "Work From Office",
+        "experience": "5-8 Yr",
+        "skills": "Ms Excel • Power Query +4",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/4e90d23db811e0d2ff0292dc3f6c5f07539983d2d84140dec3.jpg"
+    },
+    {
+        "title": "Regional Account Manager",
+        "company": "HerKey",
+        "location": "Bangalore",
+        "work_type": "Hybrid",
+        "experience": "4-6 Yr",
+        "skills": "Saas • Enterprise Software +3",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/c8dc717b169103af90ddc1ce3c5b389d9983119a584262ccb7.jpg"
+    },
+    {
+        "title": "E-commerce Operations & Quality check",
+        "company": "Magicians of Wellness (...",
+        "location": "Mumbai",
+        "work_type": "Work From Office",
+        "experience": "1-5 Yr",
+        "skills": "E-Commerce Operations • Quality Checks +3",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/688ef1dbfca5f705f293555f18562e3577aa169d05f71e0c21.jpeg"
+    },
+    {
+        "title": "Technical Support Engineer III (Email Security)",
+        "company": "Forcepoint",
+        "location": "Bangalore",
+        "work_type": "Work From Office",
+        "experience": "4-18 Yr",
+        "skills": "Technical Support • Tcp/Ip +4",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/a3b1dd0c370cb59befa16ba6398c9a2dfd487ca58a996759b3.jpg"
+    },
+    {
+        "title": "Senior Analyst - Business Analytics (Consumer...",
+        "company": "Sanofi",
+        "location": "Hyderabad",
+        "work_type": "Hybrid",
+        "experience": "4-6 Yr",
+        "skills": "Digital Analytics • Excel +3",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/4811dee31ae4fcf8008e0ea8c543a5b7f03f494f772096eb6c.jpg"
+    },
+    {
+        "title": "Senior Analyst – Customer Facing Effectivenes...",
+        "company": "Sanofi",
+        "location": "Hyderabad",
+        "work_type": "Hybrid",
+        "experience": "4-6 Yr",
+        "skills": "Design Ict System • Advanced Excel",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/4811dee31ae4fcf8008e0ea8c543a5b7f03f494f772096eb6c.jpg"
+    },
+    {
+        "title": "Analyst - Business Analytics",
+        "company": "Sanofi",
+        "location": "Hyderabad",
+        "work_type": "Hybrid",
+        "experience": "1-3 Yr",
+        "skills": "Snowflake • Powerbi +3",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/4811dee31ae4fcf8008e0ea8c543a5b7f03f494f772096eb6c.jpg"
+    },
+    {
+        "title": "Graphic Designer",
+        "company": "Sanofi",
+        "location": "Hyderabad",
+        "work_type": "Hybrid",
+        "experience": "3-6 Yr",
+        "skills": "Microsoft Powerpoint • Adobe Photoshop +2",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/4811dee31ae4fcf8008e0ea8c543a5b7f03f494f772096eb6c.jpg"
+    },
+    {
+        "title": "Service Now Developer",
+        "company": "Sanofi",
+        "location": "Hyderabad",
+        "work_type": "Hybrid",
+        "experience": "5-8 Yr",
+        "skills": "Servicenow • Itsm +7",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/4811dee31ae4fcf8008e0ea8c543a5b7f03f494f772096eb6c.jpg"
+    },
+    {
+        "title": "Digital Data Modeler",
+        "company": "Sanofi",
+        "location": "Hyderabad",
+        "work_type": "Hybrid",
+        "experience": "5-8 Yr",
+        "skills": "Data Modelling • Feasibility Analysis +2",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/4811dee31ae4fcf8008e0ea8c543a5b7f03f494f772096eb6c.jpg"
+    },
+    {
+        "title": "Clinical Trial Support Manager",
+        "company": "Sanofi",
+        "location": "Hyderabad",
+        "work_type": "Hybrid",
+        "experience": "4-8 Yr",
+        "skills": "Clinical Development • Regulatory Requirements +1",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/4811dee31ae4fcf8008e0ea8c543a5b7f03f494f772096eb6c.jpg"
+    },
+    {
+        "title": "Senior Biostatistician",
+        "company": "Sanofi",
+        "location": "Hyderabad",
+        "work_type": "Hybrid",
+        "experience": "6-9 Yr",
+        "skills": "Sap • Protocol Development +2",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/4811dee31ae4fcf8008e0ea8c543a5b7f03f494f772096eb6c.jpg"
+    },
+    {
+        "title": "Analyst -Launch & Commercialization",
+        "company": "Sanofi",
+        "location": "Hyderabad",
+        "work_type": "Hybrid",
+        "experience": "2-4 Yr",
+        "skills": "Market Strategy • Product Launch +1",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/4811dee31ae4fcf8008e0ea8c543a5b7f03f494f772096eb6c.jpg"
     }
 ]
