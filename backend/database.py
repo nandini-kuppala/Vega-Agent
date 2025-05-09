@@ -5,7 +5,7 @@ import bcrypt
 import jwt
 from datetime import datetime, timezone, timedelta
 from bson import ObjectId
-
+import json
 # Load environment variables from .env file
 load_dotenv()
 
@@ -155,7 +155,22 @@ def get_profile(user_id):
 
 
 # Add these functions to your database.py file:
-
+def sanitize_response(response):
+    """Convert any non-serializable response objects to string"""
+    # Handle CrewOutput objects
+    if hasattr(response, '__class__') and response.__class__.__name__ == 'CrewOutput':
+        try:
+            return response.raw  # Extract the raw text from CrewOutput
+        except:
+            return str(response)  # Fallback to string representation
+    
+    # Handle other object types that might not be JSON serializable
+    try:
+        # Test if the object is JSON serializable
+        json.dumps(response)
+        return response
+    except (TypeError, OverflowError):
+        return str(response)
 # Chat Storage Functions
 def save_chat_history(user_id, messages):
     """
