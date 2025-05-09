@@ -465,6 +465,8 @@ def display_chat_page():
                                 
                                 # Add user message to chat history
                                 st.session_state.messages.append({"role": "user", "content": transcribed_text})
+                                if st.session_state.get('user_id'):
+                                    save_chat_history(st.session_state['user_id'], st.session_state.messages)
                                 
                                 # Generate assistant response
                                 with st.spinner("Generating response..."):
@@ -496,6 +498,8 @@ def display_chat_page():
                                             "content": error_msg,
                                             "feedback": None
                                         })
+                                        if st.session_state.get('user_id'):
+                                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
                                         st.rerun()
                 except Exception as e:
                     st.error(f"Error with audio recording: {str(e)}")
@@ -555,6 +559,8 @@ def display_chat_page():
                             "content": error_msg,
                             "feedback": None
                         })
+                        if st.session_state.get('user_id'):
+                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
                         logger.error(f"Error generating response: {str(e)}")
                         logger.error(traceback.format_exc())
                         st.rerun()
