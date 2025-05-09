@@ -389,9 +389,15 @@ def display_chat_page():
                                 "feedback": "positive",
                                 "timestamp": datetime.now().isoformat()
                             })
-                            if st.session_state.get('user_id'):
-                                save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                                        
+                            try:
+                                # Save chat history
+                                save_result = save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                                if save_result["status"] == "error":
+                                    # Log the error but don't stop the app
+                                    print(f"Warning: Failed to save chat history: {save_result['message']}")
+                            except Exception as e:
+                                # Log error but allow the chat to continue working
+                                print(f"Error saving chat history: {str(e)}") 
                             st.rerun()
                         
                         # Thumbs down button
