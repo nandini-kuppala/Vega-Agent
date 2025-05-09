@@ -197,25 +197,27 @@ def process_user_query(prompt):
                 logger.error(traceback.format_exc())
 
 
-# 1. Create a helper function to sanitize response objects
-def sanitize_response(response):
-    """Convert any non-serializable response objects to string"""
-    # Handle CrewOutput objects
-    if hasattr(response, '__class__') and response.__class__.__name__ == 'CrewOutput':
-        try:
-            return response.raw  # Extract the raw text from CrewOutput
-        except:
-            return str(response)  # Fallback to string representation
-    
-    # Handle other object types that might not be JSON serializable
-    try:
-        # Test if the object is JSON serializable
-        json.dumps(response)
-        return response
-    except (TypeError, OverflowError):
-        return str(response)
     
 def display_chat_page():
+    
+# 1. Create a helper function to sanitize response objects
+    def sanitize_response(response):
+        """Convert any non-serializable response objects to string"""
+        # Handle CrewOutput objects
+        if hasattr(response, '__class__') and response.__class__.__name__ == 'CrewOutput':
+            try:
+                return response.raw  # Extract the raw text from CrewOutput
+            except:
+                return str(response)  # Fallback to string representation
+        
+        # Handle other object types that might not be JSON serializable
+        try:
+            # Test if the object is JSON serializable
+            json.dumps(response)
+            return response
+        except (TypeError, OverflowError):
+            return str(response)
+        
     """Display a chat interface with ASHA AI with quick action options and voice input"""
     
     # Check if user is authenticated
