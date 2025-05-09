@@ -196,9 +196,9 @@ def process_user_query(prompt):
                 logger.error(f"Error generating response: {str(e)}")
                 logger.error(traceback.format_exc())
 
+
 def display_chat_page():
     
-        
     """Display a chat interface with ASHA AI with quick action options and voice input"""
     
     # Check if user is authenticated
@@ -229,200 +229,169 @@ def display_chat_page():
             st.session_state.messages = [
                 {"role": "assistant", "content": "Hi! I'm ASHA, your career assistant powered by AI. How can I help you today?", "feedback": None}
             ]
+
+    # Set up the page structure with fixed height containers
+    st.markdown("""
+    <style>
+    .main .block-container {
+        padding-bottom: 0rem;
+        padding-top: 1rem;
+        max-width: 100%;
+    }
     
-    # Create a container for the chat messages to ensure they stay above the input
-    chat_container = st.container()
+    #chat-container {
+        height: calc(100vh - 220px);
+        overflow-y: auto;
+        padding-right: 1rem;
+        margin-bottom: 70px; /* Space for input container */
+    }
+    
+    .stChatInputContainer {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        background-color: white !important;
+        padding: 1rem 1rem !important;
+        z-index: 999 !important;
+        box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    /* For quick actions */
+    .quick-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+    .quick-action-button {
+        background-color: #f0f0f0;
+        border-radius: 20px;
+        padding: 8px 15px;
+        font-size: 14px;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.3s;
+    }
+    .quick-action-button:hover {
+        background-color: #e0e0e0;
+    }
+    .voice-button {
+        background-color: #f0f0f0;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.3s;
+        margin-right: 10px;
+    }
+    .voice-button:hover {
+        background-color: #e0e0e0;
+    }
+    .voice-button.recording {
+        background-color: #ff5252;
+    }
+    .stAudioRecorderWrapper {
+        display: none !important;
+    }
+    .custom-recording-indicator {
+        color: red;
+        font-weight: bold;
+        margin-top: 5px;
+    }
+    </style>
+    
+    <!-- Auto-scroll JavaScript for the chat container -->
+    <script>
+    // Function to scroll to the bottom of the chat container
+    function scrollToBottom() {
+        const chatContainer = document.getElementById('chat-container');
+        if (chatContainer) {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+    }
+    
+    // Set a small delay to ensure content is rendered before scrolling
+    setTimeout(scrollToBottom, 100);
+    </script>
+    """, unsafe_allow_html=True)
     
     # Display quick action buttons above chat messages
-    with chat_container:
-        st.markdown("""
-        <style>
-        .quick-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        .quick-action-button {
-            background-color: #f0f0f0;
-            border-radius: 20px;
-            padding: 8px 15px;
-            font-size: 14px;
-            cursor: pointer;
-            border: none;
-            transition: background-color 0.3s;
-        }
-        .quick-action-button:hover {
-            background-color: #e0e0e0;
-        }
-        .voice-button {
-            background-color: #f0f0f0;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border: none;
-            transition: background-color 0.3s;
-            margin-right: 10px;
-        }
-        .voice-button:hover {
-            background-color: #e0e0e0;
-        }
-        .voice-button.recording {
-            background-color: #ff5252;
-        }
-        .input-container {
-            display: flex;
-            align-items: center;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: white;
-            padding: 10px;
-            border-top: 1px solid #ddd;
-            z-index: 1000;
-        }
-        .stAudioRecorderWrapper {
-            display: none !important;
-        }
-        .custom-recording-indicator {
-            color: red;
-            font-weight: bold;
-            margin-top: 5px;
-        }
-        .stChatMessage {
-            overflow-anchor: none;
-        }
-        .chat-wrapper {
-            display: flex;
-            flex-direction: column;
-            height: calc(100vh - 200px);
-            overflow-y: auto;
-            padding-bottom: 80px; /* Space for fixed input bar */
-        }
-        .latest-message {
-            overflow-anchor: auto;
-            height: 1px;
-        }
-        /* Fix Streamlit chat input container */
-        .stChatInputContainer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: white;
-            padding: 10px;
-            border-top: 1px solid #ddd;
-            z-index: 1000;
-            margin: 0;
-            width: 100%;
-        }
-        /* Ensure the chat input row is properly aligned */
-        .stChatInputContainer > div > div {
-            justify-content: space-between;
-            width: 100%;
-        }
-        /* Add padding at bottom of page to prevent content from being hidden behind input */
-        .main .block-container {
-            padding-bottom: 120px;
-        }
-        /* Make sure scroll happens to newest message */
-        #latest-message-anchor {
-            height: 1px;
-            margin-bottom: 100px;
-        }
-        </style>
-        
-        <script>
-        // Auto-scroll to the bottom when new content is added
-        function scrollToBottom() {
-            const latestMessage = document.getElementById('latest-message-anchor');
-            if (latestMessage) {
-                latestMessage.scrollIntoView();
-            }
-        }
-        
-        // Call on page load and set interval to check for new messages
-        document.addEventListener('DOMContentLoaded', function() {
-            scrollToBottom();
-            setInterval(scrollToBottom, 500);
-        });
-        </script>
-        """, unsafe_allow_html=True)
-        
-        st.markdown('<div class="quick-actions">', unsafe_allow_html=True)
-        
-        col1, col2, col3, col4 = st.columns(4)
-        
-        with col1:
-            if st.button("🔍 Find Latest Job Postings", key="find_jobs"):
-                with st.spinner("Searching for jobs..."):
-                    try:
-                        assistant = st.session_state.get('assistant')
-                        response = assistant._get_job_recommendations()
-                        st.session_state.messages.append({"role": "user", "content": "Find me latest job postings for you"})
-                        st.session_state.messages.append({"role": "assistant", "content": response, "feedback": None})
-                        if st.session_state.get('user_id'):
-                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                        
-                        st.rerun()
-                    except Exception as e:
-                        st.error(f"Error finding jobs: {str(e)}")
-        
-        with col2:
-            if st.button("🎯 Find Upcoming Events", key="find_events"):
-                with st.spinner("Discovering events..."):
-                    try:
-                        assistant = st.session_state.get('assistant')
-                        response = assistant._get_event_recommendations()
-                        st.session_state.messages.append({"role": "user", "content": "Find upcoming events for you"})
-                        st.session_state.messages.append({"role": "assistant", "content": response, "feedback": None})
-                        
-                        if st.session_state.get('user_id'):
-                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                        st.rerun()
-                    except Exception as e:
-                        st.error(f"Error finding events: {str(e)}")
-        
-        with col3:
-            if st.button("👥 Find Community Groups", key="find_groups"):
-                with st.spinner("Discovering community groups..."):
-                    try:
-                        assistant = st.session_state.get('assistant')
-                        response = assistant._get_community_recommendations()
-                        st.session_state.messages.append({"role": "user", "content": "Find community groups for you"})
-                        st.session_state.messages.append({"role": "assistant", "content": response, "feedback": None})
-                        
-                        if st.session_state.get('user_id'):
-                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                        st.rerun()
-                    except Exception as e:
-                        st.error(f"Error finding community groups: {str(e)}")
+    st.markdown('<div class="quick-actions">', unsafe_allow_html=True)
+    
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        if st.button("🔍 Find Latest Job Postings", key="find_jobs"):
+            with st.spinner("Searching for jobs..."):
+                try:
+                    assistant = st.session_state.get('assistant')
+                    response = assistant._get_job_recommendations()
+                    st.session_state.messages.append({"role": "user", "content": "Find me latest job postings for you"})
+                    st.session_state.messages.append({"role": "assistant", "content": response, "feedback": None})
+                    if st.session_state.get('user_id'):
+                        save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                    
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"Error finding jobs: {str(e)}")
+    
+    with col2:
+        if st.button("🎯 Find Upcoming Events", key="find_events"):
+            with st.spinner("Discovering events..."):
+                try:
+                    assistant = st.session_state.get('assistant')
+                    response = assistant._get_event_recommendations()
+                    st.session_state.messages.append({"role": "user", "content": "Find upcoming events for you"})
+                    st.session_state.messages.append({"role": "assistant", "content": response, "feedback": None})
+                    
+                    if st.session_state.get('user_id'):
+                        save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"Error finding events: {str(e)}")
+    
+    with col3:
+        if st.button("👥 Find Community Groups", key="find_groups"):
+            with st.spinner("Discovering community groups..."):
+                try:
+                    assistant = st.session_state.get('assistant')
+                    response = assistant._get_community_recommendations()
+                    st.session_state.messages.append({"role": "user", "content": "Find community groups for you"})
+                    st.session_state.messages.append({"role": "assistant", "content": response, "feedback": None})
+                    
+                    if st.session_state.get('user_id'):
+                        save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"Error finding community groups: {str(e)}")
 
-        with col4:
-            if st.button("🧑‍🏫 Find Workshops and sessions", key="find_sessions"):
-                with st.spinner("Discovering sessions..."):
-                    try:
-                        assistant = st.session_state.get('assistant')
-                        response = assistant._get_session_recommendations()
-                        st.session_state.messages.append({"role": "user", "content": "Find Workshops and sessions for you"})
-                        st.session_state.messages.append({"role": "assistant", "content": response, "feedback": None})
-                        
-                        if st.session_state.get('user_id'):
-                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                        st.rerun()
-                    except Exception as e:
-                        st.error(f"Error finding Workshops and sessions: {str(e)}")
-        
-        st.markdown('</div>', unsafe_allow_html=True)
-        
-        # Wrap chat messages in a div for scrolling
-        st.markdown('<div class="chat-wrapper">', unsafe_allow_html=True)
-        
+    with col4:
+        if st.button("🧑‍🏫 Find Workshops and sessions", key="find_sessions"):
+            with st.spinner("Discovering sessions..."):
+                try:
+                    assistant = st.session_state.get('assistant')
+                    response = assistant._get_session_recommendations()
+                    st.session_state.messages.append({"role": "user", "content": "Find Workshops and sessions for you"})
+                    st.session_state.messages.append({"role": "assistant", "content": response, "feedback": None})
+                    
+                    if st.session_state.get('user_id'):
+                        save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"Error finding Workshops and sessions: {str(e)}")
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    # Create a scrollable container for chat messages with a fixed ID for JavaScript scrolling
+    chat_container = st.container()
+    st.markdown('<div id="chat-container">', unsafe_allow_html=True)
+    
+    with chat_container:
         # Display chat messages with feedback buttons
         for i, message in enumerate(st.session_state.messages):
             with st.chat_message(message["role"], avatar="👩‍💼" if message["role"] == "assistant" else None):
@@ -479,15 +448,14 @@ def display_chat_page():
                             if st.session_state.get('user_id'):
                                 save_chat_history(st.session_state['user_id'], st.session_state.messages)
                             st.rerun()
-        
-        # Create an anchor element for scrolling to the latest message
-        st.markdown('<div id="latest-message-anchor"></div>', unsafe_allow_html=True)
-        
-        # Close the chat wrapper div
-        st.markdown('</div>', unsafe_allow_html=True)
     
-    # Input area always at the bottom
-    with st.container():
+    # Close the chat container div
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    # Fixed input area at the bottom
+    input_container = st.container()
+    
+    with input_container:
         # Create columns for the chat input and voice button
         col1, col2 = st.columns([0.9, 0.1])
         
