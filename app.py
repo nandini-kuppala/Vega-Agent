@@ -62,20 +62,28 @@ def main():
         st.session_state['authenticated'] = True
         st.session_state['token'] = query_params['token']
         st.session_state['user_id'] = query_params['user_id']
-        st.session_state['page'] = query_params.get('page', 'home')
+        
+        # Explicitly set page from URL param if it exists
+        if 'page' in query_params:
+            st.session_state['page'] = query_params['page']
+        elif 'page' not in st.session_state:
+            st.session_state['page'] = 'home'  # Default page
+    
+    # If not authenticated but trying to access protected page, redirect to login
+    if not st.session_state.get('authenticated', False) and st.session_state.get('page', 'login') != 'login' and st.session_state.get('page', 'login') != 'signup':
+        st.session_state['page'] = 'login'
+        st.query_params.clear()  # Clear URL params
     
     # If authenticated, ensure the URL contains auth params for persistence
     if st.session_state.get('authenticated', False):
-        current_params = dict(st.query_params)
         params_to_set = {
             'token': st.session_state.get('token', ''),
             'user_id': st.session_state.get('user_id', ''),
             'page': st.session_state.get('page', 'home')
         }
         
-        # Only update if parameters changed or missing
-        if any(current_params.get(k) != v for k, v in params_to_set.items()):
-            st.query_params.update(params_to_set)
+        # Update URL parameters with current state
+        st.query_params.update(params_to_set)
 
     # Assistant Initialization
     if st.session_state.get('authenticated') and 'assistant' not in st.session_state:
@@ -108,31 +116,55 @@ def main():
             if st.button("🏠 Home", key="home_btn", use_container_width=True):
                 st.session_state['page'] = 'home'
                 st.session_state['show_profile'] = False
+                # Update page in query params
+                current_params = dict(st.query_params)
+                current_params['page'] = 'home'
+                st.query_params.update(current_params)
                 st.rerun()
 
             if st.button("👤 Complete Profile", key="profile_btn", use_container_width=True):
                 st.session_state['page'] = 'questionnaire'
                 st.session_state['show_profile'] = False
+                # Update page in query params
+                current_params = dict(st.query_params)
+                current_params['page'] = 'questionnaire'
+                st.query_params.update(current_params)
                 st.rerun()
 
             if st.button("🤖 Chat", key="chat_btn", use_container_width=True):
                 st.session_state['page'] = 'chat'
                 st.session_state['show_profile'] = False
+                # Update page in query params
+                current_params = dict(st.query_params)
+                current_params['page'] = 'chat'
+                st.query_params.update(current_params)
                 st.rerun()
 
             if st.button("🧠 Daily Knowledge Dose", key="knowledge_btn", use_container_width=True):
                 st.session_state['page'] = 'knowledge_dose'
                 st.session_state['show_profile'] = False
+                # Update page in query params
+                current_params = dict(st.query_params)
+                current_params['page'] = 'knowledge_dose'
+                st.query_params.update(current_params)
                 st.rerun()
 
             if st.button("🚀 Your Roadmap", key="roadmap_btn", use_container_width=True):
                 st.session_state['page'] = 'roadmap'
                 st.session_state['show_profile'] = False
+                # Update page in query params
+                current_params = dict(st.query_params)
+                current_params['page'] = 'roadmap'
+                st.query_params.update(current_params)
                 st.rerun()
             
             if st.button("📝 Resume Builder", key="resume_btn", use_container_width=True):
                 st.session_state['page'] = 'resume_builder'
                 st.session_state['show_profile'] = False
+                # Update page in query params
+                current_params = dict(st.query_params)
+                current_params['page'] = 'resume_builder'
+                st.query_params.update(current_params)
                 st.rerun()
 
             st.markdown(
@@ -186,6 +218,10 @@ def main():
     # Page Routing
     page = st.session_state.get('page', 'login')
 
+    # Debug information (optional - can be removed in production)
+    # st.sidebar.write(f"Current page: {page}")
+    # st.sidebar.write(f"URL params: {dict(st.query_params)}")
+
     if page == 'login':
         login_page()
     elif page == 'signup':
@@ -202,10 +238,10 @@ def main():
         display_resume_builder_page() 
     elif page == 'knowledge_dose':
         display_daily_knowledge_page()
-    
     else:
-        st.error("Page not found!")
-        st.session_state['page'] = 'login'
+        st.error(f"Page not found: {page}")
+        st.session_state['page'] = 'home'
+        st.query_params.update({'page': 'home'})
         st.rerun()
 
 
