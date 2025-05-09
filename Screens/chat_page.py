@@ -196,8 +196,6 @@ def process_user_query(prompt):
                 logger.error(f"Error generating response: {str(e)}")
                 logger.error(traceback.format_exc())
 
-
-    
 def display_chat_page():
     
         
@@ -234,9 +232,6 @@ def display_chat_page():
     
     # Create a container for the chat messages to ensure they stay above the input
     chat_container = st.container()
-    
-    # Create a container for the input area which will always be at the bottom
-    input_container = st.container()
     
     # Display quick action buttons above chat messages
     with chat_container:
@@ -282,10 +277,14 @@ def display_chat_page():
         .input-container {
             display: flex;
             align-items: center;
-            margin-top: 10px;
             position: fixed;
             bottom: 0;
-            width: 100%;
+            left: 0;
+            right: 0;
+            background-color: white;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+            z-index: 1000;
         }
         .stAudioRecorderWrapper {
             display: none !important;
@@ -295,20 +294,69 @@ def display_chat_page():
             font-weight: bold;
             margin-top: 5px;
         }
+        .stChatMessage {
+            overflow-anchor: none;
+        }
+        .chat-wrapper {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 200px);
+            overflow-y: auto;
+            padding-bottom: 80px; /* Space for fixed input bar */
+        }
+        .latest-message {
+            overflow-anchor: auto;
+            height: 1px;
+        }
+        /* Fix Streamlit chat input container */
         .stChatInputContainer {
             position: fixed;
             bottom: 0;
-            width: 100%;
+            left: 0;
+            right: 0;
             background-color: white;
-            padding: 10px 0;
-            z-index: 999;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+            z-index: 1000;
+            margin: 0;
+            width: 100%;
+        }
+        /* Ensure the chat input row is properly aligned */
+        .stChatInputContainer > div > div {
+            justify-content: space-between;
+            width: 100%;
+        }
+        /* Add padding at bottom of page to prevent content from being hidden behind input */
+        .main .block-container {
+            padding-bottom: 120px;
+        }
+        /* Make sure scroll happens to newest message */
+        #latest-message-anchor {
+            height: 1px;
+            margin-bottom: 100px;
         }
         </style>
+        
+        <script>
+        // Auto-scroll to the bottom when new content is added
+        function scrollToBottom() {
+            const latestMessage = document.getElementById('latest-message-anchor');
+            if (latestMessage) {
+                latestMessage.scrollIntoView();
+            }
+        }
+        
+        // Call on page load and set interval to check for new messages
+        document.addEventListener('DOMContentLoaded', function() {
+            scrollToBottom();
+            setInterval(scrollToBottom, 500);
+        });
+        </script>
         """, unsafe_allow_html=True)
         
         st.markdown('<div class="quick-actions">', unsafe_allow_html=True)
         
-        col1, col2, col3,col4 = st.columns(4)
+        col1, col2, col3, col4 = st.columns(4)
         
         with col1:
             if st.button("🔍 Find Latest Job Postings", key="find_jobs"):
@@ -366,12 +414,14 @@ def display_chat_page():
                         
                         if st.session_state.get('user_id'):
                             save_chat_history(st.session_state['user_id'], st.session_state.messages)
-
+                        st.rerun()
                     except Exception as e:
                         st.error(f"Error finding Workshops and sessions: {str(e)}")
         
-        
         st.markdown('</div>', unsafe_allow_html=True)
+        
+        # Wrap chat messages in a div for scrolling
+        st.markdown('<div class="chat-wrapper">', unsafe_allow_html=True)
         
         # Display chat messages with feedback buttons
         for i, message in enumerate(st.session_state.messages):
@@ -428,14 +478,16 @@ def display_chat_page():
                             })
                             if st.session_state.get('user_id'):
                                 save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                             
                             st.rerun()
-    
-    # Create a spacer to ensure content is visible above the fixed input bar
-    st.markdown("<div style='padding-bottom: 80px;'></div>", unsafe_allow_html=True)
+        
+        # Create an anchor element for scrolling to the latest message
+        st.markdown('<div id="latest-message-anchor"></div>', unsafe_allow_html=True)
+        
+        # Close the chat wrapper div
+        st.markdown('</div>', unsafe_allow_html=True)
     
     # Input area always at the bottom
-    with input_container:
+    with st.container():
         # Create columns for the chat input and voice button
         col1, col2 = st.columns([0.9, 0.1])
         
@@ -531,7 +583,6 @@ def display_chat_page():
                 st.session_state.messages.append({"role": "user", "content": prompt})
                 if st.session_state.get('user_id'):
                     save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                        
                 
                 # Check if user is set
                 if not st.session_state.get('user_id'):
@@ -539,7 +590,6 @@ def display_chat_page():
                     st.session_state.messages.append({"role": "assistant", "content": content, "feedback": None})
                     if st.session_state.get('user_id'):
                         save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                        
                     st.rerun()
                 
                 # Detect language of the input
@@ -575,7 +625,6 @@ def display_chat_page():
 
                         if st.session_state.get('user_id'):
                             save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                                        
                         st.rerun()
                         
                     except Exception as e:
@@ -592,4 +641,3 @@ def display_chat_page():
                         logger.error(f"Error generating response: {str(e)}")
                         logger.error(traceback.format_exc())
                         st.rerun()
-

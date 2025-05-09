@@ -10,7 +10,7 @@ class ResumeBuilderCrew:
     def __init__(self, api_key):
         """Initialize the Resume Builder Crew with API key"""
         self.llm = LLM(
-            model="gemini/gemini-1.5-flash",
+            model="gemini/gemini-2.0-flash-lite",
             temperature=0.7,
             api_key=api_key
         )
