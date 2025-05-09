@@ -196,6 +196,25 @@ def process_user_query(prompt):
                 logger.error(f"Error generating response: {str(e)}")
                 logger.error(traceback.format_exc())
 
+
+# 1. Create a helper function to sanitize response objects
+def sanitize_response(response):
+    """Convert any non-serializable response objects to string"""
+    # Handle CrewOutput objects
+    if hasattr(response, '__class__') and response.__class__.__name__ == 'CrewOutput':
+        try:
+            return response.raw  # Extract the raw text from CrewOutput
+        except:
+            return str(response)  # Fallback to string representation
+    
+    # Handle other object types that might not be JSON serializable
+    try:
+        # Test if the object is JSON serializable
+        json.dumps(response)
+        return response
+    except (TypeError, OverflowError):
+        return str(response)
+    
 def display_chat_page():
     """Display a chat interface with ASHA AI with quick action options and voice input"""
     
@@ -489,7 +508,7 @@ def display_chat_page():
                                         # Process the query using our CareerGuidanceChatbot
                                         assistant = st.session_state.get('assistant')
                                         response = assistant.process_query(english_text)
-                                        
+                                        response = sanitize_response(response)
                                         # Translate back to original language if needed
                                         if detected_lang != "en-IN":
                                             translated_response = translate_text(response, "en-IN", detected_lang)
@@ -554,7 +573,7 @@ def display_chat_page():
                         # Process the query using our CareerGuidanceChatbot
                         assistant = st.session_state.get('assistant')
                         response = assistant.process_query(english_prompt)
-                        
+                        response = sanitize_response(response)
                         # Translate back to original language if needed
                         if detected_lang != "en-IN":
                             translated_response = translate_text(response, "en-IN", detected_lang)
@@ -584,7 +603,7 @@ def display_chat_page():
 
                         if st.session_state.get('user_id'):
                             save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                            
+
                         logger.error(f"Error generating response: {str(e)}")
                         logger.error(traceback.format_exc())
                         st.rerun()

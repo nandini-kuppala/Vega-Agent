@@ -161,30 +161,44 @@ def save_chat_history(user_id, messages):
     """
     Save or update chat history for a user in MongoDB
     """
-    # Check if chat history already exists for this user
-    existing_chat = db["chats"].find_one({"user_id": user_id})
+    # Sanitize messages before saving
+    sanitized_messages = []
+    for msg in messages:
+        sanitized_msg = msg.copy()
+        if 'content' in sanitized_msg:
+            sanitized_msg['content'] = sanitize_response(sanitized_msg['content'])
+        sanitized_messages.append(sanitized_msg)
     
-    if existing_chat:
-        # Update existing chat history
-        db["chats"].update_one(
-            {"user_id": user_id},
-            {
-                "$set": {
-                    "messages": messages,
-                    "updated_at": datetime.now(timezone.utc)
+    try:
+        # Check if chat history already exists for this user
+        existing_chat = db["chats"].find_one({"user_id": user_id})
+        
+        if existing_chat:
+            # Update existing chat history
+            db["chats"].update_one(
+                {"user_id": user_id},
+                {
+                    "$set": {
+                        "messages": sanitized_messages,
+                        "updated_at": datetime.now(timezone.utc)
+                    }
                 }
-            }
-        )
-    else:
-        # Create new chat history
-        db["chats"].insert_one({
-            "user_id": user_id,
-            "messages": messages,
-            "created_at": datetime.now(timezone.utc),
-            "updated_at": datetime.now(timezone.utc)
-        })
+            )
+        else:
+            # Create new chat history
+            db["chats"].insert_one({
+                "user_id": user_id,
+                "messages": sanitized_messages,
+                "created_at": datetime.now(timezone.utc),
+                "updated_at": datetime.now(timezone.utc)
+            })
+        
+        return {"status": "success", "message": "Chat history saved"}
+    except Exception as e:
+        # Log the error but return a status so the chat can continue
+        print(f"Error saving chat history: {str(e)}")
+        return {"status": "error", "message": str(e)}
     
-    return {"status": "success", "message": "Chat history saved"}
 
 def get_chat_history(user_id):
     """
