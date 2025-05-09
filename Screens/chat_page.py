@@ -197,6 +197,8 @@ def process_user_query(prompt):
                 logger.error(traceback.format_exc())
 
 def display_chat_page():
+    
+        
     """Display a chat interface with ASHA AI with quick action options and voice input"""
     
     # Check if user is authenticated
@@ -228,178 +230,83 @@ def display_chat_page():
                 {"role": "assistant", "content": "Hi! I'm ASHA, your career assistant powered by AI. How can I help you today?", "feedback": None}
             ]
     
-    # Apply custom CSS for fixed positioning and auto-scrolling
-    st.markdown("""
-    <style>
-    /* Main container styles */
-    .main-container {
-        display: flex;
-        flex-direction: column;
-        height: calc(100vh - 80px);
-        max-width: 100%;
-        margin: 0;
-        padding: 0;
-    }
+    # Create a container for the chat messages to ensure they stay above the input
+    chat_container = st.container()
     
-    /* Quick actions bar styles */
-    .quick-actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-bottom: 15px;
-        padding: 10px 0;
-        background-color: white;
-        z-index: 98;
-    }
-    .quick-action-button {
-        background-color: #f0f0f0;
-        border-radius: 20px;
-        padding: 8px 15px;
-        font-size: 14px;
-        cursor: pointer;
-        border: none;
-        transition: background-color 0.3s;
-    }
-    .quick-action-button:hover {
-        background-color: #e0e0e0;
-    }
+    # Create a container for the input area which will always be at the bottom
+    input_container = st.container()
     
-    /* Chat container styles */
-    .chat-container {
-        flex-grow: 1;
-        overflow-y: auto;
-        padding: 10px;
-        margin-bottom: 70px; /* Space for fixed input bar */
-    }
-    
-    /* Fixed input bar styles */
-    .input-area {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: white;
-        padding: 10px 5%;
-        display: flex;
-        box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
-        z-index: 100;
-    }
-    
-    /* Voice button styles */
-    .voice-button-container {
-        width: 40px;
-        margin-left: 10px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    .voice-button {
-        background-color: #f0f0f0;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        border: none;
-        transition: background-color 0.3s;
-    }
-    .voice-button:hover {
-        background-color: #e0e0e0;
-    }
-    .voice-button.recording {
-        background-color: #ff5252;
-    }
-    
-    /* Recording indicator */
-    .custom-recording-indicator {
-        color: red;
-        font-weight: bold;
-        font-size: 10px;
-        text-align: center;
-    }
-    
-    /* Hide Streamlit's audio recorder */
-    .stAudioRecorderWrapper {
-        display: none !important;
-    }
-    
-    /* Other styles */
-    .chat-input-container {
-        flex-grow: 1;
-    }
-    
-    /* Auto-scroll script */
-    #auto-scroll {
-        height: 1px;
-        width: 1px;
-    }
-    
-    /* Make buttons in the chat have consistent width */
-    .stButton button {
-        width: 100%;
-    }
-    
-    /* Streamlit chat input container - force it to use our custom styling */
-    .stChatInputContainer, .stChatMessageContent {
-        width: 100% !important;
-    }
-    
-    /* Override any Streamlit styling that might interfere */
-    .stApp {
-        overflow: hidden;
-    }
-    
-    /* Make content area full height */
-    [data-testid="stAppViewContainer"] > div:first-child {
-        height: 100vh;
-    }
-    </style>
-    
-    <!-- Auto-scroll script -->
-    <script>
-        function scrollToBottom() {
-            const chatContainer = document.querySelector('.chat-container');
-            if (chatContainer) {
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-            }
+    # Display quick action buttons above chat messages
+    with chat_container:
+        st.markdown("""
+        <style>
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
         }
-        
-        // Try to scroll immediately and also after a short delay to ensure content is loaded
-        window.onload = function() {
-            scrollToBottom();
-            setTimeout(scrollToBottom, 100);
-            setTimeout(scrollToBottom, 500);
-            setTimeout(scrollToBottom, 1000);
+        .quick-action-button {
+            background-color: #f0f0f0;
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s;
         }
+        .quick-action-button:hover {
+            background-color: #e0e0e0;
+        }
+        .voice-button {
+            background-color: #f0f0f0;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s;
+            margin-right: 10px;
+        }
+        .voice-button:hover {
+            background-color: #e0e0e0;
+        }
+        .voice-button.recording {
+            background-color: #ff5252;
+        }
+        .input-container {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        .stAudioRecorderWrapper {
+            display: none !important;
+        }
+        .custom-recording-indicator {
+            color: red;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        .stChatInputContainer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: white;
+            padding: 10px 0;
+            z-index: 999;
+        }
+        </style>
+        """, unsafe_allow_html=True)
         
-        // Add mutation observer to detect new messages
-        const observer = new MutationObserver(function(mutations) {
-            scrollToBottom();
-        });
+        st.markdown('<div class="quick-actions">', unsafe_allow_html=True)
         
-        // Start observing after a delay to ensure the chat container exists
-        setTimeout(function() {
-            const chatContainer = document.querySelector('.chat-container');
-            if (chatContainer) {
-                observer.observe(chatContainer, { childList: true, subtree: true });
-            }
-        }, 1000);
-    </script>
-    
-    <div class="main-container">
-        <div id="quick-actions-area"></div>
-        <div class="chat-container" id="chat-container"></div>
-        <div id="auto-scroll"></div>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    # Quick actions area
-    with st.container():
-        st.markdown('<div id="quick-actions-area" class="quick-actions">', unsafe_allow_html=True)
-        
-        col1, col2, col3, col4 = st.columns(4)
+        col1, col2, col3,col4 = st.columns(4)
         
         with col1:
             if st.button("🔍 Find Latest Job Postings", key="find_jobs"):
@@ -457,16 +364,12 @@ def display_chat_page():
                         
                         if st.session_state.get('user_id'):
                             save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                        st.rerun()
+
                     except Exception as e:
                         st.error(f"Error finding Workshops and sessions: {str(e)}")
         
+        
         st.markdown('</div>', unsafe_allow_html=True)
-    
-    # Chat container for messages - wrap in a container with the chat-container class
-    chat_area = st.container()
-    with chat_area:
-        st.markdown('<div id="chat-container" class="chat-container">', unsafe_allow_html=True)
         
         # Display chat messages with feedback buttons
         for i, message in enumerate(st.session_state.messages):
@@ -523,178 +426,168 @@ def display_chat_page():
                             })
                             if st.session_state.get('user_id'):
                                 save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                             
                             st.rerun()
-        
-        # Add an empty div for auto-scrolling target
-        st.markdown('<div id="auto-scroll"></div>', unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
     
-    # Fixed input area at the bottom
-    st.markdown('<div class="input-area">', unsafe_allow_html=True)
+    # Create a spacer to ensure content is visible above the fixed input bar
+    st.markdown("<div style='padding-bottom: 80px;'></div>", unsafe_allow_html=True)
     
-    # Use columns for the input bar layout
-    input_cols = st.columns([0.95, 0.05])
-    
-    # Chat input in the first column
-    with input_cols[0]:
-        prompt = st.chat_input("What would you like help with?", key="chat_input")
-    
-    # Voice button in the second column
-    with input_cols[1]:
-        # Initialize recording state
-        if 'is_recording' not in st.session_state:
-            st.session_state.is_recording = False
-            st.session_state.audio_recorder_key = 0
+    # Input area always at the bottom
+    with input_container:
+        # Create columns for the chat input and voice button
+        col1, col2 = st.columns([0.9, 0.1])
         
-        # Voice button with different style based on recording state
-        button_style = "voice-button recording" if st.session_state.is_recording else "voice-button"
-        button_text = "🛑" if st.session_state.is_recording else "🎤"
-        
-        st.markdown(f"""
-        <div class="voice-button-container">
-            <button id="voice-button" class="{button_style}">{button_text}</button>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        # The actual button that Streamlit can interact with (hidden but functional)
-        if st.button("Voice", key="voice_button", help="Toggle voice recording"):
-            st.session_state.is_recording = not st.session_state.is_recording
-            st.session_state.audio_recorder_key += 1
-            st.rerun()
-        
-        # Show recording indicator
-        if st.session_state.is_recording:
-            st.markdown("<div class='custom-recording-indicator'>Recording...</div>", unsafe_allow_html=True)
-        
-        # Hidden audio recorder that's only active when recording
-        if st.session_state.is_recording:
-            try:
-                wav_audio_data = st_audiorec()
-                
-                if wav_audio_data is not None and wav_audio_data != st.session_state.get('last_audio_data'):
-                    st.session_state['last_audio_data'] = wav_audio_data
-                    st.session_state.is_recording = False  # Stop recording
+        with col2:
+            # Initialize recording state
+            if 'is_recording' not in st.session_state:
+                st.session_state.is_recording = False
+                st.session_state.audio_recorder_key = 0
+            
+            # Voice button with different style based on recording state
+            button_style = "background-color: #ff5252;" if st.session_state.is_recording else "background-color: #f0f0f0;"
+            button_text = "🛑" if st.session_state.is_recording else "🎤"
+            
+            if st.button(button_text, key="voice_button", help="Toggle voice recording"):
+                st.session_state.is_recording = not st.session_state.is_recording
+                st.session_state.audio_recorder_key += 1
+                st.rerun()
+            
+            # Show recording indicator
+            if st.session_state.is_recording:
+                st.markdown("<div class='custom-recording-indicator'>Recording...</div>", unsafe_allow_html=True)
+            
+            # Hidden audio recorder that's only active when recording
+            if st.session_state.is_recording:
+                try:
+                    wav_audio_data = st_audiorec()
                     
-                    with st.spinner("Processing your voice input..."):
-                        # Transcribe the audio to text
-                        transcribed_text = transcribe_audio(wav_audio_data)
+                    if wav_audio_data is not None and wav_audio_data != st.session_state.get('last_audio_data'):
+                        st.session_state['last_audio_data'] = wav_audio_data
+                        st.session_state.is_recording = False  # Stop recording
                         
-                        if transcribed_text:
-                            # Detect language
-                            detected_lang = detect_language(transcribed_text)
-                            st.session_state.detected_language = detected_lang
+                        with st.spinner("Processing your voice input..."):
+                            # Transcribe the audio to text
+                            transcribed_text = transcribe_audio(wav_audio_data)
                             
-                            # Translate to English if not already in English
-                            if detected_lang != "en-IN":
-                                english_text = translate_text(transcribed_text, detected_lang, "en-IN")
-                            else:
-                                english_text = transcribed_text
-                            
-                            # Add user message to chat history
-                            st.session_state.messages.append({"role": "user", "content": transcribed_text})
-                            if st.session_state.get('user_id'):
-                                save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                            
-                            # Generate assistant response
-                            with st.spinner("Generating response..."):
-                                try:
-                                    # Process the query using our CareerGuidanceChatbot
-                                    assistant = st.session_state.get('assistant')
-                                    response = assistant.process_query(english_text)
-                                    response = sanitize_response(response)
-                                    # Translate back to original language if needed
-                                    if detected_lang != "en-IN":
-                                        translated_response = translate_text(response, "en-IN", detected_lang)
-                                        display_response = translated_response
-                                    else:
-                                        display_response = response
-                                    
-                                    # Add assistant response to chat history
-                                    st.session_state.messages.append({
-                                        "role": "assistant", 
-                                        "content": display_response,
-                                        "feedback": None
-                                    })
-                                    if st.session_state.get('user_id'):
-                                        save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                                    st.rerun()
-                                except Exception as e:
-                                    error_msg = f"I'm sorry, I encountered an error: {str(e)}"
-                                    st.session_state.messages.append({
-                                        "role": "assistant", 
-                                        "content": error_msg,
-                                        "feedback": None
-                                    })
-                                    if st.session_state.get('user_id'):
-                                        save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                                    st.rerun()
-            except Exception as e:
-                st.error(f"Error with audio recording: {str(e)}")
-    
-    st.markdown('</div>', unsafe_allow_html=True)
-    
-    # Process text input if provided
-    if prompt:
-        # Add user message to chat history
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        if st.session_state.get('user_id'):
-            save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                            if transcribed_text:
+                                # Detect language
+                                detected_lang = detect_language(transcribed_text)
+                                st.session_state.detected_language = detected_lang
+                                
+                                # Translate to English if not already in English
+                                if detected_lang != "en-IN":
+                                    english_text = translate_text(transcribed_text, detected_lang, "en-IN")
+                                else:
+                                    english_text = transcribed_text
+                                
+                                # Add user message to chat history
+                                st.session_state.messages.append({"role": "user", "content": transcribed_text})
+                                if st.session_state.get('user_id'):
+                                    save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                                
+                                # Generate assistant response
+                                with st.spinner("Generating response..."):
+                                    try:
+                                        # Process the query using our CareerGuidanceChatbot
+                                        assistant = st.session_state.get('assistant')
+                                        response = assistant.process_query(english_text)
+                                        response = sanitize_response(response)
+                                        # Translate back to original language if needed
+                                        if detected_lang != "en-IN":
+                                            translated_response = translate_text(response, "en-IN", detected_lang)
+                                            display_response = translated_response
+                                        else:
+                                            display_response = response
+                                        
+                                        # Add assistant response to chat history
+                                        st.session_state.messages.append({
+                                            "role": "assistant", 
+                                            "content": display_response,
+                                            "feedback": None
+                                        })
+                                        if st.session_state.get('user_id'):
+                                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                                        st.rerun()
+                                    except Exception as e:
+                                        error_msg = f"I'm sorry, I encountered an error: {str(e)}"
+                                        st.session_state.messages.append({
+                                            "role": "assistant", 
+                                            "content": error_msg,
+                                            "feedback": None
+                                        })
+                                        if st.session_state.get('user_id'):
+                                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                                        st.rerun()
+                except Exception as e:
+                    st.error(f"Error with audio recording: {str(e)}")
         
-        # Check if user is set
-        if not st.session_state.get('user_id'):
-            content = "It seems you're not logged in. Please log in first so I can provide personalized assistance."
-            st.session_state.messages.append({"role": "assistant", "content": content, "feedback": None})
-            if st.session_state.get('user_id'):
-                save_chat_history(st.session_state['user_id'], st.session_state.messages)
-            st.rerun()
-        
-        # Detect language of the input
-        detected_lang = detect_language(prompt)
-        st.session_state.detected_language = detected_lang
-        
-        # Translate to English if needed
-        if detected_lang != "en-IN":
-            english_prompt = translate_text(prompt, detected_lang, "en-IN")
-        else:
-            english_prompt = prompt
-        
-        # Generate response with the assistant
-        with st.spinner("Thinking..."):
-            try:
-                # Process the query using our CareerGuidanceChatbot
-                assistant = st.session_state.get('assistant')
-                response = assistant.process_query(english_prompt)
-                response = sanitize_response(response)
-                # Translate back to original language if needed
+        with col1:
+            prompt = st.chat_input("What would you like help with?")
+            
+            if prompt:
+                # Add user message to chat history
+                st.session_state.messages.append({"role": "user", "content": prompt})
+                if st.session_state.get('user_id'):
+                    save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                        
+                
+                # Check if user is set
+                if not st.session_state.get('user_id'):
+                    content = "It seems you're not logged in. Please log in first so I can provide personalized assistance."
+                    st.session_state.messages.append({"role": "assistant", "content": content, "feedback": None})
+                    if st.session_state.get('user_id'):
+                        save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                        
+                    st.rerun()
+                
+                # Detect language of the input
+                detected_lang = detect_language(prompt)
+                st.session_state.detected_language = detected_lang
+                
+                # Translate to English if needed
                 if detected_lang != "en-IN":
-                    translated_response = translate_text(response, "en-IN", detected_lang)
-                    display_response = translated_response
+                    english_prompt = translate_text(prompt, detected_lang, "en-IN")
                 else:
-                    display_response = response
+                    english_prompt = prompt
                 
-                # Update chat history
-                st.session_state.messages.append({
-                    "role": "assistant", 
-                    "content": display_response,
-                    "feedback": None
-                })
-                
-                if st.session_state.get('user_id'):
-                    save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                
-                st.rerun()
-                
-            except Exception as e:
-                error_msg = f"I'm sorry, I encountered an error: {str(e)}"
-                st.session_state.messages.append({
-                    "role": "assistant", 
-                    "content": error_msg,
-                    "feedback": None
-                })
-                
-                if st.session_state.get('user_id'):
-                    save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                
-                logger.error(f"Error generating response: {str(e)}")
-                logger.error(traceback.format_exc())
-                st.rerun()
+                # Generate response with the assistant
+                with st.spinner("Thinking..."):
+                    try:
+                        # Process the query using our CareerGuidanceChatbot
+                        assistant = st.session_state.get('assistant')
+                        response = assistant.process_query(english_prompt)
+                        response = sanitize_response(response)
+                        # Translate back to original language if needed
+                        if detected_lang != "en-IN":
+                            translated_response = translate_text(response, "en-IN", detected_lang)
+                            display_response = translated_response
+                        else:
+                            display_response = response
+                        
+                        # Update chat history
+                        st.session_state.messages.append({
+                            "role": "assistant", 
+                            "content": display_response,
+                            "feedback": None
+                        })
+
+                        if st.session_state.get('user_id'):
+                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                                        
+                        st.rerun()
+                        
+                    except Exception as e:
+                        error_msg = f"I'm sorry, I encountered an error: {str(e)}"
+                        st.session_state.messages.append({
+                            "role": "assistant", 
+                            "content": error_msg,
+                            "feedback": None
+                        })
+
+                        if st.session_state.get('user_id'):
+                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
+
+                        logger.error(f"Error generating response: {str(e)}")
+                        logger.error(traceback.format_exc())
+                        st.rerun()
+
