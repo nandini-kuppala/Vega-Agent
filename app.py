@@ -55,7 +55,7 @@ def main():
             if var not in st.session_state:
                 st.session_state[var] = False if var != 'page' else 'login'
         st.session_state['init_done'] = True
-
+    
     # Check for authentication in URL parameters FIRST before other logic
     query_params = st.query_params
     if 'token' in query_params and 'user_id' in query_params:
@@ -76,41 +76,6 @@ def main():
         # Only update if parameters changed or missing
         if any(current_params.get(k) != v for k, v in params_to_set.items()):
             st.query_params.update(params_to_set)
-
-
-    # Apply custom CSS
-    st.markdown("""
-        <style>
-            .sidebar-button {
-                background-color: #4CAF50;
-                color: white;
-                padding: 10px;
-                text-align: center;
-                border-radius: 10px;
-                margin: 10px 0;
-                font-weight: bold;
-                cursor: pointer;
-                transition: 0.3s;
-            }
-            .sidebar-button:hover {
-                background-color: #45a049;
-            }
-            .profile-icon-button {
-                background: none;
-                border: none;
-                font-size: 26px;
-                cursor: pointer;
-            }
-            /* Fix for audio recorder component */
-            .stAudioRecorderWrapper {
-                display: none !important;
-            }
-            .st-emotion-cache-1avcm0n {
-                height: calc(100vh - 80px) !important;
-                overflow-y: auto !important;
-            }
-        </style>
-    """, unsafe_allow_html=True)
 
     # Assistant Initialization
     if st.session_state.get('authenticated') and 'assistant' not in st.session_state:
@@ -170,8 +135,6 @@ def main():
                 st.session_state['show_profile'] = False
                 st.rerun()
 
-            
-
             st.markdown(
                 """
                 <a href="https://skillassessment.streamlit.app/" target="_blank">
@@ -194,15 +157,13 @@ def main():
                 unsafe_allow_html=True
             )
 
-            
-
             st.markdown("---")
 
             if st.button("🚪 Logout", key="logout_btn", use_container_width=True):
                 # Clear session storage to completely log out
                 for key in list(st.session_state.keys()):
                     del st.session_state[key]
-                # Clear session state
+                # Clear URL parameters
                 st.query_params.clear()
                 st.session_state['page'] = 'login'
                 st.rerun()
