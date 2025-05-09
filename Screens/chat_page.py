@@ -196,7 +196,6 @@ def process_user_query(prompt):
                 logger.error(f"Error generating response: {str(e)}")
                 logger.error(traceback.format_exc())
 
-
 def display_chat_page():
     
     """Display a chat interface with ASHA AI with quick action options and voice input"""
@@ -255,6 +254,19 @@ def display_chat_page():
         padding: 1rem 1rem !important;
         z-index: 999 !important;
         box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    .input-container {
+        display: flex;
+        align-items: center;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 10px;
+        background-color: white;
+        z-index: 1000;
+        border-top: 1px solid #ccc;
     }
     
     /* For quick actions */
@@ -449,163 +461,178 @@ def display_chat_page():
                                 save_chat_history(st.session_state['user_id'], st.session_state.messages)
                             st.rerun()
     
+    # Add an invisible anchor to scroll to
+    st.markdown("<div id='bottom-chat-anchor'></div>", unsafe_allow_html=True)
+
+    # Inject JavaScript to scroll to the anchor on page load
+    scroll_script = """
+    <script>
+        const anchor = document.getElementById("bottom-chat-anchor");
+        if (anchor) {
+            anchor.scrollIntoView({ behavior: "smooth", block: "end" });
+        }
+    </script>
+    """
+    st.markdown(scroll_script, unsafe_allow_html=True)
+    
     # Close the chat container div
     st.markdown('</div>', unsafe_allow_html=True)
     
-    # Fixed input area at the bottom
-    input_container = st.container()
+    # Fixed input bar at bottom
+    st.markdown('<div class="input-container">', unsafe_allow_html=True)
     
-    with input_container:
-        # Create columns for the chat input and voice button
-        col1, col2 = st.columns([0.9, 0.1])
+    # Create columns for the chat input and voice button
+    col1, col2 = st.columns([0.9, 0.1])
+    
+    with col2:
+        # Initialize recording state
+        if 'is_recording' not in st.session_state:
+            st.session_state.is_recording = False
+            st.session_state.audio_recorder_key = 0
         
-        with col2:
-            # Initialize recording state
-            if 'is_recording' not in st.session_state:
-                st.session_state.is_recording = False
-                st.session_state.audio_recorder_key = 0
-            
-            # Voice button with different style based on recording state
-            button_style = "background-color: #ff5252;" if st.session_state.is_recording else "background-color: #f0f0f0;"
-            button_text = "🛑" if st.session_state.is_recording else "🎤"
-            
-            if st.button(button_text, key="voice_button", help="Toggle voice recording"):
-                st.session_state.is_recording = not st.session_state.is_recording
-                st.session_state.audio_recorder_key += 1
-                st.rerun()
-            
-            # Show recording indicator
-            if st.session_state.is_recording:
-                st.markdown("<div class='custom-recording-indicator'>Recording...</div>", unsafe_allow_html=True)
-            
-            # Hidden audio recorder that's only active when recording
-            if st.session_state.is_recording:
-                try:
-                    wav_audio_data = st_audiorec()
+        # Voice button with different style based on recording state
+        button_style = "background-color: #ff5252;" if st.session_state.is_recording else "background-color: #f0f0f0;"
+        button_text = "🛑" if st.session_state.is_recording else "🎤"
+        
+        if st.button(button_text, key="voice_button", help="Toggle voice recording"):
+            st.session_state.is_recording = not st.session_state.is_recording
+            st.session_state.audio_recorder_key += 1
+            st.rerun()
+        
+        # Show recording indicator
+        if st.session_state.is_recording:
+            st.markdown("<div class='custom-recording-indicator'>Recording...</div>", unsafe_allow_html=True)
+        
+        # Hidden audio recorder that's only active when recording
+        if st.session_state.is_recording:
+            try:
+                wav_audio_data = st_audiorec()
+                
+                if wav_audio_data is not None and wav_audio_data != st.session_state.get('last_audio_data'):
+                    st.session_state['last_audio_data'] = wav_audio_data
+                    st.session_state.is_recording = False  # Stop recording
                     
-                    if wav_audio_data is not None and wav_audio_data != st.session_state.get('last_audio_data'):
-                        st.session_state['last_audio_data'] = wav_audio_data
-                        st.session_state.is_recording = False  # Stop recording
+                    with st.spinner("Processing your voice input..."):
+                        # Transcribe the audio to text
+                        transcribed_text = transcribe_audio(wav_audio_data)
                         
-                        with st.spinner("Processing your voice input..."):
-                            # Transcribe the audio to text
-                            transcribed_text = transcribe_audio(wav_audio_data)
+                        if transcribed_text:
+                            # Detect language
+                            detected_lang = detect_language(transcribed_text)
+                            st.session_state.detected_language = detected_lang
                             
-                            if transcribed_text:
-                                # Detect language
-                                detected_lang = detect_language(transcribed_text)
-                                st.session_state.detected_language = detected_lang
-                                
-                                # Translate to English if not already in English
-                                if detected_lang != "en-IN":
-                                    english_text = translate_text(transcribed_text, detected_lang, "en-IN")
-                                else:
-                                    english_text = transcribed_text
-                                
-                                # Add user message to chat history
-                                st.session_state.messages.append({"role": "user", "content": transcribed_text})
-                                if st.session_state.get('user_id'):
-                                    save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                                
-                                # Generate assistant response
-                                with st.spinner("Generating response..."):
-                                    try:
-                                        # Process the query using our CareerGuidanceChatbot
-                                        assistant = st.session_state.get('assistant')
-                                        response = assistant.process_query(english_text)
-                                        response = sanitize_response(response)
-                                        # Translate back to original language if needed
-                                        if detected_lang != "en-IN":
-                                            translated_response = translate_text(response, "en-IN", detected_lang)
-                                            display_response = translated_response
-                                        else:
-                                            display_response = response
-                                        
-                                        # Add assistant response to chat history
-                                        st.session_state.messages.append({
-                                            "role": "assistant", 
-                                            "content": display_response,
-                                            "feedback": None
-                                        })
-                                        if st.session_state.get('user_id'):
-                                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                                        st.rerun()
-                                    except Exception as e:
-                                        error_msg = f"I'm sorry, I encountered an error: {str(e)}"
-                                        st.session_state.messages.append({
-                                            "role": "assistant", 
-                                            "content": error_msg,
-                                            "feedback": None
-                                        })
-                                        if st.session_state.get('user_id'):
-                                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                                        st.rerun()
-                except Exception as e:
-                    st.error(f"Error with audio recording: {str(e)}")
+                            # Translate to English if not already in English
+                            if detected_lang != "en-IN":
+                                english_text = translate_text(transcribed_text, detected_lang, "en-IN")
+                            else:
+                                english_text = transcribed_text
+                            
+                            # Add user message to chat history
+                            st.session_state.messages.append({"role": "user", "content": transcribed_text})
+                            if st.session_state.get('user_id'):
+                                save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                            
+                            # Generate assistant response
+                            with st.spinner("Generating response..."):
+                                try:
+                                    # Process the query using our CareerGuidanceChatbot
+                                    assistant = st.session_state.get('assistant')
+                                    response = assistant.process_query(english_text)
+                                    response = sanitize_response(response)
+                                    # Translate back to original language if needed
+                                    if detected_lang != "en-IN":
+                                        translated_response = translate_text(response, "en-IN", detected_lang)
+                                        display_response = translated_response
+                                    else:
+                                        display_response = response
+                                    
+                                    # Add assistant response to chat history
+                                    st.session_state.messages.append({
+                                        "role": "assistant", 
+                                        "content": display_response,
+                                        "feedback": None
+                                    })
+                                    if st.session_state.get('user_id'):
+                                        save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                                    st.rerun()
+                                except Exception as e:
+                                    error_msg = f"I'm sorry, I encountered an error: {str(e)}"
+                                    st.session_state.messages.append({
+                                        "role": "assistant", 
+                                        "content": error_msg,
+                                        "feedback": None
+                                    })
+                                    if st.session_state.get('user_id'):
+                                        save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                                    st.rerun()
+            except Exception as e:
+                st.error(f"Error with audio recording: {str(e)}")
+    
+    with col1:
+        prompt = st.chat_input("What would you like help with?")
         
-        with col1:
-            prompt = st.chat_input("What would you like help with?")
+        if prompt:
+            # Add user message to chat history
+            st.session_state.messages.append({"role": "user", "content": prompt})
+            if st.session_state.get('user_id'):
+                save_chat_history(st.session_state['user_id'], st.session_state.messages)
             
-            if prompt:
-                # Add user message to chat history
-                st.session_state.messages.append({"role": "user", "content": prompt})
+            # Check if user is set
+            if not st.session_state.get('user_id'):
+                content = "It seems you're not logged in. Please log in first so I can provide personalized assistance."
+                st.session_state.messages.append({"role": "assistant", "content": content, "feedback": None})
                 if st.session_state.get('user_id'):
                     save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                
-                # Check if user is set
-                if not st.session_state.get('user_id'):
-                    content = "It seems you're not logged in. Please log in first so I can provide personalized assistance."
-                    st.session_state.messages.append({"role": "assistant", "content": content, "feedback": None})
+                st.rerun()
+            
+            # Detect language of the input
+            detected_lang = detect_language(prompt)
+            st.session_state.detected_language = detected_lang
+            
+            # Translate to English if needed
+            if detected_lang != "en-IN":
+                english_prompt = translate_text(prompt, detected_lang, "en-IN")
+            else:
+                english_prompt = prompt
+            
+            # Generate response with the assistant
+            with st.spinner("Thinking..."):
+                try:
+                    # Process the query using our CareerGuidanceChatbot
+                    assistant = st.session_state.get('assistant')
+                    response = assistant.process_query(english_prompt)
+                    response = sanitize_response(response)
+                    # Translate back to original language if needed
+                    if detected_lang != "en-IN":
+                        translated_response = translate_text(response, "en-IN", detected_lang)
+                        display_response = translated_response
+                    else:
+                        display_response = response
+                    
+                    # Update chat history
+                    st.session_state.messages.append({
+                        "role": "assistant", 
+                        "content": display_response,
+                        "feedback": None
+                    })
+
                     if st.session_state.get('user_id'):
                         save_chat_history(st.session_state['user_id'], st.session_state.messages)
                     st.rerun()
-                
-                # Detect language of the input
-                detected_lang = detect_language(prompt)
-                st.session_state.detected_language = detected_lang
-                
-                # Translate to English if needed
-                if detected_lang != "en-IN":
-                    english_prompt = translate_text(prompt, detected_lang, "en-IN")
-                else:
-                    english_prompt = prompt
-                
-                # Generate response with the assistant
-                with st.spinner("Thinking..."):
-                    try:
-                        # Process the query using our CareerGuidanceChatbot
-                        assistant = st.session_state.get('assistant')
-                        response = assistant.process_query(english_prompt)
-                        response = sanitize_response(response)
-                        # Translate back to original language if needed
-                        if detected_lang != "en-IN":
-                            translated_response = translate_text(response, "en-IN", detected_lang)
-                            display_response = translated_response
-                        else:
-                            display_response = response
-                        
-                        # Update chat history
-                        st.session_state.messages.append({
-                            "role": "assistant", 
-                            "content": display_response,
-                            "feedback": None
-                        })
+                    
+                except Exception as e:
+                    error_msg = f"I'm sorry, I encountered an error: {str(e)}"
+                    st.session_state.messages.append({
+                        "role": "assistant", 
+                        "content": error_msg,
+                        "feedback": None
+                    })
 
-                        if st.session_state.get('user_id'):
-                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                        st.rerun()
-                        
-                    except Exception as e:
-                        error_msg = f"I'm sorry, I encountered an error: {str(e)}"
-                        st.session_state.messages.append({
-                            "role": "assistant", 
-                            "content": error_msg,
-                            "feedback": None
-                        })
+                    if st.session_state.get('user_id'):
+                        save_chat_history(st.session_state['user_id'], st.session_state.messages)
 
-                        if st.session_state.get('user_id'):
-                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
-
-                        logger.error(f"Error generating response: {str(e)}")
-                        logger.error(traceback.format_exc())
-                        st.rerun()
+                    logger.error(f"Error generating response: {str(e)}")
+                    logger.error(traceback.format_exc())
+                    st.rerun()
+                    
+    st.markdown('</div>', unsafe_allow_html=True)
