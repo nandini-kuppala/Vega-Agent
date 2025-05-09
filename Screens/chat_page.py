@@ -155,6 +155,9 @@ def process_user_query(prompt):
             content = "It seems you're not logged in. Please log in first so I can provide personalized assistance."
             st.markdown(content)
             st.session_state.messages.append({"role": "assistant", "content": content, "feedback": None})
+            if st.session_state.get('user_id'):
+                save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                        
             return
     
     # Generate response with the assistant
@@ -179,11 +182,17 @@ def process_user_query(prompt):
                 # Update chat history
                 st.markdown(display_response)
                 st.session_state.messages.append({"role": "assistant", "content": display_response, "feedback": None})
+                if st.session_state.get('user_id'):
+                    save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                        
                 
             except Exception as e:
                 error_msg = f"I'm sorry, I encountered an error: {str(e)}"
                 st.error(error_msg)
                 st.session_state.messages.append({"role": "assistant", "content": error_msg, "feedback": None})
+                if st.session_state.get('user_id'):
+                    save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                        
                 logger.error(f"Error generating response: {str(e)}")
                 logger.error(traceback.format_exc())
 
@@ -516,11 +525,17 @@ def display_chat_page():
             if prompt:
                 # Add user message to chat history
                 st.session_state.messages.append({"role": "user", "content": prompt})
+                if st.session_state.get('user_id'):
+                    save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                        
                 
                 # Check if user is set
                 if not st.session_state.get('user_id'):
                     content = "It seems you're not logged in. Please log in first so I can provide personalized assistance."
                     st.session_state.messages.append({"role": "assistant", "content": content, "feedback": None})
+                    if st.session_state.get('user_id'):
+                        save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                        
                     st.rerun()
                 
                 # Detect language of the input
@@ -553,6 +568,7 @@ def display_chat_page():
                             "content": display_response,
                             "feedback": None
                         })
+
                         if st.session_state.get('user_id'):
                             save_chat_history(st.session_state['user_id'], st.session_state.messages)
                                         
@@ -565,8 +581,10 @@ def display_chat_page():
                             "content": error_msg,
                             "feedback": None
                         })
+
                         if st.session_state.get('user_id'):
                             save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                            
                         logger.error(f"Error generating response: {str(e)}")
                         logger.error(traceback.format_exc())
                         st.rerun()
