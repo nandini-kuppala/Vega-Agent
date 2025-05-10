@@ -1,6 +1,7 @@
 import streamlit as st
 from backend.database import get_profile, get_user_details
 
+from Screens.chat_page import display_chat_page
 def display_home_page():
     """Display the home page after login with personalized greeting and content"""
     
@@ -216,6 +217,7 @@ def display_home_page():
                 if st.button("Chat with ASHA AI", key="chat_button"):
                     st.session_state['page'] = 'chat'
                     st.session_state['show_profile'] = False
+                    display_chat_page()
                     st.rerun()
                 
                 st.markdown('</div>', unsafe_allow_html=True)
@@ -232,9 +234,24 @@ def display_home_page():
                     mentorship_type = profile_res["profile"].get('community', {}).get('mentorship_type', 'mentorship')
                     st.write(f"We'll help you find {mentorship_type} opportunities.")
                 
-                if st.button("Explore Community", key="community_button"):
-                    st.session_state['page'] = 'community'
-                    st.rerun()
+                st.markdown("""
+                    <a href="https://www.herkey.com/network" target="_blank">
+                        <div style="
+                            background-color: #F63366;
+                            color: white;
+                            padding: 0.5em 1em;
+                            border-radius: 0.25rem;
+                            text-align: center;
+                            text-decoration: none;
+                            display: inline-block;
+                            font-weight: 600;
+                            cursor: pointer;
+                            transition: background-color 0.3s ease;">
+                            Explore Community
+                        </div>
+                    </a>
+                """, unsafe_allow_html=True)
+
                 
                 st.markdown('</div>', unsafe_allow_html=True)
     
