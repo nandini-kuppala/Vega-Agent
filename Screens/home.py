@@ -164,6 +164,7 @@ def display_home_page():
                         
                         if st.button("View Full Profile", key="view_profile_button"):
                             st.session_state['show_profile'] = True
+                            st.session_state['home'] = False
                             st.rerun()
             
             else:
