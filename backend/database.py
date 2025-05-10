@@ -153,7 +153,36 @@ def get_profile(user_id):
     except Exception as e:
         return {"status": "error", "message": f"Error retrieving profile: {str(e)}"}
 
-
+def get_user_details(user_id):
+    """
+    Retrieve user details from the users collection.
+    
+    Args:
+        user_id (str): The ID of the user to retrieve.
+        
+    Returns:
+        dict: A dictionary containing the user's details or an error message.
+    """
+    try:
+        # Convert string ID to ObjectId
+        user = users_collection.find_one({"_id": ObjectId(user_id)})
+        
+        if not user:
+            return {"status": "error", "message": "User not found"}
+        
+        # Create a cleaned user dict without sensitive information
+        user_dict = {
+            "id": str(user["_id"]),
+            "name": user.get("name", ""),
+            "email": user.get("email", ""),
+            "phone": user.get("phone", ""),
+            "city": user.get("city", ""),
+            "created_at": user.get("created_at", "")
+        }
+        
+        return {"status": "success", "user": user_dict}
+    except Exception as e:
+        return {"status": "error", "message": f"Error retrieving user details: {str(e)}"}
 # Add these functions to your database.py file:
 def sanitize_response(response):
     """Convert any non-serializable response objects to string"""

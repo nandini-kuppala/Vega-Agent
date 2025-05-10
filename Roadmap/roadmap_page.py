@@ -1,10 +1,10 @@
 
 import streamlit as st
-from backend.database import get_profile
+from backend.database import get_profile, get_user_details
 from Roadmap.roadmap import generate_learning_roadmap
 
 def display_roadmap_page():
-    """Display the learning roadmap page"""
+    """Display the learning roadmap page with personalized user details"""
     
     # Check if user is authenticated
     if not st.session_state.get('authenticated', False):
@@ -12,15 +12,26 @@ def display_roadmap_page():
         st.session_state['page'] = 'login'
         st.rerun()
         return
+        
+    # Get user details from database
+    user_result = get_user_details(st.session_state['user_id'])
+    
+    if user_result["status"] == "error":
+        st.error(f"Error retrieving user details: {user_result['message']}")
+        user_data = {"name": "User"}  # Fallback
+    else:
+        user_data = user_result["user"]
+        
+    # Use the user's name in the welcome message
     st.markdown(
-        """
+        f"""
         <h1 style="color: #935073; text-align: center; font-size: 36px; font-weight: bold;">
-            Your Personalized Learning Roadmap Awaits! <span style="font-size: 40px;">🚀</span>
+            Hello, {user_data.get('name', 'there')}! Your Learning Roadmap Awaits! <span style="font-size: 40px;">🚀</span>
         </h1>
         <p style="text-align: center; font-size: 18px; color: #555;">
             Ready to take your career to the next level? With our tailor-made roadmap, 
-            you’ll get a clear path forward, personalized just for you based on your skills, goals, and experience. 
-            Let’s start crafting the future you’ve always wanted! 
+            you'll get a clear path forward, personalized just for you based on your skills, goals, and experience. 
+            Let's start crafting the future you've always wanted! 
         </p>
         
         """, unsafe_allow_html=True
@@ -28,7 +39,9 @@ def display_roadmap_page():
 
     st.markdown("<br>", unsafe_allow_html=True)
     
-
+    # Show user location if available
+    if user_data.get('city'):
+        st.markdown(f"<p style='text-align: center; font-style: italic;'>Location: {user_data.get('city')}</p>", unsafe_allow_html=True)
     
     # Try to get user profile information
     try:
@@ -104,7 +117,9 @@ def display_roadmap_page():
             
             # Format the user profile data for the roadmap generator
             user_profile_text = f"""
-            **Name**: {st.session_state.get('username', 'User')}
+            **Name**: {user_data.get('name', 'User')}
+            **Email**: {user_data.get('email', 'Not specified')}
+            **Location**: {user_data.get('city', 'Not specified')}
             **Education**: {profile_data.get('education', 'Not specified')}
             
             **Skills**:
@@ -121,7 +136,7 @@ def display_roadmap_page():
             # Generate roadmap button
             if st.button("🔮 Generate Learning Roadmap", type="primary"):
                 if learning_goal:
-                    with st.spinner("Generating your personalized learning roadmap... This may take a few minutes."):
+                    with st.spinner(f"Generating your personalized learning roadmap, {user_data.get('name').split()[0]}... This may take a few minutes."):
                         try:
                             # Call the CrewAI function to generate the roadmap
                             roadmap = generate_learning_roadmap(user_profile_text, learning_goal)
@@ -131,13 +146,23 @@ def display_roadmap_page():
                             
                             # Display the roadmap
                             st.markdown("## 🗺️ Your Personalized Learning Roadmap")
-                            st.markdown(roadmap)
+                            
+                            # Create tabs for viewing and raw formats
+                            tab1, tab2 = st.tabs(["Rendered View", "Raw Markdown"])
+                            
+                            with tab1:
+                                # Render the markdown properly
+                                st.markdown(roadmap)
+                            
+                            with tab2:
+                                # Show raw markdown with a monospace font
+                                st.code(roadmap, language="markdown")
                             
                             # Add a download button for the markdown file
                             st.download_button(
-                                label="📥 Download Roadmap",
+                                label=f"📥 Download {user_data.get('name').split()[0]}'s Roadmap",
                                 data=roadmap,
-                                file_name="my_learning_roadmap.md",
+                                file_name=f"{user_data.get('name').lower().replace(' ', '_')}_learning_roadmap.md",
                                 mime="text/markdown"
                             )
                             
@@ -149,19 +174,29 @@ def display_roadmap_page():
             # Display previously generated roadmap if it exists
             if 'current_roadmap' in st.session_state and not st.button:
                 st.markdown("## 🗺️ Your Personalized Learning Roadmap")
-                st.markdown(st.session_state['current_roadmap'])
                 
-                # Add a download button for the markdown file
+                # Create tabs for viewing and raw formats
+                tab1, tab2 = st.tabs(["Rendered View", "Raw Markdown"])
+                
+                with tab1:
+                    # Render the markdown properly
+                    st.markdown(st.session_state['current_roadmap'])
+                
+                with tab2:
+                    # Show raw markdown with a monospace font
+                    st.code(st.session_state['current_roadmap'], language="markdown")
+                
+                # Add a download button for the markdown file with personalized filename
                 st.download_button(
-                    label="📥 Download Roadmap", 
+                    label=f"📥 Download {user_data.get('name').split()[0]}'s Roadmap", 
                     data=st.session_state['current_roadmap'],
-                    file_name="my_learning_roadmap.md",
+                    file_name=f"{user_data.get('name').lower().replace(' ', '_')}_learning_roadmap.md",
                     mime="text/markdown"
                 )
         
         else:
             # Profile doesn't exist yet
-            st.info("It looks like you haven't completed your profile questionnaire yet.")
+            st.info(f"It looks like you haven't completed your profile questionnaire yet, {user_data.get('name', 'there')}.")
             
             if st.button("Complete Your Profile Now"):
                 st.session_state['page'] = 'questionnaire'
@@ -171,14 +206,13 @@ def display_roadmap_page():
         st.error(f"Error retrieving profile: {str(e)}")
         
         # Fallback content
-        st.markdown("""
+        st.markdown(f"""
         ## Complete Your Profile
         
-        To generate a personalized learning roadmap, we need to know more about you.
+        To generate a personalized learning roadmap, we need to know more about you, {user_data.get('name', 'there')}.
         Please complete your profile questionnaire first.
         """)
         
         if st.button("Complete Your Profile"):
             st.session_state['page'] = 'questionnaire'
             st.rerun()
-

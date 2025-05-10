@@ -1,6 +1,5 @@
-
 import streamlit as st
-from backend.database import get_profile
+from backend.database import get_profile, get_user_details
 
 def display_profile_modal():
     """Display user profile in a visually appealing modal."""
@@ -35,6 +34,11 @@ def display_profile_modal():
         display: inline-block;
         font-size: 14px;
     }
+    .contact-info {
+        margin-top: 5px;
+        font-size: 14px;
+        color: #6c757d;
+    }
     </style>
     """, unsafe_allow_html=True)
     
@@ -56,12 +60,15 @@ def display_profile_modal():
         
         # Get profile data
         try:
-            res = get_profile(st.session_state['user_id'])
+            profile_res = get_profile(st.session_state['user_id'])
+            user_res = get_user_details(st.session_state['user_id'])
             
-            if res["status"] == "success":
-                profile = res["profile"]
+            if profile_res["status"] == "success" and user_res["status"] == "success":
+                profile = profile_res["profile"]
+                user = user_res["user"]
             else:
-                st.error("Failed to retrieve profile data.")
+                error_message = profile_res.get("message", "") or user_res.get("message", "Failed to retrieve data.")
+                st.error(error_message)
                 st.markdown('</div>', unsafe_allow_html=True)
                 return
         except Exception as e:
@@ -69,15 +76,19 @@ def display_profile_modal():
             st.markdown('</div>', unsafe_allow_html=True)
             return
         
-        # User header with avatar
-        st.write(f"## {profile.get('name', 'User')}")
+        # User header with avatar and basic user details
         st.markdown('<div class="profile-header">', unsafe_allow_html=True)
         st.markdown('<div style="font-size: 64px; margin-right: 20px;">👤</div>', unsafe_allow_html=True)
         st.markdown(f"""
         <div>
+            <h3 style="margin: 0;">{user.get('name', 'User')}</h3>
             <p style="margin: 0; font-size: 18px;">{profile.get('education', 'Education not specified')}</p>
             <p style="margin: 0; color: #6c757d;">Experience: {profile.get('experience_years', 0)} years</p>
-            <p style="margin: 0; color: #6c757d;">{profile.get('location', {}).get('city', 'Location not specified')}</p>
+            <p style="margin: 0; color: #6c757d;">{user.get('city', '') or profile.get('location', {}).get('city', 'Location not specified')}</p>
+            <div class="contact-info">
+                <p style="margin: 0;"><strong>Email:</strong> {user.get('email', 'Not specified')}</p>
+                <p style="margin: 0;"><strong>Phone:</strong> {user.get('phone', 'Not specified')}</p>
+            </div>
         </div>
         """, unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
@@ -98,8 +109,21 @@ def display_profile_modal():
             else:
                 st.write("No skills specified yet")
             
+            st.write(f"**Current Status:** {profile.get('current_status', 'Not specified')}")
+            
             if profile.get('last_job'):
                 st.write(f"**Last Position:** {profile['last_job'].get('title', 'Not specified')} at {profile['last_job'].get('company', 'Not specified')}")
+            
+            # Display life stage information if available
+            life_stage = profile.get('life_stage', {})
+            if any(life_stage.values()):
+                st.subheader("Life Stage")
+                if life_stage.get('situation') and life_stage.get('situation') != "None of the above":
+                    st.write(f"**Situation:** {life_stage.get('situation')}")
+                if life_stage.get('pregnancy_status') == "Yes":
+                    st.write("**Pregnancy Status:** Yes")
+                if life_stage.get('needs_flexible_work'):
+                    st.write("**Needs Flexible Work:** Yes")
             
             st.markdown('</div>', unsafe_allow_html=True)
         
@@ -153,6 +177,18 @@ def display_profile_modal():
         with col2:
             st.write(f"**Interested in Events:** {'Yes' if community.get('join_events', False) else 'No'}")
         
+        if profile.get('communication_preference'):
+            st.write(f"**Communication Preference:** {profile.get('communication_preference')}")
+        
+        st.markdown('</div>', unsafe_allow_html=True)
+        
+        # Account information
+        st.markdown('<div class="profile-section">', unsafe_allow_html=True)
+        st.subheader("Account Information")
+        
+        st.write(f"**Member Since:** {user.get('created_at', 'Not available')}")
+        st.write(f"**User ID:** {user.get('id', 'Not available')}")
+        
         st.markdown('</div>', unsafe_allow_html=True)
         
         # Edit profile button
@@ -173,16 +209,26 @@ def display_profile():
         return
         
     try:
-        res = get_profile(st.session_state['user_id'])
+        profile_res = get_profile(st.session_state['user_id'])
+        user_res = get_user_details(st.session_state['user_id'])
         
-        if res["status"] == "success":
-            profile = res["profile"]
+        if profile_res["status"] == "success" and user_res["status"] == "success":
+            profile = profile_res["profile"]
+            user = user_res["user"]
         else:
-            st.error("Failed to retrieve profile data.")
+            error_message = profile_res.get("message", "") or user_res.get("message", "Failed to retrieve data.")
+            st.error(error_message)
             return
     except Exception as e:
         st.error(f"Error retrieving profile: {str(e)}")
         return
+    
+    # User header with basic details
+    st.header(f"{user.get('name', 'User')}")
+    st.write(f"**Email:** {user.get('email', 'Not specified')}")
+    st.write(f"**Phone:** {user.get('phone', 'Not specified')}")
+    st.write(f"**Member Since:** {user.get('created_at', 'Not available')}")
+    st.divider()
     
     col1, col2 = st.columns(2)
     
@@ -194,6 +240,17 @@ def display_profile():
         
         if profile.get('last_job'):
             st.write(f"**Last Job:** {profile['last_job'].get('title', 'Not specified')} at {profile['last_job'].get('company', 'Not specified')}")
+        
+        # Display life stage information if available
+        life_stage = profile.get('life_stage', {})
+        if any(life_stage.values()):
+            st.subheader("Life Stage")
+            if life_stage.get('situation') and life_stage.get('situation') != "None of the above":
+                st.write(f"**Situation:** {life_stage.get('situation')}")
+            if life_stage.get('pregnancy_status') == "Yes":
+                st.write("**Pregnancy Status:** Yes")
+            if life_stage.get('needs_flexible_work'):
+                st.write("**Needs Flexible Work:** Yes")
         
         st.subheader("Skills")
         skills = profile.get('skills', [])
@@ -228,4 +285,11 @@ def display_profile():
         if community.get('wants_mentorship', False):
             st.write(f"**Mentorship Type:** {community.get('mentorship_type', 'Not specified')}")
         st.write(f"**Interested in Events:** {'Yes' if community.get('join_events', False) else 'No'}")
-
+        
+        if profile.get('communication_preference'):
+            st.write(f"**Communication Preference:** {profile.get('communication_preference')}")
+    
+    # Add edit profile button
+    if st.button("Edit Profile", key="edit_profile"):
+        st.session_state['page'] = 'questionnaire'
+        st.rerun()
