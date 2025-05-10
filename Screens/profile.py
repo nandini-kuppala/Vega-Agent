@@ -292,4 +292,5 @@ def display_profile():
     # Add edit profile button
     if st.button("Edit Profile", key="edit_profile"):
         st.session_state['page'] = 'questionnaire'
+        st.session_state['show_profile'] = False
         st.rerun()

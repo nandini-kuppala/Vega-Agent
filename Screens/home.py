@@ -154,10 +154,12 @@ def display_home_page():
                     if not is_profile_complete:
                         if st.button("Complete Your Profile", key="complete_profile_button"):
                             st.session_state['page'] = 'questionnaire'
+                            st.session_state['show_profile'] = False
                             st.rerun()
                     else:
                         if st.button("Update Profile", key="update_profile_button"):
                             st.session_state['page'] = 'questionnaire'
+                            st.session_state['show_profile'] = False
                             st.rerun()
                         
                         if st.button("View Full Profile", key="view_profile_button"):
@@ -191,6 +193,7 @@ def display_home_page():
                 
                 if st.button("Complete Your Profile Now", key="create_profile_button"):
                     st.session_state['page'] = 'questionnaire'
+                    st.session_state['show_profile'] = False
                     st.rerun()
             
             st.markdown('</div>', unsafe_allow_html=True)
@@ -211,6 +214,7 @@ def display_home_page():
                 
                 if st.button("Chat with ASHA AI", key="chat_button"):
                     st.session_state['page'] = 'chat'
+                    st.session_state['show_profile'] = False
                     st.rerun()
                 
                 st.markdown('</div>', unsafe_allow_html=True)
@@ -246,4 +250,5 @@ def display_home_page():
         
         if st.button("Complete Your Profile", key="fallback_button"):
             st.session_state['page'] = 'questionnaire'
+            st.session_state['show_profile'] = False
             st.rerun()
