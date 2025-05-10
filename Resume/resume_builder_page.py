@@ -20,8 +20,6 @@ from reportlab.lib import colors
 from html.parser import HTMLParser
 import html
 
-user_profile = None
-user_details = None
 if 'user_id' in st.session_state:
     try:
         # Get profile data
