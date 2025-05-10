@@ -1,6 +1,6 @@
 # resume_builder_page
 import streamlit as st
-from backend.database import get_profile
+from backend.database import get_profile, get_user_details
 from Resume.resume_builder_agent import ResumeBuilderCrew
 import streamlit as st
 import json
@@ -19,6 +19,22 @@ from reportlab.lib.units import inch
 from reportlab.lib import colors
 from html.parser import HTMLParser
 import html
+
+user_profile = None
+user_details = None
+if 'user_id' in st.session_state:
+    try:
+        # Get profile data
+        profile_result = get_profile(st.session_state['user_id'])
+        if profile_result["status"] == "success":
+            user_profile = profile_result["profile"]
+            
+        # Get user details
+        user_result = get_user_details(st.session_state['user_id'])
+        if user_result["status"] == "success":
+            user_details = user_result["user"]
+    except Exception as e:
+        st.error(f"Error retrieving data: {str(e)}")
 
 class HTMLToReportLabParser(HTMLParser):
     """Parser to convert HTML to ReportLab elements optimized for single-page resumes"""
@@ -337,6 +353,72 @@ def clean_html_for_pdf(html_content):
     # Convert back to string
     return str(soup)
 
+def format_user_data_for_resume(user_details, user_profile, form_data):
+    """
+    Format user data from multiple sources into a unified structure for the resume builder.
+    
+    Args:
+        user_details (dict): User details from the database
+        user_profile (dict): User profile from the database
+        form_data (dict): Data collected from the form
+        
+    Returns:
+        dict: Formatted user data for resume generation
+    """
+    # Initialize the formatted data structure
+    formatted_data = {
+        "personal_info": {
+            "name": "",
+            "email": "",
+            "phone": "",
+            "location": ""
+        },
+        "education": "",
+        "experience": "",
+        "skills": [],
+        "experience_years": "",
+        "last_job": {"title": "", "company": ""},
+        "location": {"city": ""}
+    }
+    
+    # Fill in data from user_details if available
+    if user_details:
+        formatted_data["personal_info"]["name"] = user_details.get("name", "")
+        formatted_data["personal_info"]["email"] = user_details.get("email", "")
+        formatted_data["personal_info"]["phone"] = user_details.get("phone", "")
+        formatted_data["location"]["city"] = user_details.get("city", "")
+    
+    # Add data from user_profile if available
+    if user_profile:
+        # Override location from profile if available
+        if user_profile.get("location", {}).get("city"):
+            formatted_data["location"]["city"] = user_profile.get("location", {}).get("city")
+        
+        # Add education, experience, and skills
+        formatted_data["education"] = user_profile.get("education", "")
+        formatted_data["experience_years"] = user_profile.get("experience_years", "")
+        formatted_data["last_job"] = user_profile.get("last_job", {"title": "", "company": ""})
+        formatted_data["skills"] = user_profile.get("skills", [])
+    
+    
+    if "education" in form_data:
+        formatted_data["education"] = form_data.get("education", "")
+    
+    if "experience" in form_data:
+        formatted_data["experience"] = form_data.get("experience", "")
+    
+    if "skills" in form_data:
+        # Convert comma-separated skills to list if needed
+        skills_input = form_data.get("skills", "")
+        if isinstance(skills_input, str):
+            formatted_data["skills"] = [skill.strip() for skill in skills_input.split(",") if skill.strip()]
+        else:
+            formatted_data["skills"] = skills_input
+    
+    # Add location information
+    formatted_data["personal_info"]["location"] = formatted_data["location"]["city"]
+    
+    return formatted_data
 
 def display_resume_builder_page():
     """Display the resume builder page in Streamlit with improved UI"""
@@ -526,26 +608,11 @@ def display_resume_builder_page():
         default_company = user_profile.get('last_job', {}).get('company', '') if user_profile else ''
         
         # Use tabs for better organization of form sections
-        tabs = st.tabs(["📋 Personal", "🎓 Education", "💼 Experience", "🔧 Skills", "🚀 Projects", "🏆 Achievements", "🎯 Target Job"])
+        tabs = st.tabs(["🎓 Education", "💼 Experience", "🔧 Skills", "🚀 Projects", "🏆 Achievements", "🎯 Target Job"])
+        
+        
         
         with tabs[0]:
-            st.markdown('<div class="section-header">Personal Information</div>', unsafe_allow_html=True)
-            
-            # Two-column layout for personal info
-            col_personal_1, col_personal_2 = st.columns(2)
-            
-            with col_personal_1:
-                full_name = st.text_input("Full Name", placeholder="John Doe")
-                email = st.text_input("Email Address", placeholder="johndoe@example.com")
-                phone = st.text_input("Phone Number", placeholder="(123) 456-7890")
-            
-            with col_personal_2:
-                linkedin = st.text_input("LinkedIn URL", placeholder="linkedin.com/in/johndoe")
-                location = st.text_input("Location", 
-                                      value=user_profile.get('location', {}).get('city', '') if user_profile else '',
-                                      placeholder="City, State, Country")
-        
-        with tabs[1]:
             st.markdown('<div class="section-header">Education Details</div>', unsafe_allow_html=True)
             st.info("Include degree name, institution, location, and graduation year")
             education = st.text_area("Education", 
@@ -553,7 +620,7 @@ def display_resume_builder_page():
                                   value=default_education,
                                   placeholder="Bachelor of Science in Computer Science\nUniversity of California, Berkeley\n2018-2022")
         
-        with tabs[2]:
+        with tabs[1]:
             st.markdown('<div class="section-header">Work Experience</div>', unsafe_allow_html=True)
             st.info("List your work history in reverse chronological order")
             experience = st.text_area("Work Experience", 
@@ -561,7 +628,7 @@ def display_resume_builder_page():
                                    value=f"Title: {default_job_title}\nCompany: {default_company}\nDuration: {default_experience}\n\nResponsibilities and achievements:",
                                    placeholder="Title: Software Engineer\nCompany: Tech Solutions Inc.\nDuration: 2022-Present\n\nResponsibilities and achievements:\n- Developed scalable web applications using React and Node.js\n- Improved system performance by 40% through code optimization")
         
-        with tabs[3]:
+        with tabs[2]:
             st.markdown('<div class="section-header">Skills</div>', unsafe_allow_html=True)
             skills = st.text_area("Technical & Professional Skills", 
                                height=120,
@@ -586,19 +653,19 @@ def display_resume_builder_page():
                                             height=100,
                                             placeholder="Leadership, communication, etc.")
         
-        with tabs[4]:
+        with tabs[3]:
             st.markdown('<div class="section-header">Projects</div>', unsafe_allow_html=True)
             projects = st.text_area("Projects", 
                                  height=150,
                                  placeholder="Project Name: E-commerce Platform\nDuration: 3 months\nTechnologies: React, Node.js, MongoDB\n\nDescription:\n- Built a full-stack e-commerce platform with user authentication\n- Implemented payment processing using Stripe API")
         
-        with tabs[5]:
+        with tabs[4]:
             st.markdown('<div class="section-header">Achievements</div>', unsafe_allow_html=True)
             achievements = st.text_area("Awards & Achievements", 
                                      height=120,
                                      placeholder="- Employee of the Month (June 2023)\n- Increased team productivity by 25% through process improvements\n- Published research paper on AI ethics")
         
-        with tabs[6]:
+        with tabs[5]:
             # Job Description Card - separate and prominent
             st.markdown('<div class="card" style="border-left: 4px solid #3498db; margin-top: 20px;">', unsafe_allow_html=True)
             st.markdown("""
@@ -646,29 +713,17 @@ def display_resume_builder_page():
             if not job_description:
                 st.error("Please enter a job description to generate a tailored resume.")
             else:
-                # Format user data into a profile dictionary
-                formatted_user_profile = {
-                    "personal_info": {
-                        "name": full_name,
-                        "email": email,
-                        "phone": phone,
-                        "linkedin": linkedin,
-                        "location": location
-                    },
+                # Collect form data
+                form_data = {
                     "education": education,
                     "experience": experience,
-                    "skills": skills.split(",") if skills else []
+                    "skills": skills,
+                    "projects": projects,
+                    "achievements": achievements
                 }
                 
-                # Add user profile data if available
-                if user_profile:
-                    formatted_user_profile.update({
-                        "education": user_profile.get('education', education),
-                        "experience_years": user_profile.get('experience_years', ''),
-                        "last_job": user_profile.get('last_job', {}),
-                        "skills": user_profile.get('skills', skills.split(",") if skills else []),
-                        "location": user_profile.get('location', {})
-                    })
+                # Format all user data into a unified structure
+                formatted_user_profile = format_user_data_for_resume(user_details, user_profile, form_data)
                 
                 with st.spinner("Building your ATS-friendly resume..."):
                     try:
