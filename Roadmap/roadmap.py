@@ -13,7 +13,7 @@ os.environ['SERPER_API_KEY'] = st.secrets["SERPER_API_KEY"]
 
 # Initialize LLM
 llm = LLM(
-    model="gemini/gemini-2.0-flash-lite",  
+    model="gemini/gemini-1.5-flash",  
     temperature=0.7,
     api_key=st.secrets["GEMINI_API_KEY"] 
 )
