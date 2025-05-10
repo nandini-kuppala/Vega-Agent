@@ -2,6 +2,7 @@ import streamlit as st
 from backend.database import get_profile, get_user_details
 
 from Screens.chat_page import display_chat_page
+
 def display_home_page():
     """Display the home page after login with personalized greeting and content"""
     
@@ -209,17 +210,15 @@ def display_home_page():
                 st.write("Your personal career guide powered by AI")
                 st.markdown("""
                 * Get personalized career advice
-                * Explore job opportunities
-                * Prepare for interviews
-                * Develop your skills
+                * Enhance your skills and receive follow-ups on your past plans                                    
+                * Prepare for interviews with personalized roadmaps and recommendations
+                * Explore job opportunities tailored for you from JobsForHer and trusted platforms like Indeed, Naukri, and more — saving you hours of job searching.
+                * Explore groups for you to join -- from Herkey
+                * Explore upcoming events relevant to your background -- from Herkey
+                * Explore personalized sessions for you  -- from Herkey 
+                * Create Posts to share with your network on Herkey.com explore community now  👉               
                 """)
-                
-                if st.button("Chat with ASHA AI", key="chat_button"):
-                    st.session_state['page'] = 'chat'
-                    st.session_state['show_profile'] = False
-                    display_chat_page()
-                    st.rerun()
-                
+
                 st.markdown('</div>', unsafe_allow_html=True)
             
             with col2:
@@ -237,7 +236,7 @@ def display_home_page():
                 st.markdown("""
                     <a href="https://www.herkey.com/network" target="_blank">
                         <div style="
-                            background-color: #F63366;
+                            background-color: #935073;
                             color: white;
                             padding: 0.5em 1em;
                             border-radius: 0.25rem;
