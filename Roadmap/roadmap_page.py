@@ -147,16 +147,7 @@ def display_roadmap_page():
                             # Display the roadmap
                             st.markdown("## 🗺️ Your Personalized Learning Roadmap")
                             
-                            # Create tabs for viewing and raw formats
-                            tab1, tab2 = st.tabs(["Rendered View", "Raw Markdown"])
-                            
-                            with tab1:
-                                # Render the markdown properly
-                                st.markdown(roadmap)
-                            
-                            with tab2:
-                                # Show raw markdown with a monospace font
-                                st.code(roadmap, language="markdown")
+                            st.markdown(roadmap)
                             
                             # Add a download button for the markdown file
                             st.download_button(
