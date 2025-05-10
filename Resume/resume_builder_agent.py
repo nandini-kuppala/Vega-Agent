@@ -5,7 +5,6 @@ from crewai import LLM
 import json
 import re
 from utils.input import DateTimeEncoder # cls=DateTimeEncoder
-
 class ResumeBuilderCrew:
     def __init__(self, api_key):
         """Initialize the Resume Builder Crew with API key"""
@@ -18,40 +17,44 @@ class ResumeBuilderCrew:
     def create_agents(self):
         """Create the agents for the resume building process"""
         
-        # Resume Expert Agent
+        # Enhanced Resume Expert Agent
         resume_expert = Agent(
             role="ATS Resume Expert",
-            goal="Create ATS-friendly resumes that maximize interview callback rates",
+            goal="Create concise, single-page ATS-friendly resumes that maximize interview callback rates",
             backstory="""You are a highly experienced resume writer with 15+ years of experience
             helping candidates get past Applicant Tracking Systems (ATS) and land interviews.
-            You know exactly how to optimize resumes for relevant keywords, structure them properly,
-            and highlight achievements in a way that appeals to both ATS systems and human recruiters.""",
+            You specialize in creating impactful single-page resumes that are keyword-optimized,
+            achievement-focused, and tailored to specific job roles. Your resumes consistently
+            achieve an 85% success rate in passing ATS screening.""",
             verbose=True,
             llm=self.llm,
             allow_delegation=False
         )
         
-        # Job Description Analyzer Agent
+        # Enhanced Job Description Analyzer Agent
         job_analyzer = Agent(
-            role="Job Description Analyzer",
-            goal="Extract key skills, requirements, and priorities from job descriptions",
+            role="ATS Job Description Analyzer",
+            goal="Extract key skills, requirements, and priorities from job descriptions with 99% accuracy",
             backstory="""You are an expert at analyzing job descriptions and identifying exactly what 
-            employers are looking for. You can extract key requirements, must-have skills, preferred
-            qualifications, and even the hidden priorities that aren't explicitly stated. Your analysis
-            ensures resumes can be perfectly tailored to specific positions.""",
+            employers are looking for. You can extract both explicit and implicit requirements,
+            identify primary vs. secondary skills, recognize industry-specific terminology,
+            and understand the hidden priorities within job postings. You've analyzed over 10,000
+            job descriptions across diverse industries and have developed an intuitive understanding
+            of what matters most to hiring managers.""",
             verbose=True,
             llm=self.llm,
             allow_delegation=True
         )
         
-        # Resume Formatter Agent
+        # Enhanced Resume Formatter Agent
         resume_formatter = Agent(
-            role="Resume Formatter",
-            goal="Structure and format resumes for optimal ATS parsing and visual appeal",
-            backstory="""You are a formatting and design expert who knows exactly how to structure
-            resumes for maximum readability by both ATS systems and human recruiters. You understand
-            which formats work best, how to organize sections, and how to ensure all critical information
-            is presented in a way that's easy to scan and absorb.""",
+            role="Resume Formatter and Space Optimizer",
+            goal="Create perfectly structured single-page resumes that pass ATS parsing with 100% accuracy",
+            backstory="""You are a formatting and space optimization expert who specializes in
+            creating clean, scannable single-page resumes. You know exactly how to structure content
+            to maximize space efficiency while maintaining perfect ATS compatibility. You understand
+            optimal section ordering, white space utilization, and formatting techniques that allow
+            candidates to fit more meaningful content on a single page without appearing cluttered.""",
             verbose=True,
             llm=self.llm,
             allow_delegation=True
@@ -65,93 +68,106 @@ class ResumeBuilderCrew:
         # Unpack agents
         resume_expert, job_analyzer, resume_formatter = agents
         
-        # Task 1: Analyze Job Description
+        # Enhanced Task 1: Analyze Job Description
         analyze_job = Task(
-            description=f"""Analyze the job description carefully to extract:
-            1. Required skills and qualifications
-            2. Preferred skills and experience
-            3. Key responsibilities
-            4. Industry-specific keywords and phrases
-            5. Soft skills that appear important for the role
+            description=f"""Perform a detailed analysis of the job description to extract:
+            1. Core technical skills (ranked by importance)
+            2. Required soft skills and attributes
+            3. Key responsibilities and expected deliverables
+            4. Industry-specific keywords and terminology
+            5. Implicit requirements and preferences
+            6. Unique selling points that would make a candidate stand out
             
             Job Description:
             {job_description}
             
-            Provide a structured analysis that can be used to optimize a resume.
+            Your analysis should be comprehensive yet focused on the most critical elements
+            that will help create a tailored, single-page resume.
             """,
             agent=job_analyzer,
-            expected_output="""A detailed analysis of the job description with lists of:
-            - Required technical skills
-            - Required soft skills
+            expected_output="""A strategic analysis of the job description that includes:
+            - Primary technical skills (must-haves)
+            - Secondary technical skills (nice-to-haves)  
+            - Essential soft skills
             - Key responsibilities
-            - Important keywords
+            - Critical keywords and phrases
             - Industry-specific terminology
+            - Unique differentiators for the ideal candidate
             """
         )
         
-        # Task 2: Tailor Resume Content
+        # Enhanced Task 2: Tailor Resume Content
         tailor_resume = Task(
-            description=f"""Using the job description analysis and the candidate's profile, create tailored content for each section of the resume.
+            description=f"""Create highly tailored, concise content for a single-page resume that
+            perfectly matches the candidate's qualifications with the job requirements.
             
-            IMPORTANT: This resume MUST fit on a single page. Be concise and focus on the most relevant information.
+            STRICT REQUIREMENTS:
+            1. The final resume MUST fit on ONE PAGE - this is non-negotiable
+            2. Every word must earn its place - no filler content
+            3. Quantify achievements wherever possible (use numbers, percentages, dollar amounts)
+            4. Use powerful action verbs aligned with the job description
+            5. Prioritize the most relevant experience and skills for this specific role
+            6. Create a concise, powerful summary that positions the candidate as ideal for the role
             
             Candidate Profile:
             {json.dumps(user_profile, indent=2, cls=DateTimeEncoder)}
             
-            Projects:
+            Projects (include only if highly relevant):
             {projects}
             
-            Achievements:
+            Achievements (focus on most impressive and relevant):
             {achievements}
             
-            Focus on:
-            1. Creating a powerful but BRIEF professional summary (max 2-3 lines)
-            2. Limiting work experience to 3-4 most relevant positions with 2-3 bullet points each
-            3. Using concise language and removing unnecessary words
-            4. Quantifying achievements with metrics where possible
-            5. Using action verbs and targeted keywords from the job description
-            6. Keeping all content highly relevant to the target position
-            
-            Make sure the final resume is compact enough to fit on a single page.
+            Strategies for fitting on one page:
+            - Create a powerful but BRIEF professional summary (2-3 lines maximum)
+            - Include only 2-3 most relevant positions with 2-3 bullet points each
+            - Use concise, impactful language (remove articles and unnecessary words)
+            - Focus on achievements rather than responsibilities
+            - For education, include only degree, institution and year
+            - Present skills in a space-efficient format
             """,
             agent=resume_expert,
-            expected_output="""Complete content for each resume section, including:
-            - Brief professional summary (2-3 lines)
-            - Work experience with 2-3 bullet points per position
-            - Education details (degree, institution, year only)
-            - Skills section (relevant skills only)
-            - Relevant projects with brief descriptions
-            - Key achievements section
-            All content should be compact and optimized for a single-page resume.
+            expected_output="""Optimized, one-page resume content including:
+            - Brief, targeted professional summary (2-3 lines)
+            - Most relevant work experiences with achievement-focused bullet points
+            - Concise education section
+            - Tailored skills section
+            - Relevant projects or achievements (if space permits)
+            All content must be highly relevant to the target position and optimized for ATS algorithms.
             """,
             dependencies=[analyze_job]
         )
         
-        # Task 3: Format and Structure Resume
+        # Enhanced Task 3: Format and Structure Resume
         format_resume = Task(
-            description="""Create a properly structured and formatted resume using the content provided.
+            description="""Create a perfectly structured and formatted single-page resume using the content provided.
             
-            Follow these ATS-friendly formatting guidelines:
-            1. Use a clean, simple structure that can be easily parsed by ATS
-            2. Include clear section headers (Summary, Experience, Education, Skills, Projects, etc.)
-            3. Use a chronological or hybrid format depending on the candidate's experience
-            4. Ensure proper spacing and organization
-            5. Include all required contact information
-            6. Format the resume in a way that it can be presented as clean HTML/markdown
+            Advanced ATS-friendly formatting requirements:
+            1. Use a clean, minimal structure optimized for ATS parsing
+            2. Include clear section headers that match ATS expectations
+            3. Use a reverse-chronological format for experience
+            4. Balance white space with content density for readability
+            5. Ensure contact information is complete and properly formatted
+            6. Structure the resume for maximum impact in 6-second initial review by recruiters
+            7. Create a clean, professional layout that conveys expertise
             
-            Deliver a complete, formatted resume that is both ATS-friendly and visually appealing to human recruiters.
+            The output must be a complete, formatted resume in markdown format that:
+            - Fits perfectly on a single page
+            - Passes ATS screening with 100% content recognition
+            - Appears visually balanced and professional
+            - Has perfect spelling and grammar
+            - Includes all necessary sections in optimal order
             """,
             agent=resume_formatter,
-            expected_output="""A complete, formatted resume with all sections properly organized, including:
-            - Contact information
-            - Professional summary
-            - Work experience
-            - Education
-            - Skills
-            - Projects
-            - Achievements
+            expected_output="""A professionally formatted, single-page resume in clean markdown format with:
+            - Properly structured contact information
+            - Space-efficient professional summary
+            - Optimally formatted experience section with achievement-focused bullet points
+            - Concise education section
+            - ATS-friendly skills presentation
+            - Perfect spacing and organization
             
-            The resume should be provided in a clean, structured format that can be easily rendered in HTML or markdown.
+            The final product will be ATS-compatible while still being visually appealing to human reviewers.
             """,
             dependencies=[tailor_resume]
         )
@@ -196,16 +212,26 @@ class ResumeBuilderCrew:
             # Fallback
             raise ValueError("Could not extract resume text from crew result")
         
-        # Basic cleaning - this might need to be enhanced based on actual output
+        # Enhanced cleaning
         cleaned_result = result_text
         
         # Remove any markdown code block markers if present
         cleaned_result = re.sub(r'```(?:markdown|md|html)?\n', '', cleaned_result)
         cleaned_result = re.sub(r'```', '', cleaned_result)
         
-        # Remove any agent commentary that might be present
-        # This is a simple approach and might need refinement based on actual output patterns
-        if "# Resume" in cleaned_result:
-            cleaned_result = cleaned_result[cleaned_result.find("# Resume"):]
+        # Remove any agent commentary or analysis that might be present
+        if "# " in cleaned_result and not cleaned_result.startswith("# "):
+            # Find the first proper heading which should be the resume start
+            match = re.search(r'# .*', cleaned_result)
+            if match:
+                cleaned_result = cleaned_result[match.start():]
+        
+        # Fix common formatting issues
+        # Ensure consistent section headers
+        cleaned_result = re.sub(r'^(EDUCATION|EXPERIENCE|SKILLS|PROJECTS|ACHIEVEMENTS)$', 
+                              r'## \1', cleaned_result, flags=re.MULTILINE)
+        
+        # Ensure bullet points are properly formatted
+        cleaned_result = re.sub(r'^(\s*)-\s', r'\1- ', cleaned_result, flags=re.MULTILINE)
         
         return cleaned_result
