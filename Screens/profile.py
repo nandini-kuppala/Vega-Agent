@@ -54,7 +54,7 @@ def display_profile_modal():
         
         # Check if user_id exists in session state
         if 'user_id' not in st.session_state:
-            st.error("User ID not found in session state. Please log in again.")
+            st.error("Please log in again.")
             st.markdown('</div>', unsafe_allow_html=True)
             return            
         
@@ -187,7 +187,6 @@ def display_profile_modal():
         st.subheader("Account Information")
         
         st.write(f"**Member Since:** {user.get('created_at', 'Not available')}")
-        st.write(f"**User ID:** {user.get('id', 'Not available')}")
         
         st.markdown('</div>', unsafe_allow_html=True)
         
@@ -205,7 +204,7 @@ def display_profile():
     
     # Check if user_id exists in session state
     if 'user_id' not in st.session_state:
-        st.error("User ID not found in session state. Please log in again.")
+        st.error("Please log in again.")
         return
         
     try:
