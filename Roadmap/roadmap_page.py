@@ -230,14 +230,8 @@ def display_roadmap_page():
                 st.markdown(f"## 📋 {selected['learning_goal']}")
                 st.markdown(f"*Created on: {selected['created_at'].strftime('%B %d, %Y at %H:%M')}*")
                 
-                # Create tabs for the selected roadmap
-                tab1, tab2 = st.tabs(["Rendered View", "Raw Markdown"])
+                st.markdown(selected['roadmap_content'])
                 
-                with tab1:
-                    st.markdown(selected['roadmap_content'])
-                
-                with tab2:
-                    st.code(selected['roadmap_content'], language="markdown")
                 
                 # Download button for previous roadmap
                 st.download_button(
@@ -256,6 +250,7 @@ def display_roadmap_page():
                 st.info("No previous roadmaps found. Generate your first roadmap above!")
             else:
                 st.error(f"Error loading previous roadmaps: {roadmaps_result['message']}")
+
             # Display previously generated roadmap if it exists
             if 'current_roadmap' in st.session_state and not st.button:
                 st.markdown("## 🗺️ Your Personalized Learning Roadmap")
