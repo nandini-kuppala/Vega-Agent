@@ -1,20 +1,5 @@
 [
     {
-        "title": "Back to Work - RestartHer with MS office",
-        "date": "16th Apr, 2025 to 14th May, 2025",
-        "time": "12:00pm to 11:00pm",
-        "location": "Any",
-        "event_type": "Online",
-        "categories": [
-            "event"
-        ],
-        "registration_status": "Open",
-        "registration_text": "Register",
-        "price": "₹ 1\n₹ 9999",
-        "url": "https://events.herkey.com/events/back-to-work---restarther-with-ms-office/1476",
-        "featured": true
-    },
-    {
         "title": "SkillReBoot program: Restart Your Career Journey",
         "date": "21st Apr, 2025 to 20th May, 2025",
         "time": "6:00pm to 11:00pm",
@@ -25,7 +10,7 @@
         ],
         "registration_status": "Open",
         "registration_text": "Register",
-        "price": "Free",
+        "price": "₹ 1\n₹ 30000",
         "url": "https://events.herkey.com/events/skillreboot-program:-restart-your-career-journey/1663",
         "featured": true
     },
@@ -59,6 +44,19 @@
         "registration_text": "Register",
         "price": "Free",
         "url": "https://events.herkey.com/events/advance-your-career-with-a-premier-executive-mba-from-great-lakes/1669",
+        "featured": true
+    },
+    {
+        "title": "Back to Work - RestartHer with MS office",
+        "date": "16th Apr, 2025 to 14th May, 2025",
+        "time": "12:00pm to 11:00pm",
+        "location": "Any",
+        "event_type": "Online",
+        "categories": [
+            "event"
+        ],
+        "price": "₹ 1\n₹ 11999",
+        "url": "https://events.herkey.com/events/back-to-work---restarther-with-ms-office/1476",
         "featured": true
     },
     {
@@ -114,18 +112,5 @@
         "price": "Free",
         "url": "https://events.herkey.com/events/leadhers-in-tech:-tech-meets-talent-,-innovation-meets-inspiration/1660",
         "featured": true
-    },
-    {
-        "title": "Open Ceiling: Women Lead India",
-        "date": "21st Mar, 2025",
-        "time": "9:00am to 2:30pm",
-        "location": "Mumbai",
-        "event_type": "Offline",
-        "categories": [
-            "event",
-            "networking event"
-        ],
-        "price": "Free",
-        "url": "https://events.herkey.com/events/open-ceiling:-women-lead-india/1667"
     }
 ]

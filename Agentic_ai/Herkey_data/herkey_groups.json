@@ -385,8 +385,9 @@
         "name": "HerRising",
         "type": "public",
         "member_count": 39405,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/HerRising-icon.jpg",
+        "featured": true,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/HerRising_Group_Icon_2.jpg",
+        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/HerRising_2205_group_banner.jpg",
         "joinable": true,
         "join_button_text": "Join"
     },
@@ -914,6 +915,15 @@
         "featured": true,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/NTT_groupicon.jpg",
         "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/NTT_GroupBanner.jpg",
+        "joinable": true,
+        "join_button_text": "Join"
+    },
+    {
+        "name": "HerFit.Tribe",
+        "type": "private",
+        "featured": true,
+        "icon_url": "https://d2jbshxkjdydpu.cloudfront.net/4556629_549715d621f24948ac3b4862933fbd4b.jpg",
+        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/HerFit_Tribe-creatives_Group_Banner.jpg",
         "joinable": true,
         "join_button_text": "Join"
     }
