@@ -370,7 +370,7 @@ def display_chat_page():
     """, unsafe_allow_html=True)
     
     # Create main layout
-    main_col, sidebar_col = st.columns([1, 0])
+    main_col, sidebar_col = st.columns([0.9, 0.1])
     
     with main_col:
         # Sidebar toggle button
