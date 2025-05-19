@@ -198,7 +198,7 @@ def process_user_query(prompt):
 
 
 def display_chat_page():
-    """Display a chat interface with session management in right sidebar"""
+    """Display a chat interface with session management in Streamlit sidebar"""
     
     # Check if user is authenticated
     if not st.session_state.get('authenticated', False):
@@ -210,11 +210,7 @@ def display_chat_page():
     user_id = st.session_state.get('user_id')
     current_session_id = st.session_state.get('current_session_id')
     
-    # Initialize sidebar state for new login
-    if 'sidebar_open' not in st.session_state:
-        st.session_state.sidebar_open = False
-    
-    # Add CSS styling for right sidebar and title area
+    # Add CSS styling for chat interface
     st.markdown("""
     <style>
     /* Chat session styling */
@@ -234,245 +230,6 @@ def display_chat_page():
         border-left: 3px solid #2196f3;
     }
 
-    /* Right sidebar styling - Fixed positioning */
-    .right-sidebar {
-        position: fixed;
-        top: 0;
-        right: 0;
-        width: 350px;
-        height: 100vh;
-        background-color: white;
-        box-shadow: -4px 0 15px rgba(0, 0, 0, 0.15);
-        padding: 20px;
-        overflow-y: auto;
-        z-index: 9999;
-        transition: transform 0.3s ease-in-out;
-        border-left: 1px solid #e0e0e0;
-    }
-
-    .right-sidebar.hidden {
-        transform: translateX(100%);
-    }
-
-    /* Sidebar overlay for mobile */
-    .sidebar-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background-color: rgba(0, 0, 0, 0.3);
-        z-index: 9998;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s ease-in-out;
-    }
-
-    .sidebar-overlay.visible {
-        opacity: 1;
-        visibility: visible;
-    }
-
-    /* Main chat area adjustment */
-    .chat-main-container {
-        width: 100%;
-        transition: margin-right 0.3s ease-in-out;
-    }
-
-    .chat-main-container.with-sidebar {
-        margin-right: 350px;
-    }
-
-    /* Header with toggle button */
-    .header-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-        padding: 0 10px;
-    }
-
-    .sidebar-toggle-btn {
-        background: #f5f5f5;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 8px 12px;
-        cursor: pointer;
-        font-size: 14px;
-        transition: all 0.2s ease;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .sidebar-toggle-btn:hover {
-        background: #e0e0e0;
-        border-color: #bbb;
-    }
-
-    /* Session item styling */
-    .session-item {
-        background: white;
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
-        padding: 12px;
-        margin-bottom: 8px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        position: relative;
-    }
-
-    .session-item:hover {
-        background: #f8f9fa;
-        border-color: #c0c0c0;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-
-    .session-item.active {
-        background: #e3f2fd;
-        border-color: #2196f3;
-        box-shadow: 0 2px 8px rgba(33, 150, 243, 0.15);
-    }
-
-    .session-title {
-        font-weight: 500;
-        color: #333;
-        margin-bottom: 4px;
-        font-size: 14px;
-    }
-
-    .session-preview {
-        font-size: 12px;
-        color: #666;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        margin-bottom: 6px;
-    }
-
-    .session-date {
-        font-size: 11px;
-        color: #888;
-        text-align: right;
-    }
-
-    .session-actions {
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        display: flex;
-        gap: 4px;
-        opacity: 0;
-        transition: opacity 0.2s ease;
-    }
-
-    .session-item:hover .session-actions {
-        opacity: 1;
-    }
-
-    .action-btn {
-        background: white;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        width: 24px;
-        height: 24px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        font-size: 12px;
-        transition: all 0.2s ease;
-    }
-
-    .action-btn:hover {
-        background: #f0f0f0;
-    }
-
-    .action-btn.delete:hover {
-        background: #ffebee;
-        border-color: #f44336;
-        color: #f44336;
-    }
-
-    /* New chat button */
-    .new-chat-btn {
-        background: #2196f3;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        padding: 12px;
-        width: 100%;
-        cursor: pointer;
-        font-size: 14px;
-        font-weight: 500;
-        transition: background 0.2s ease;
-        margin-bottom: 16px;
-    }
-
-    .new-chat-btn:hover {
-        background: #1976d2;
-    }
-
-    /* Confirmation dialog */
-    .confirm-dialog {
-        background: white;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 16px;
-        margin-top: 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-
-    .confirm-text {
-        color: #d32f2f;
-        font-size: 14px;
-        margin-bottom: 12px;
-    }
-
-    .confirm-buttons {
-        display: flex;
-        gap: 8px;
-    }
-
-    .confirm-btn {
-        flex: 1;
-        padding: 8px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 12px;
-        transition: all 0.2s ease;
-    }
-
-    .confirm-btn.yes {
-        background: #f44336;
-        color: white;
-        border-color: #f44336;
-    }
-
-    .confirm-btn.yes:hover {
-        background: #d32f2f;
-    }
-
-    .confirm-btn.no {
-        background: white;
-        color: #666;
-    }
-
-    .confirm-btn.no:hover {
-        background: #f5f5f5;
-    }
-
-    /* Edit input styling */
-    .edit-input {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid #2196f3;
-        border-radius: 4px;
-        font-size: 14px;
-        margin-bottom: 8px;
-    }
-
     /* Fixed input area */
     .fixed-input {
         position: fixed;
@@ -484,11 +241,6 @@ def display_chat_page():
         box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
         z-index: 1000;
         border-top: 1px solid #e0e0e0;
-        transition: right 0.3s ease-in-out;
-    }
-
-    .fixed-input.with-sidebar {
-        right: 350px;
     }
 
     /* Quick actions styling */
@@ -518,73 +270,170 @@ def display_chat_page():
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-        .right-sidebar {
-            width: 100vw;
-        }
-        
-        .chat-main-container.with-sidebar {
-            margin-right: 0;
-        }
-        
-        .fixed-input.with-sidebar {
-            right: 0;
-        }
+    /* Recording indicator */
+    .custom-recording-indicator {
+        color: red;
+        font-size: 12px;
+        text-align: center;
+        margin-top: 5px;
+        animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+        0%, 50% { opacity: 1; }
+        51%, 100% { opacity: 0.3; }
     }
     </style>
     """, unsafe_allow_html=True)
     
-    # Create main layout with a single container
+    # Streamlit Native Sidebar for Chat History
+    with st.sidebar:
+        st.markdown("### 💬 Chat History")
+        
+        # New Chat button
+        if st.button("➕ New Chat", key="new_chat_sidebar", help="Start a new conversation"):
+            result = create_chat_session(user_id)
+            if result["status"] == "success":
+                st.session_state['current_session_id'] = result["session_id"]
+                st.session_state['messages'] = [{
+                    "role": "assistant", 
+                    "content": "Hi! I'm ASHA, your career assistant powered by AI. How can I help you today?", 
+                    "feedback": None
+                }]
+                # Update URL
+                current_params = dict(st.query_params)
+                current_params['session_id'] = result["session_id"]
+                st.query_params.update(current_params)
+                st.rerun()
+        
+        st.divider()
+        
+        # Get user's chat sessions
+        sessions_result = get_user_chat_sessions(user_id)
+        if sessions_result["status"] == "success":
+            sessions = sessions_result["sessions"]
+            
+            if not sessions:
+                st.info("No chat history yet")
+            else:
+                for session in sessions:
+                    session_id = str(session["_id"])
+                    title = session.get("title", "New Chat")
+                    updated_at = session.get("updated_at", datetime.now())
+                    messages = session.get("messages", [])
+                    
+                    # Get preview text from last user message
+                    preview_text = "New conversation"
+                    if messages:
+                        for msg in reversed(messages):
+                            if msg.get("role") == "user":
+                                preview_text = msg.get("content", "")[:50] + "..." if len(msg.get("content", "")) > 50 else msg.get("content", "")
+                                break
+                    
+                    is_current = session_id == current_session_id
+                    
+                    # Session container
+                    with st.container():
+                        # Use different styling for current session
+                        if is_current:
+                            st.markdown(f"**🔵 {title}**")
+                        else:
+                            st.markdown(f"**{title}**")
+                        
+                        # Preview text
+                        st.caption(preview_text)
+                        
+                        # Date
+                        date_str = updated_at.strftime("%m/%d %H:%M") if isinstance(updated_at, datetime) else "Recent"
+                        st.caption(f"📅 {date_str}")
+                        
+                        # Action buttons in columns
+                        col1, col2, col3 = st.columns(3)
+                        
+                        with col1:
+                            if not is_current and st.button("📂", key=f"load_{session_id}", help="Load conversation"):
+                                st.session_state['current_session_id'] = session_id
+                                # Load session messages
+                                session_data = get_chat_session(session_id)
+                                if session_data["status"] == "success":
+                                    st.session_state['messages'] = session_data["session"]["messages"]
+                                else:
+                                    st.session_state['messages'] = [{
+                                        "role": "assistant", 
+                                        "content": "Hi! I'm ASHA, your career assistant powered by AI. How can I help you today?", 
+                                        "feedback": None
+                                    }]
+                                # Update URL
+                                current_params = dict(st.query_params)
+                                current_params['session_id'] = session_id
+                                st.query_params.update(current_params)
+                                st.rerun()
+                        
+                        with col2:
+                            if st.button("✏️", key=f"edit_{session_id}", help="Edit title"):
+                                st.session_state[f'editing_{session_id}'] = True
+                                st.rerun()
+                        
+                        with col3:
+                            if st.button("🗑️", key=f"delete_{session_id}", help="Delete"):
+                                st.session_state[f'confirm_delete_{session_id}'] = True
+                                st.rerun()
+                        
+                        # Edit title interface
+                        if st.session_state.get(f'editing_{session_id}'):
+                            new_title = st.text_input(
+                                "New title:", 
+                                value=title, 
+                                key=f"title_input_{session_id}"
+                            )
+                            col1, col2 = st.columns(2)
+                            with col1:
+                                if st.button("💾", key=f"save_{session_id}", help="Save"):
+                                    update_session_title(session_id, user_id, new_title)
+                                    st.session_state[f'editing_{session_id}'] = False
+                                    st.rerun()
+                            with col2:
+                                if st.button("❌", key=f"cancel_{session_id}", help="Cancel"):
+                                    st.session_state[f'editing_{session_id}'] = False
+                                    st.rerun()
+                        
+                        # Delete confirmation
+                        if st.session_state.get(f'confirm_delete_{session_id}'):
+                            st.warning(f"Delete '{title}'?")
+                            col1, col2 = st.columns(2)
+                            with col1:
+                                if st.button("✅ Yes", key=f"confirm_yes_{session_id}"):
+                                    result = delete_chat_session(session_id, user_id)
+                                    if result["status"] == "success":
+                                        # If deleted session was current, create new one
+                                        if session_id == current_session_id:
+                                            new_result = create_chat_session(user_id)
+                                            if new_result["status"] == "success":
+                                                st.session_state['current_session_id'] = new_result["session_id"]
+                                                st.session_state['messages'] = [{
+                                                    "role": "assistant", 
+                                                    "content": "Hi! I'm ASHA, your career assistant powered by AI. How can I help you today?", 
+                                                    "feedback": None
+                                                }]
+                                    st.session_state[f'confirm_delete_{session_id}'] = False
+                                    st.rerun()
+                            with col2:
+                                if st.button("❌ No", key=f"confirm_no_{session_id}"):
+                                    st.session_state[f'confirm_delete_{session_id}'] = False
+                                    st.rerun()
+                        
+                        st.divider()
+    
+    # Main chat container
     main_container = st.container()
 
     with main_container:
-        # Header with toggle button
+        # Header
         st.markdown("""
         <div class="header-container">
             <h1>ASHA AI Chat Bot</h1>
         </div>
         """, unsafe_allow_html=True)
-        
-        # Toggle button (outside of sidebar content)
-        col1, col2, col3 = st.columns([1, 8, 1])
-        with col3:
-            toggle_text = "✕ Close" if st.session_state.sidebar_open else "💬 History"
-            if st.button(toggle_text, key="sidebar_toggle_header", help="Toggle chat history"):
-                st.session_state.sidebar_open = not st.session_state.sidebar_open
-                st.rerun()
-        
-        # Main chat container
-        chat_class = "chat-main-container with-sidebar" if st.session_state.sidebar_open else "chat-main-container"
-        st.markdown(f'<div class="{chat_class}">', unsafe_allow_html=True)
-            
-        # Add JavaScript for toggle functionality
-        st.markdown("""
-        <script>
-        function toggleSidebar() {
-            const sidebar = document.querySelector('.right-sidebar');
-            const content = document.querySelector('.chat-area');
-            const isHidden = sidebar.classList.contains('hidden');
-            
-            if (isHidden) {
-                sidebar.classList.remove('hidden');
-                content.classList.add('content-with-sidebar');
-            } else {
-                sidebar.classList.add('hidden');
-                content.classList.remove('content-with-sidebar');
-            }
-            
-            // Tell Streamlit the sidebar state has changed
-            // This is a workaround since we're using client-side JS
-            const toggleButton = document.querySelector('.stButton button');
-            if (toggleButton) {
-                toggleButton.click();
-            }
-        }
-        </script>
-        """, unsafe_allow_html=True)
-        
-        
         
         # Initialize or create session if needed
         if not current_session_id:
@@ -614,7 +463,6 @@ def display_chat_page():
                 "content": "Hi! I'm ASHA, your career assistant powered by AI. How can I help you today?", 
                 "feedback": None
             }]
-        
         
         # Create a container for the chat messages
         chat_container = st.container()
@@ -745,22 +593,6 @@ def display_chat_page():
         
         # Create a spacer to ensure content is visible above the fixed input bar
         st.markdown("<div style='padding-bottom: 80px;'></div>", unsafe_allow_html=True)
-        
-        # Fixed input area at the bottom
-        st.markdown("""
-        <style>
-        .fixed-input {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            padding: 15px;
-            background: white;
-            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
-            z-index: 999;
-        }
-        </style>
-        """, unsafe_allow_html=True)
         
         # Input area
         with input_container:
@@ -918,176 +750,3 @@ def display_chat_page():
                             logger.error(traceback.format_exc())
                             st.rerun()
             st.markdown('</div>', unsafe_allow_html=True)
-        
-        st.markdown('</div>', unsafe_allow_html=True)
-
-    # Render the sidebar as an overlay/popup (this goes outside the main container)
-    if st.session_state.sidebar_open:
-        # Add overlay for mobile
-        st.markdown('<div class="sidebar-overlay visible" onclick="closeSidebar()"></div>', unsafe_allow_html=True)
-        
-        # Create the sidebar using columns to position it
-        st.markdown('<div class="right-sidebar">', unsafe_allow_html=True)
-        
-        # Sidebar header
-        st.markdown("### 💬 Chat History")
-        
-        # New Chat button
-        if st.button("➕ New Chat", key="new_chat_sidebar", help="Start a new conversation"):
-            result = create_chat_session(user_id)
-            if result["status"] == "success":
-                st.session_state['current_session_id'] = result["session_id"]
-                st.session_state['messages'] = [{
-                    "role": "assistant", 
-                    "content": "Hi! I'm ASHA, your career assistant powered by AI. How can I help you today?", 
-                    "feedback": None
-                }]
-                # Update URL
-                current_params = dict(st.query_params)
-                current_params['session_id'] = result["session_id"]
-                st.query_params.update(current_params)
-                st.rerun()
-        
-        st.markdown("---")
-        
-        # Get user's chat sessions
-        sessions_result = get_user_chat_sessions(user_id)
-        if sessions_result["status"] == "success":
-            sessions = sessions_result["sessions"]
-            
-            if not sessions:
-                st.markdown("*No chat history yet*")
-            else:
-                for session in sessions:
-                    session_id = str(session["_id"])
-                    title = session.get("title", "New Chat")
-                    updated_at = session.get("updated_at", datetime.now())
-                    messages = session.get("messages", [])
-                    
-                    # Get preview text from last user message
-                    preview_text = "New conversation"
-                    if messages:
-                        for msg in reversed(messages):
-                            if msg.get("role") == "user":
-                                preview_text = msg.get("content", "")[:50] + "..." if len(msg.get("content", "")) > 50 else msg.get("content", "")
-                                break
-                    
-                    is_current = session_id == current_session_id
-                    
-                    # Create session item
-                    item_class = "session-item active" if is_current else "session-item"
-                    
-                    st.markdown(f'''
-                    <div class="{item_class}">
-                        <div class="session-title">{title}</div>
-                        <div class="session-preview">{preview_text}</div>
-                        <div class="session-date">{updated_at.strftime("%m/%d %H:%M") if isinstance(updated_at, datetime) else "Recent"}</div>
-                        <div class="session-actions">
-                            <div class="action-btn" title="Edit">✏️</div>
-                            <div class="action-btn delete" title="Delete">🗑️</div>
-                        </div>
-                    </div>
-                    ''', unsafe_allow_html=True)
-                    
-                    # Handle session click
-                    if st.button("Select", key=f"select_session_{session_id}", help="Load this conversation"):
-                        st.session_state['current_session_id'] = session_id
-                        # Load session messages
-                        session_data = get_chat_session(session_id)
-                        if session_data["status"] == "success":
-                            st.session_state['messages'] = session_data["session"]["messages"]
-                        else:
-                            st.session_state['messages'] = [{
-                                "role": "assistant", 
-                                "content": "Hi! I'm ASHA, your career assistant powered by AI. How can I help you today?", 
-                                "feedback": None
-                            }]
-                        # Update URL
-                        current_params = dict(st.query_params)
-                        current_params['session_id'] = session_id
-                        st.query_params.update(current_params)
-                        st.rerun()
-                    
-                    # Action buttons
-                    col1, col2 = st.columns(2)
-                    with col1:
-                        if st.button("✏️", key=f"edit_btn_{session_id}", help="Edit title"):
-                            st.session_state[f'editing_{session_id}'] = True
-                            st.rerun()
-                    with col2:
-                        if st.button("🗑️", key=f"delete_btn_{session_id}", help="Delete chat"):
-                            st.session_state[f'confirm_delete_{session_id}'] = True
-                            st.rerun()
-                    
-                    # Show confirmation for delete
-                    if st.session_state.get(f'confirm_delete_{session_id}'):
-                        st.markdown(f'''
-                        <div class="confirm-dialog">
-                            <div class="confirm-text">Delete "{title}"?</div>
-                            <div class="confirm-buttons">
-                                <div class="confirm-btn yes">Yes</div>
-                                <div class="confirm-btn no">No</div>
-                            </div>
-                        </div>
-                        ''', unsafe_allow_html=True)
-                        
-                        col1, col2 = st.columns(2)
-                        with col1:
-                            if st.button("Confirm Delete", key=f"confirm_yes_{session_id}"):
-                                result = delete_chat_session(session_id, user_id)
-                                if result["status"] == "success":
-                                    # If deleted session was current, create new one
-                                    if session_id == current_session_id:
-                                        new_result = create_chat_session(user_id)
-                                        if new_result["status"] == "success":
-                                            st.session_state['current_session_id'] = new_result["session_id"]
-                                            st.session_state['messages'] = [{
-                                                "role": "assistant", 
-                                                "content": "Hi! I'm ASHA, your career assistant powered by AI. How can I help you today?", 
-                                                "feedback": None
-                                            }]
-                                    st.session_state[f'confirm_delete_{session_id}'] = False
-                                    st.rerun()
-                        with col2:
-                            if st.button("Cancel", key=f"confirm_no_{session_id}"):
-                                st.session_state[f'confirm_delete_{session_id}'] = False
-                                st.rerun()
-                    
-                    # Show edit title input
-                    if st.session_state.get(f'editing_{session_id}'):
-                        new_title = st.text_input(
-                            "New title:", 
-                            value=title, 
-                            key=f"title_input_{session_id}",
-                            placeholder="Enter new title..."
-                        )
-                        col1, col2 = st.columns(2)
-                        with col1:
-                            if st.button("Save", key=f"save_title_{session_id}"):
-                                update_session_title(session_id, user_id, new_title)
-                                st.session_state[f'editing_{session_id}'] = False
-                                st.rerun()
-                        with col2:
-                            if st.button("Cancel", key=f"cancel_edit_{session_id}"):
-                                st.session_state[f'editing_{session_id}'] = False
-                                st.rerun()
-        
-        st.markdown('</div>')  # Close sidebar
-        
-        # Add JavaScript for sidebar interaction
-        st.markdown("""
-        <script>
-        function closeSidebar() {
-            // This would trigger the Streamlit button click
-            // Since we can't directly manipulate Streamlit state from JS,
-            // the overlay click should be handled by Streamlit
-        }
-        
-        // Handle escape key to close sidebar
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeSidebar();
-            }
-        });
-        </script>
-        """, unsafe_allow_html=True)
