@@ -757,11 +757,12 @@ def display_chat_page():
     </div>
     
     <script>
-    function toggleSessionPopup() {
+    function toggleSessionPopup() {{
         // This function toggles the session popup visibility
         // We need to trigger a hidden Streamlit button to update the state
         document.querySelector('button[data-testid="baseButton-secondary"]').click();
-    }
+    }}
+    
     </script>
     ''', unsafe_allow_html=True)
     
