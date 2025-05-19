@@ -370,3 +370,94 @@ def update_session_title(session_id, user_id, new_title):
         return {"status": "success", "message": "Title updated"}
     except Exception as e:
         return {"status": "error", "message": str(e)}
+    
+def save_roadmap(user_id, learning_goal, roadmap_content):
+    """
+    Save a generated roadmap to MongoDB
+    """
+    try:
+        roadmap_data = {
+            "user_id": user_id,
+            "learning_goal": learning_goal,
+            "roadmap_content": roadmap_content,
+            "created_at": datetime.now(timezone.utc),
+            "updated_at": datetime.now(timezone.utc)
+        }
+        
+        result = db["roadmaps"].insert_one(roadmap_data)
+        roadmap_id = str(result.inserted_id)
+        
+        return {"status": "success", "roadmap_id": roadmap_id}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+def get_user_roadmaps(user_id, limit=10):
+    """
+    Retrieve all roadmaps for a user, ordered by most recent
+    """
+    try:
+        roadmaps = list(db["roadmaps"].find(
+            {"user_id": user_id}, 
+            {"learning_goal": 1, "created_at": 1, "updated_at": 1}
+        ).sort("created_at", -1).limit(limit))
+        
+        # Convert ObjectId to string and add display names
+        for i, roadmap in enumerate(roadmaps):
+            roadmap["_id"] = str(roadmap["_id"])
+            # Extract domain from learning goal for display name
+            goal = roadmap.get("learning_goal", "")
+            domain = goal.split("want to")[-1].strip() if "want to" in goal else goal[:30]
+            roadmap["display_name"] = f"Roadmap {i+1} ({domain})"
+            
+        return {"status": "success", "roadmaps": roadmaps}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+def get_roadmap(roadmap_id):
+    """
+    Get a specific roadmap by ID
+    """
+    try:
+        roadmap = db["roadmaps"].find_one({"_id": ObjectId(roadmap_id)})
+        if not roadmap:
+            return {"status": "error", "message": "Roadmap not found"}
+        
+        # Convert ObjectId to string
+        roadmap["_id"] = str(roadmap["_id"])
+        return {"status": "success", "roadmap": roadmap}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+def delete_roadmap(roadmap_id, user_id):
+    """
+    Delete a roadmap (verify ownership)
+    """
+    try:
+        result = db["roadmaps"].delete_one({
+            "_id": ObjectId(roadmap_id),
+            "user_id": user_id
+        })
+        
+        if result.deleted_count == 0:
+            return {"status": "error", "message": "Roadmap not found or not authorized"}
+        
+        return {"status": "success", "message": "Roadmap deleted"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+def update_roadmap_title(roadmap_id, user_id, new_title):
+    """
+    Update the learning goal/title of a roadmap
+    """
+    try:
+        result = db["roadmaps"].update_one(
+            {"_id": ObjectId(roadmap_id), "user_id": user_id},
+            {"$set": {"learning_goal": new_title, "updated_at": datetime.now(timezone.utc)}}
+        )
+        
+        if result.matched_count == 0:
+            return {"status": "error", "message": "Roadmap not found or not authorized"}
+        
+        return {"status": "success", "message": "Roadmap updated"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}

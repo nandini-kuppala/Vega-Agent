@@ -2,6 +2,7 @@
 import streamlit as st
 from backend.database import get_profile, get_user_details
 from Roadmap.roadmap import generate_learning_roadmap
+from backend.database import save_roadmap, get_user_roadmaps, get_roadmap
 
 def display_roadmap_page():
     """Display the learning roadmap page with personalized user details"""
@@ -141,8 +142,14 @@ def display_roadmap_page():
                             # Call the CrewAI function to generate the roadmap
                             roadmap = generate_learning_roadmap(user_profile_text, learning_goal)
                             
+                            # Save the roadmap to database
+                            save_result = save_roadmap(st.session_state['user_id'], learning_goal, roadmap)
+                            if save_result["status"] == "success":
+                                st.success("Roadmap saved successfully!")
+                            
                             # Store the roadmap in session state
                             st.session_state['current_roadmap'] = roadmap
+                            st.session_state['current_roadmap_goal'] = learning_goal
                             
                             # Display the roadmap
                             st.markdown("## 🗺️ Your Personalized Learning Roadmap")
@@ -161,7 +168,94 @@ def display_roadmap_page():
                             st.error(f"Error generating roadmap: {str(e)}")
                 else:
                     st.warning("Please enter a learning goal first")
-            
+
+            # Display previously generated roadmap if it exists
+            if 'current_roadmap' in st.session_state and not st.button:
+                st.markdown("## 🗺️ Your Personalized Learning Roadmap")
+                
+                # Create tabs for viewing and raw formats
+                tab1, tab2 = st.tabs(["Rendered View", "Raw Markdown"])
+                
+                with tab1:
+                    # Render the markdown properly
+                    st.markdown(st.session_state['current_roadmap'])
+                
+                with tab2:
+                    # Show raw markdown with a monospace font
+                    st.code(st.session_state['current_roadmap'], language="markdown")
+                
+                # Add a download button for the markdown file with personalized filename
+                st.download_button(
+                    label=f"📥 Download {user_data.get('name').split()[0]}'s Roadmap", 
+                    data=st.session_state['current_roadmap'],
+                    file_name=f"{user_data.get('name').lower().replace(' ', '_')}_learning_roadmap.md",
+                    mime="text/markdown"
+                )
+
+            # Add spacing and previous roadmaps section
+            st.markdown("<br><br><hr><br>", unsafe_allow_html=True)
+
+            # Previous Roadmaps Section
+            st.markdown("### 📚 Your Previous Learning Roadmaps")
+
+            # Get user's previous roadmaps
+            roadmaps_result = get_user_roadmaps(st.session_state['user_id'])
+
+            if roadmaps_result["status"] == "success" and roadmaps_result["roadmaps"]:
+                roadmaps = roadmaps_result["roadmaps"]
+                
+                # Create columns for roadmap buttons
+                cols_per_row = 3
+                for i in range(0, len(roadmaps), cols_per_row):
+                    row_roadmaps = roadmaps[i:i + cols_per_row]
+                    cols = st.columns(len(row_roadmaps))
+                    
+                    for j, roadmap in enumerate(row_roadmaps):
+                        with cols[j]:
+                            if st.button(
+                                roadmap["display_name"], 
+                                key=f"roadmap_{roadmap['_id']}",
+                                help=f"Created: {roadmap['created_at'].strftime('%Y-%m-%d %H:%M')}"
+                            ):
+                                # Fetch and display the selected roadmap
+                                roadmap_detail = get_roadmap(roadmap["_id"])
+                                if roadmap_detail["status"] == "success":
+                                    selected_roadmap = roadmap_detail["roadmap"]
+                                    st.session_state['selected_previous_roadmap'] = selected_roadmap
+
+            # Display selected previous roadmap
+            if 'selected_previous_roadmap' in st.session_state:
+                st.markdown("---")
+                selected = st.session_state['selected_previous_roadmap']
+                st.markdown(f"## 📋 {selected['learning_goal']}")
+                st.markdown(f"*Created on: {selected['created_at'].strftime('%B %d, %Y at %H:%M')}*")
+                
+                # Create tabs for the selected roadmap
+                tab1, tab2 = st.tabs(["Rendered View", "Raw Markdown"])
+                
+                with tab1:
+                    st.markdown(selected['roadmap_content'])
+                
+                with tab2:
+                    st.code(selected['roadmap_content'], language="markdown")
+                
+                # Download button for previous roadmap
+                st.download_button(
+                    label=f"📥 Download Previous Roadmap",
+                    data=selected['roadmap_content'],
+                    file_name=f"previous_roadmap_{selected['_id']}.md",
+                    mime="text/markdown"
+                )
+                
+                # Clear button to hide the roadmap
+                if st.button("❌ Hide Roadmap", key="hide_previous"):
+                    del st.session_state['selected_previous_roadmap']
+                    st.rerun()
+
+            elif roadmaps_result["status"] == "success":
+                st.info("No previous roadmaps found. Generate your first roadmap above!")
+            else:
+                st.error(f"Error loading previous roadmaps: {roadmaps_result['message']}")
             # Display previously generated roadmap if it exists
             if 'current_roadmap' in st.session_state and not st.button:
                 st.markdown("## 🗺️ Your Personalized Learning Roadmap")
