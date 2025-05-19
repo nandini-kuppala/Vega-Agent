@@ -23,6 +23,8 @@ from Roadmap.roadmap_page import display_roadmap_page
 from skill_assessment import skill
 from Resume.resume_builder_page import display_resume_builder_page
 from Knowledge.knowledge_dose_page import display_daily_knowledge_page
+from backend.database import create_chat_session, get_user_chat_sessions,save_session_messages
+
 
 # Add the project root directory to the Python path for imports
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
@@ -84,7 +86,32 @@ def main():
         
         # Update URL parameters with current state
         st.query_params.update(params_to_set)
+        # Session Management for Chat
 
+    if st.session_state.get('authenticated') and st.session_state.get('user_id'):
+        # Initialize current session if not exists
+        if 'current_session_id' not in st.session_state:
+            # Check if we have a session_id in URL params
+            query_params = st.query_params
+            if 'session_id' in query_params:
+                st.session_state['current_session_id'] = query_params['session_id']
+            else:
+                # Create new session
+                result = create_chat_session(st.session_state['user_id'])
+                if result["status"] == "success":
+                    st.session_state['current_session_id'] = result["session_id"]
+                    # Update URL with session_id
+                    current_params = dict(st.query_params)
+                    current_params['session_id'] = result["session_id"]
+                    st.query_params.update(current_params)
+        
+        # Ensure session_id is in URL for persistence
+        if st.session_state.get('current_session_id'):
+            current_params = dict(st.query_params)
+            if 'session_id' not in current_params:
+                current_params['session_id'] = st.session_state['current_session_id']
+                st.query_params.update(current_params)
+    
     # Assistant Initialization
     if st.session_state.get('authenticated') and 'assistant' not in st.session_state:
         try:
@@ -190,8 +217,12 @@ def main():
             )
 
             st.markdown("---")
-
+            
             if st.button("🚪 Logout", key="logout_btn", use_container_width=True):
+                # Save current session before logout
+                if st.session_state.get('current_session_id') and st.session_state.get('messages'):
+                    save_session_messages(st.session_state['current_session_id'], st.session_state.messages)
+                
                 # Clear session storage to completely log out
                 for key in list(st.session_state.keys()):
                     del st.session_state[key]
@@ -199,7 +230,7 @@ def main():
                 st.query_params.clear()
                 st.session_state['page'] = 'login'
                 st.rerun()
-
+            
             st.markdown("---")
 
             st.info("""

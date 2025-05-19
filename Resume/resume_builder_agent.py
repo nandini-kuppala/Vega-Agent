@@ -235,3 +235,4 @@ class ResumeBuilderCrew:
         cleaned_result = re.sub(r'^(\s*)-\s', r'\1- ', cleaned_result, flags=re.MULTILINE)
         
         return cleaned_result
+        

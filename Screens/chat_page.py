@@ -5,8 +5,10 @@ import traceback
 import logging
 from datetime import datetime
 from st_audiorec import st_audiorec
-from backend.database import save_chat_history, get_chat_history, sanitize_response
+from backend.database import save_chat_history, get_chat_history, sanitize_response,get_user_chat_sessions, get_chat_session, save_session_messages, delete_chat_session, create_chat_session, update_session_title
+
 import json
+
 
 # Configure logging
 logging.basicConfig(
@@ -14,6 +16,7 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
 
 def transcribe_audio(audio_data):
     """Transcribe audio using Sarvam AI API"""
@@ -155,9 +158,8 @@ def process_user_query(prompt):
             content = "It seems you're not logged in. Please log in first so I can provide personalized assistance."
             st.markdown(content)
             st.session_state.messages.append({"role": "assistant", "content": content, "feedback": None})
-            if st.session_state.get('user_id'):
-                save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                        
+            if st.session_state.get('current_session_id'):
+                save_session_messages(st.session_state['current_session_id'], st.session_state.messages)
             return
     
     # Generate response with the assistant
@@ -182,24 +184,21 @@ def process_user_query(prompt):
                 # Update chat history
                 st.markdown(display_response)
                 st.session_state.messages.append({"role": "assistant", "content": display_response, "feedback": None})
-                if st.session_state.get('user_id'):
-                    save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                        
+                if st.session_state.get('current_session_id'):
+                    save_session_messages(st.session_state['current_session_id'], st.session_state.messages)
                 
             except Exception as e:
                 error_msg = f"I'm sorry, I encountered an error: {str(e)}"
                 st.error(error_msg)
                 st.session_state.messages.append({"role": "assistant", "content": error_msg, "feedback": None})
-                if st.session_state.get('user_id'):
-                    save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                        
+                if st.session_state.get('current_session_id'):
+                    save_session_messages(st.session_state['current_session_id'], st.session_state.messages)
                 logger.error(f"Error generating response: {str(e)}")
                 logger.error(traceback.format_exc())
 
+
 def display_chat_page():
-    
-        
-    """Display a chat interface with ASHA AI with quick action options and voice input"""
+    """Display a chat interface with session management similar to ChatGPT/Claude"""
     
     # Check if user is authenticated
     if not st.session_state.get('authenticated', False):
@@ -208,105 +207,265 @@ def display_chat_page():
         st.rerun()
         return
     
-    st.title("ASHA AI Chat")
-
     user_id = st.session_state.get('user_id')
-
-    # Initialize chat history if it doesn't exist
-    if 'messages' not in st.session_state:
-        # Try to load chat history from MongoDB
-        if user_id:
-            chat_history = get_chat_history(user_id)
-            if chat_history["status"] == "success" and chat_history["messages"]:
-                st.session_state.messages = chat_history["messages"]
-            else:
-                # Default welcome message if no chat history found
-                st.session_state.messages = [
-                    {"role": "assistant", "content": "Hi! I'm ASHA, your career assistant powered by AI. How can I help you today?", "feedback": None}
-                ]
-        else:
-            # Default welcome message if no user_id
-            st.session_state.messages = [
-                {"role": "assistant", "content": "Hi! I'm ASHA, your career assistant powered by AI. How can I help you today?", "feedback": None}
-            ]
+    current_session_id = st.session_state.get('current_session_id')
     
-    # Create a container for the chat messages to ensure they stay above the input
+    # Add CSS styling
+    st.markdown("""
+    <style>
+    /* Chat session styling */
+    .chat-session-container {
+        border-radius: 8px;
+        padding: 8px;
+        margin: 4px 0;
+        transition: background-color 0.2s;
+    }
+
+    .chat-session-container:hover {
+        background-color: #f0f0f0;
+    }
+
+    .chat-session-active {
+        background-color: #e3f2fd;
+        border-left: 3px solid #2196f3;
+    }
+
+    .quick-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+    .quick-action-button {
+        background-color: #f0f0f0;
+        border-radius: 20px;
+        padding: 8px 15px;
+        font-size: 14px;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.3s;
+    }
+    .quick-action-button:hover {
+        background-color: #e0e0e0;
+    }
+    .voice-button {
+        background-color: #f0f0f0;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.3s;
+        margin-right: 10px;
+    }
+    .voice-button:hover {
+        background-color: #e0e0e0;
+    }
+    .voice-button.recording {
+        background-color: #ff5252;
+    }
+    .custom-recording-indicator {
+        color: red;
+        font-weight: bold;
+        margin-top: 5px;
+    }
+    .session-title {
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
+        text-align: left;
+        padding: 8px 12px;
+        border-radius: 6px;
+        border: none;
+        background: none;
+        width: 100%;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+    .session-title:hover {
+        background-color: #f5f5f5;
+    }
+    .session-title.active {
+        background-color: #e3f2fd;
+        color: #1976d2;
+        font-weight: 600;
+    }
+    .delete-button {
+        color: #d32f2f;
+    }
+    .delete-button:hover {
+        background-color: #ffebee;
+        border-color: #d32f2f;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    # Create main layout with sidebar for chat history
+    with st.sidebar:
+        st.subheader("💬 Chat History")
+        
+        # New Chat button
+        if st.button("➕ New Chat", use_container_width=True):
+            result = create_chat_session(user_id)
+            if result["status"] == "success":
+                st.session_state['current_session_id'] = result["session_id"]
+                st.session_state['messages'] = [{
+                    "role": "assistant", 
+                    "content": "Hi! I'm ASHA, your career assistant powered by AI. How can I help you today?", 
+                    "feedback": None
+                }]
+                # Update URL
+                current_params = dict(st.query_params)
+                current_params['session_id'] = result["session_id"]
+                st.query_params.update(current_params)
+                st.rerun()
+        
+        st.markdown("---")
+        
+        # Get user's chat sessions
+        sessions_result = get_user_chat_sessions(user_id)
+        if sessions_result["status"] == "success":
+            sessions = sessions_result["sessions"]
+            
+            for session in sessions:
+                session_id = str(session["_id"])
+                title = session.get("title", "New Chat")
+                is_current = session_id == current_session_id
+                
+                # Create a container for each chat session
+                with st.container():
+                    cols = st.columns([0.7, 0.15, 0.15])
+                    
+                    # Chat title button
+                    with cols[0]:
+                        button_type = "primary" if is_current else "secondary"
+                        if st.button(
+                            f"{'🟢 ' if is_current else ''}{title}", 
+                            key=f"session_{session_id}",
+                            use_container_width=True,
+                            type=button_type
+                        ):
+                            st.session_state['current_session_id'] = session_id
+                            # Load session messages
+                            session_data = get_chat_session(session_id)
+                            if session_data["status"] == "success":
+                                st.session_state['messages'] = session_data["session"]["messages"]
+                            else:
+                                st.session_state['messages'] = [{
+                                    "role": "assistant", 
+                                    "content": "Hi! I'm ASHA, your career assistant powered by AI. How can I help you today?", 
+                                    "feedback": None
+                                }]
+                            # Update URL
+                            current_params = dict(st.query_params)
+                            current_params['session_id'] = session_id
+                            st.query_params.update(current_params)
+                            st.rerun()
+                    
+                    # Edit title button
+                    with cols[1]:
+                        if st.button("✏️", key=f"edit_{session_id}", help="Edit title"):
+                            st.session_state[f'editing_{session_id}'] = True
+                            st.rerun()
+                    
+                    # Delete button
+                    with cols[2]:
+                        if st.button("🗑️", key=f"delete_{session_id}", help="Delete chat"):
+                            if st.session_state.get(f'confirm_delete_{session_id}'):
+                                result = delete_chat_session(session_id, user_id)
+                                if result["status"] == "success":
+                                    # If deleted session was current, create new one
+                                    if session_id == current_session_id:
+                                        new_result = create_chat_session(user_id)
+                                        if new_result["status"] == "success":
+                                            st.session_state['current_session_id'] = new_result["session_id"]
+                                            st.session_state['messages'] = [{
+                                                "role": "assistant", 
+                                                "content": "Hi! I'm ASHA, your career assistant powered by AI. How can I help you today?", 
+                                                "feedback": None
+                                            }]
+                                    st.rerun()
+                            else:
+                                st.session_state[f'confirm_delete_{session_id}'] = True
+                                st.rerun()
+                    
+                    # Show confirmation for delete
+                    if st.session_state.get(f'confirm_delete_{session_id}'):
+                        st.warning(f"Delete '{title}'?")
+                        col1, col2 = st.columns(2)
+                        with col1:
+                            if st.button("Yes", key=f"confirm_yes_{session_id}"):
+                                st.session_state[f'confirm_delete_{session_id}'] = False
+                                # Will be processed on next rerun
+                        with col2:
+                            if st.button("No", key=f"confirm_no_{session_id}"):
+                                st.session_state[f'confirm_delete_{session_id}'] = False
+                                st.rerun()
+                    
+                    # Show edit title input
+                    if st.session_state.get(f'editing_{session_id}'):
+                        new_title = st.text_input(
+                            "New title:", 
+                            value=title, 
+                            key=f"title_input_{session_id}"
+                        )
+                        col1, col2 = st.columns(2)
+                        with col1:
+                            if st.button("Save", key=f"save_{session_id}"):
+                                update_session_title(session_id, user_id, new_title)
+                                st.session_state[f'editing_{session_id}'] = False
+                                st.rerun()
+                        with col2:
+                            if st.button("Cancel", key=f"cancel_{session_id}"):
+                                st.session_state[f'editing_{session_id}'] = False
+                                st.rerun()
+    
+    # Main chat area
+    st.title("ASHA AI Chat")
+    
+    # Initialize or create session if needed
+    if not current_session_id:
+        result = create_chat_session(user_id)
+        if result["status"] == "success":
+            st.session_state['current_session_id'] = result["session_id"]
+            current_session_id = result["session_id"]
+            # Update URL
+            current_params = dict(st.query_params)
+            current_params['session_id'] = current_session_id
+            st.query_params.update(current_params)
+    
+    # Load current session messages if not already loaded
+    if 'messages' not in st.session_state and current_session_id:
+        session_data = get_chat_session(current_session_id)
+        if session_data["status"] == "success":
+            st.session_state['messages'] = session_data["session"]["messages"]
+        else:
+            st.session_state['messages'] = [{
+                "role": "assistant", 
+                "content": "Hi! I'm ASHA, your career assistant powered by AI. How can I help you today?", 
+                "feedback": None
+            }]
+    elif 'messages' not in st.session_state:
+        st.session_state['messages'] = [{
+            "role": "assistant", 
+            "content": "Hi! I'm ASHA, your career assistant powered by AI. How can I help you today?", 
+            "feedback": None
+        }]
+    
+    # Create a container for the chat messages
     chat_container = st.container()
     
-    # Create a container for the input area which will always be at the bottom
+    # Create a container for the input area
     input_container = st.container()
     
     # Display quick action buttons above chat messages
     with chat_container:
-        st.markdown("""
-        <style>
-        .quick-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        .quick-action-button {
-            background-color: #f0f0f0;
-            border-radius: 20px;
-            padding: 8px 15px;
-            font-size: 14px;
-            cursor: pointer;
-            border: none;
-            transition: background-color 0.3s;
-        }
-        .quick-action-button:hover {
-            background-color: #e0e0e0;
-        }
-        .voice-button {
-            background-color: #f0f0f0;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border: none;
-            transition: background-color 0.3s;
-            margin-right: 10px;
-        }
-        .voice-button:hover {
-            background-color: #e0e0e0;
-        }
-        .voice-button.recording {
-            background-color: #ff5252;
-        }
-        .input-container {
-            display: flex;
-            align-items: center;
-            margin-top: 10px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-        .stAudioRecorderWrapper {
-            display: none !important;
-        }
-        .custom-recording-indicator {
-            color: red;
-            font-weight: bold;
-            margin-top: 5px;
-        }
-        .stChatInputContainer {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background-color: white;
-            padding: 10px 0;
-            z-index: 999;
-        }
-        </style>
-        """, unsafe_allow_html=True)
-        
         st.markdown('<div class="quick-actions">', unsafe_allow_html=True)
         
-        col1, col2, col3,col4 = st.columns(4)
+        col1, col2, col3, col4 = st.columns(4)
         
         with col1:
             if st.button("🔍 Find Latest Job Postings", key="find_jobs"):
@@ -314,11 +473,10 @@ def display_chat_page():
                     try:
                         assistant = st.session_state.get('assistant')
                         response = assistant._get_job_recommendations()
-                        st.session_state.messages.append({"role": "user", "content": "Find me latest job postings for you"})
+                        st.session_state.messages.append({"role": "user", "content": "Find me latest job postings for you", "feedback": None})
                         st.session_state.messages.append({"role": "assistant", "content": response, "feedback": None})
-                        if st.session_state.get('user_id'):
-                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                        
+                        if st.session_state.get('current_session_id'):
+                            save_session_messages(st.session_state['current_session_id'], st.session_state.messages)
                         st.rerun()
                     except Exception as e:
                         st.error(f"Error finding jobs: {str(e)}")
@@ -329,11 +487,10 @@ def display_chat_page():
                     try:
                         assistant = st.session_state.get('assistant')
                         response = assistant._get_event_recommendations()
-                        st.session_state.messages.append({"role": "user", "content": "Find upcoming events for you"})
+                        st.session_state.messages.append({"role": "user", "content": "Find upcoming events for you", "feedback": None})
                         st.session_state.messages.append({"role": "assistant", "content": response, "feedback": None})
-                        
-                        if st.session_state.get('user_id'):
-                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                        if st.session_state.get('current_session_id'):
+                            save_session_messages(st.session_state['current_session_id'], st.session_state.messages)
                         st.rerun()
                     except Exception as e:
                         st.error(f"Error finding events: {str(e)}")
@@ -344,11 +501,10 @@ def display_chat_page():
                     try:
                         assistant = st.session_state.get('assistant')
                         response = assistant._get_community_recommendations()
-                        st.session_state.messages.append({"role": "user", "content": "Find community groups for you"})
+                        st.session_state.messages.append({"role": "user", "content": "Find community groups for you", "feedback": None})
                         st.session_state.messages.append({"role": "assistant", "content": response, "feedback": None})
-                        
-                        if st.session_state.get('user_id'):
-                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                        if st.session_state.get('current_session_id'):
+                            save_session_messages(st.session_state['current_session_id'], st.session_state.messages)
                         st.rerun()
                     except Exception as e:
                         st.error(f"Error finding community groups: {str(e)}")
@@ -359,15 +515,13 @@ def display_chat_page():
                     try:
                         assistant = st.session_state.get('assistant')
                         response = assistant._get_session_recommendations()
-                        st.session_state.messages.append({"role": "user", "content": "Find Workshops and sessions for you"})
+                        st.session_state.messages.append({"role": "user", "content": "Find Workshops and sessions for you", "feedback": None})
                         st.session_state.messages.append({"role": "assistant", "content": response, "feedback": None})
-                        
-                        if st.session_state.get('user_id'):
-                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
-
+                        if st.session_state.get('current_session_id'):
+                            save_session_messages(st.session_state['current_session_id'], st.session_state.messages)
+                        st.rerun()
                     except Exception as e:
                         st.error(f"Error finding Workshops and sessions: {str(e)}")
-        
         
         st.markdown('</div>', unsafe_allow_html=True)
         
@@ -401,14 +555,14 @@ def display_chat_page():
                                 "timestamp": datetime.now().isoformat()
                             })
                             try:
-                                # Save chat history
-                                save_result = save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                                # Save session messages
+                                save_result = save_session_messages(st.session_state['current_session_id'], st.session_state.messages)
                                 if save_result["status"] == "error":
                                     # Log the error but don't stop the app
-                                    print(f"Warning: Failed to save chat history: {save_result['message']}")
+                                    print(f"Warning: Failed to save session messages: {save_result['message']}")
                             except Exception as e:
                                 # Log error but allow the chat to continue working
-                                print(f"Error saving chat history: {str(e)}") 
+                                print(f"Error saving session messages: {str(e)}")
                             st.rerun()
                         
                         # Thumbs down button
@@ -424,15 +578,14 @@ def display_chat_page():
                                 "feedback": "negative",
                                 "timestamp": datetime.now().isoformat()
                             })
-                            if st.session_state.get('user_id'):
-                                save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                             
+                            if st.session_state.get('current_session_id'):
+                                save_session_messages(st.session_state['current_session_id'], st.session_state.messages)
                             st.rerun()
     
     # Create a spacer to ensure content is visible above the fixed input bar
     st.markdown("<div style='padding-bottom: 80px;'></div>", unsafe_allow_html=True)
     
-    # Input area always at the bottom
+    # Input area
     with input_container:
         # Create columns for the chat input and voice button
         col1, col2 = st.columns([0.9, 0.1])
@@ -444,7 +597,6 @@ def display_chat_page():
                 st.session_state.audio_recorder_key = 0
             
             # Voice button with different style based on recording state
-            button_style = "background-color: #ff5252;" if st.session_state.is_recording else "background-color: #f0f0f0;"
             button_text = "🛑" if st.session_state.is_recording else "🎤"
             
             if st.button(button_text, key="voice_button", help="Toggle voice recording"):
@@ -481,9 +633,9 @@ def display_chat_page():
                                     english_text = transcribed_text
                                 
                                 # Add user message to chat history
-                                st.session_state.messages.append({"role": "user", "content": transcribed_text})
-                                if st.session_state.get('user_id'):
-                                    save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                                st.session_state.messages.append({"role": "user", "content": transcribed_text, "feedback": None})
+                                if st.session_state.get('current_session_id'):
+                                    save_session_messages(st.session_state['current_session_id'], st.session_state.messages)
                                 
                                 # Generate assistant response
                                 with st.spinner("Generating response..."):
@@ -505,8 +657,8 @@ def display_chat_page():
                                             "content": display_response,
                                             "feedback": None
                                         })
-                                        if st.session_state.get('user_id'):
-                                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                                        if st.session_state.get('current_session_id'):
+                                            save_session_messages(st.session_state['current_session_id'], st.session_state.messages)
                                         st.rerun()
                                     except Exception as e:
                                         error_msg = f"I'm sorry, I encountered an error: {str(e)}"
@@ -515,8 +667,8 @@ def display_chat_page():
                                             "content": error_msg,
                                             "feedback": None
                                         })
-                                        if st.session_state.get('user_id'):
-                                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                                        if st.session_state.get('current_session_id'):
+                                            save_session_messages(st.session_state['current_session_id'], st.session_state.messages)
                                         st.rerun()
                 except Exception as e:
                     st.error(f"Error with audio recording: {str(e)}")
@@ -526,18 +678,16 @@ def display_chat_page():
             
             if prompt:
                 # Add user message to chat history
-                st.session_state.messages.append({"role": "user", "content": prompt})
-                if st.session_state.get('user_id'):
-                    save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                        
+                st.session_state.messages.append({"role": "user", "content": prompt, "feedback": None})
+                if st.session_state.get('current_session_id'):
+                    save_session_messages(st.session_state['current_session_id'], st.session_state.messages)
                 
                 # Check if user is set
                 if not st.session_state.get('user_id'):
                     content = "It seems you're not logged in. Please log in first so I can provide personalized assistance."
                     st.session_state.messages.append({"role": "assistant", "content": content, "feedback": None})
-                    if st.session_state.get('user_id'):
-                        save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                        
+                    if st.session_state.get('current_session_id'):
+                        save_session_messages(st.session_state['current_session_id'], st.session_state.messages)
                     st.rerun()
                 
                 # Detect language of the input
@@ -571,9 +721,8 @@ def display_chat_page():
                             "feedback": None
                         })
 
-                        if st.session_state.get('user_id'):
-                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
-                                        
+                        if st.session_state.get('current_session_id'):
+                            save_session_messages(st.session_state['current_session_id'], st.session_state.messages)
                         st.rerun()
                         
                     except Exception as e:
@@ -584,10 +733,9 @@ def display_chat_page():
                             "feedback": None
                         })
 
-                        if st.session_state.get('user_id'):
-                            save_chat_history(st.session_state['user_id'], st.session_state.messages)
+                        if st.session_state.get('current_session_id'):
+                            save_session_messages(st.session_state['current_session_id'], st.session_state.messages)
 
                         logger.error(f"Error generating response: {str(e)}")
                         logger.error(traceback.format_exc())
                         st.rerun()
-

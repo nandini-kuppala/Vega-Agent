@@ -254,3 +254,119 @@ def get_chat_history(user_id):
         return {"status": "success", "messages": []}
     
     return {"status": "success", "messages": chat_history.get("messages", [])}
+
+
+def create_chat_session(user_id, title="New Chat"):
+    """Create a new chat session for a user"""
+    try:
+        session_data = {
+            "user_id": user_id,
+            "title": title,
+            "messages": [],
+            "created_at": datetime.now(timezone.utc),
+            "updated_at": datetime.now(timezone.utc),
+            "is_active": True
+        }
+        
+        result = db["chat_sessions"].insert_one(session_data)
+        session_id = str(result.inserted_id)
+        
+        return {"status": "success", "session_id": session_id}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+def get_user_chat_sessions(user_id, limit=20):
+    """Get all chat sessions for a user, ordered by most recent"""
+    try:
+        sessions = list(db["chat_sessions"].find(
+            {"user_id": user_id}, 
+            {"title": 1, "created_at": 1, "updated_at": 1, "message_count": {"$size": "$messages"}}
+        ).sort("updated_at", -1).limit(limit))
+        
+        # Convert ObjectId to string
+        for session in sessions:
+            session["_id"] = str(session["_id"])
+            
+        return {"status": "success", "sessions": sessions}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+def get_chat_session(session_id):
+    """Get a specific chat session by ID"""
+    try:
+        session = db["chat_sessions"].find_one({"_id": ObjectId(session_id)})
+        if not session:
+            return {"status": "error", "message": "Session not found"}
+        
+        # Convert ObjectId to string
+        session["_id"] = str(session["_id"])
+        return {"status": "success", "session": session}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+def save_session_messages(session_id, messages):
+    """Save messages to a specific chat session"""
+    try:
+        # Sanitize messages before saving
+        sanitized_messages = []
+        for msg in messages:
+            sanitized_msg = msg.copy()
+            if 'content' in sanitized_msg:
+                sanitized_msg['content'] = sanitize_response(sanitized_msg['content'])
+            sanitized_messages.append(sanitized_msg)
+        
+        # Generate title from first user message if title is "New Chat"
+        session = db["chat_sessions"].find_one({"_id": ObjectId(session_id)})
+        title = session.get("title", "New Chat")
+        
+        if title == "New Chat" and sanitized_messages:
+            # Find first user message to generate title
+            for msg in sanitized_messages:
+                if msg.get("role") == "user":
+                    title = msg["content"][:50] + "..." if len(msg["content"]) > 50 else msg["content"]
+                    break
+        
+        db["chat_sessions"].update_one(
+            {"_id": ObjectId(session_id)},
+            {
+                "$set": {
+                    "messages": sanitized_messages,
+                    "title": title,
+                    "updated_at": datetime.now(timezone.utc)
+                }
+            }
+        )
+        
+        return {"status": "success", "message": "Messages saved"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+def delete_chat_session(session_id, user_id):
+    """Delete a chat session (verify ownership)"""
+    try:
+        result = db["chat_sessions"].delete_one({
+            "_id": ObjectId(session_id),
+            "user_id": user_id
+        })
+        
+        if result.deleted_count == 0:
+            return {"status": "error", "message": "Session not found or not authorized"}
+        
+        return {"status": "success", "message": "Session deleted"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+def update_session_title(session_id, user_id, new_title):
+    """Update the title of a chat session"""
+    try:
+        result = db["chat_sessions"].update_one(
+            {"_id": ObjectId(session_id), "user_id": user_id},
+            {"$set": {"title": new_title, "updated_at": datetime.now(timezone.utc)}}
+        )
+        
+        if result.matched_count == 0:
+            return {"status": "error", "message": "Session not found or not authorized"}
+        
+        return {"status": "success", "message": "Title updated"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
