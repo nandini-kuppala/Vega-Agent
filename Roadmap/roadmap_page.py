@@ -260,16 +260,7 @@ def display_roadmap_page():
             if 'current_roadmap' in st.session_state and not st.button:
                 st.markdown("## 🗺️ Your Personalized Learning Roadmap")
                 
-                # Create tabs for viewing and raw formats
-                tab1, tab2 = st.tabs(["Rendered View", "Raw Markdown"])
-                
-                with tab1:
-                    # Render the markdown properly
-                    st.markdown(st.session_state['current_roadmap'])
-                
-                with tab2:
-                    # Show raw markdown with a monospace font
-                    st.code(st.session_state['current_roadmap'], language="markdown")
+                st.markdown(st.session_state['current_roadmap'])
                 
                 # Add a download button for the markdown file with personalized filename
                 st.download_button(
