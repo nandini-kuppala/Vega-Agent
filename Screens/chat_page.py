@@ -686,7 +686,7 @@ def display_chat_page():
         with input_container:
             st.markdown('<div class="fixed-input">', unsafe_allow_html=True)
             # Create columns for the chat input and voice button
-            col1, col2 = st.columns([9, 1])
+            col1, col2 = st.columns([0.9, 0.1])
             
             with col2:
                 # Initialize recording state
