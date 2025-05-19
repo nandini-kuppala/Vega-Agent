@@ -240,7 +240,7 @@ def display_chat_page():
     
     # Initialize sidebar state for new login
     if 'sidebar_open' not in st.session_state:
-        st.session_state.sidebar_open = True  # Default to open
+        st.session_state.sidebar_open = False  # Default to open
     
     # Add CSS styling for right sidebar and title area
     st.markdown("""
