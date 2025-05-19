@@ -350,6 +350,12 @@ def display_chat_page():
         background-color: #ffebee;
         border-color: #d32f2f;
     }
+    .sidebar-toggle {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        z-index: 1001;
+    }
     </style>
     
     <script>
@@ -369,19 +375,22 @@ def display_chat_page():
     </script>
     """, unsafe_allow_html=True)
     
-    # Create main layout - FIX: Use a single container instead of columns
+    # Place the sidebar toggle button at the top right
+    toggle_col = st.container()
+    with toggle_col:
+        # Create a div for the sidebar toggle with correct positioning
+        st.markdown('<div class="sidebar-toggle">', unsafe_allow_html=True)
+        if st.button("📋" if not st.session_state.sidebar_open else "✖️", 
+                    key="sidebar_toggle", 
+                    help="Toggle chat history"):
+            st.session_state.sidebar_open = not st.session_state.sidebar_open
+            st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
+    
+    # Create main layout with a single container
     main_col = st.container()
     
     with main_col:
-        # Sidebar toggle button
-        toggle_container = st.container()
-        with toggle_container:
-            if st.button("📋" if not st.session_state.sidebar_open else "✖️", 
-                        key="sidebar_toggle", 
-                        help="Toggle chat history"):
-                st.session_state.sidebar_open = not st.session_state.sidebar_open
-                st.rerun()
-        
         # Main chat area
         chat_area_class = "content-with-sidebar" if st.session_state.sidebar_open else ""
         st.markdown(f'<div class="chat-area {chat_area_class}">', unsafe_allow_html=True)
@@ -547,10 +556,27 @@ def display_chat_page():
         # Create a spacer to ensure content is visible above the fixed input bar
         st.markdown("<div style='padding-bottom: 80px;'></div>", unsafe_allow_html=True)
         
+        # Fixed input area at the bottom
+        st.markdown("""
+        <style>
+        .fixed-input {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px;
+            background: white;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            z-index: 999;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+        
         # Input area
         with input_container:
+            st.markdown('<div class="fixed-input">', unsafe_allow_html=True)
             # Create columns for the chat input and voice button
-            col1, col2 = st.columns([9, 1])  # FIX: Use integer ratio instead of float
+            col1, col2 = st.columns([9, 1])  # Use integer ratio instead of float
             
             with col2:
                 # Initialize recording state
@@ -701,6 +727,7 @@ def display_chat_page():
                             logger.error(f"Error generating response: {str(e)}")
                             logger.error(traceback.format_exc())
                             st.rerun()
+            st.markdown('</div>', unsafe_allow_html=True)
         
         st.markdown('</div>', unsafe_allow_html=True)
     
