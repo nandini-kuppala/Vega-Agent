@@ -247,7 +247,7 @@ def display_roadmap_page():
                     st.rerun()
 
             elif roadmaps_result["status"] == "success":
-                st.info("No previous roadmaps found. Generate your first roadmap above!")
+                st.info("Generate your first roadmap above!")
             else:
                 st.error(f"Error loading previous roadmaps: {roadmaps_result['message']}")
 
