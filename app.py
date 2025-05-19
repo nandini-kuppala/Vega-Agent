@@ -217,7 +217,6 @@ def main():
             )
 
             st.markdown("---")
-            
             if st.button("🚪 Logout", key="logout_btn", use_container_width=True):
                 # Save current session before logout
                 if st.session_state.get('current_session_id') and st.session_state.get('messages'):
