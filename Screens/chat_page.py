@@ -387,10 +387,8 @@ def display_chat_page():
         st.markdown(
             f"""
             <div class="title-container">
-                <h1>ASHA AI Chat</h1>
-                <button class="sidebar-toggle-button" onclick="toggleSidebar()" title="Toggle chat history">
-                    {"📋" if not st.session_state.sidebar_open else "✖️"}
-                </button>
+                <h1>ASHA AI Chat Bot</h1>
+                
             </div>
             """, 
             unsafe_allow_html=True
@@ -423,7 +421,7 @@ def display_chat_page():
         """, unsafe_allow_html=True)
         
         # Hidden button to capture sidebar toggle state
-        if st.button("Toggle Sidebar State", key="sidebar_toggle", help="Toggle chat history", type="primary"):
+        if st.button("Previous Sessions", key="sidebar_toggle", help="Toggle chat history", type="primary"):
             st.session_state.sidebar_open = not st.session_state.sidebar_open
             st.rerun()
         
