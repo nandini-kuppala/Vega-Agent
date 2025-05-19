@@ -210,38 +210,7 @@ def display_chat_page():
     user_id = st.session_state.get('user_id')
     current_session_id = st.session_state.get('current_session_id')
     
-    # Initialize messages if not present in session state
-    if 'messages' not in st.session_state:
-        # Check if we have a current session to load messages from
-        if current_session_id:
-            session_data = get_chat_session(current_session_id)
-            if session_data["status"] == "success":
-                st.session_state['messages'] = session_data["session"]["messages"]
-            else:
-                # Default welcome message
-                st.session_state['messages'] = [{
-                    "role": "assistant", 
-                    "content": "Hi! I'm ASHA, your career assistant powered by AI. How can I help you today?", 
-                    "feedback": None
-                }]
-        else:
-            # If no session_id, create a new session
-            if user_id:
-                result = create_chat_session(user_id)
-                if result["status"] == "success":
-                    st.session_state['current_session_id'] = result["session_id"]
-                    # Update URL
-                    current_params = dict(st.query_params)
-                    current_params['session_id'] = result["session_id"]
-                    st.query_params.update(current_params)
-            
-            # Default welcome message
-            st.session_state['messages'] = [{
-                "role": "assistant", 
-                "content": "Hi! I'm ASHA, your career assistant powered by AI. How can I help you today?", 
-                "feedback": None
-            }]
-        
+    
     # Initialize sidebar state for new login
     if 'sidebar_open' not in st.session_state:
         st.session_state.sidebar_open = True  # Default to open
@@ -567,7 +536,34 @@ def display_chat_page():
             """, 
             unsafe_allow_html=True
         )
+        # Initialize or create session if needed
+        if not current_session_id:
+            result = create_chat_session(user_id)
+            if result["status"] == "success":
+                st.session_state['current_session_id'] = result["session_id"]
+                current_session_id = result["session_id"]
+                # Update URL
+                current_params = dict(st.query_params)
+                current_params['session_id'] = current_session_id
+                st.query_params.update(current_params)
         
+        # Load current session messages if not already loaded
+        if 'messages' not in st.session_state and current_session_id:
+            session_data = get_chat_session(current_session_id)
+            if session_data["status"] == "success":
+                st.session_state['messages'] = session_data["session"]["messages"]
+            else:
+                st.session_state['messages'] = [{
+                    "role": "assistant", 
+                    "content": "Hi! I'm ASHA, your career assistant powered by AI. How can I help you today?", 
+                    "feedback": None
+                }]
+        elif 'messages' not in st.session_state:
+            st.session_state['messages'] = [{
+                "role": "assistant", 
+                "content": "Hi! I'm ASHA, your career assistant powered by AI. How can I help you today?", 
+                "feedback": None
+            }]
         # Create a container for the chat messages
         chat_container = st.container()
         
