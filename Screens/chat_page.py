@@ -550,7 +550,7 @@ def display_chat_page():
         col1, col2, col3 = st.columns([1, 8, 1])
         with col3:
             toggle_text = "✕ Close" if st.session_state.sidebar_open else "💬 History"
-            if st.button(toggle_text, key="sidebar_toggle", help="Toggle chat history"):
+            if st.button(toggle_text, key="sidebar_toggle_header", help="Toggle chat history"):
                 st.session_state.sidebar_open = not st.session_state.sidebar_open
                 st.rerun()
         
@@ -584,10 +584,7 @@ def display_chat_page():
         </script>
         """, unsafe_allow_html=True)
         
-        # Hidden button to capture sidebar toggle state
-        if st.button("Previous Sessions", key="sidebar_toggle", help="Toggle chat history", type="primary"):
-            st.session_state.sidebar_open = not st.session_state.sidebar_open
-            st.rerun()
+        
         
         # Initialize or create session if needed
         if not current_session_id:
