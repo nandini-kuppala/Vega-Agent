@@ -369,8 +369,8 @@ def display_chat_page():
     </script>
     """, unsafe_allow_html=True)
     
-    # Create main layout
-    main_col, sidebar_col = st.columns([0.9, 0.1])
+    # Create main layout - FIX: Use a single container instead of columns
+    main_col = st.container()
     
     with main_col:
         # Sidebar toggle button
@@ -550,7 +550,7 @@ def display_chat_page():
         # Input area
         with input_container:
             # Create columns for the chat input and voice button
-            col1, col2 = st.columns([0.9, 0.1])
+            col1, col2 = st.columns([9, 1])  # FIX: Use integer ratio instead of float
             
             with col2:
                 # Initialize recording state
@@ -851,4 +851,3 @@ def display_chat_page():
                             st.markdown("<hr style='margin: 5px 0; opacity: 0.3;'>", unsafe_allow_html=True)
             
             st.markdown('</div>', unsafe_allow_html=True)
-                                
