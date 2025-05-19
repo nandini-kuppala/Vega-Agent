@@ -196,6 +196,7 @@ def process_user_query(prompt):
                 logger.error(f"Error generating response: {str(e)}")
                 logger.error(traceback.format_exc())
 
+
 def display_chat_page():
     """Display a chat interface with session management in right sidebar"""
     
@@ -240,11 +241,11 @@ def display_chat_page():
                 "content": "Hi! I'm ASHA, your career assistant powered by AI. How can I help you today?", 
                 "feedback": None
             }]
-    
+        
     # Initialize sidebar state for new login
     if 'sidebar_open' not in st.session_state:
-        st.session_state.sidebar_open = True 
-
+        st.session_state.sidebar_open = True  # Default to open
+    
     # Add CSS styling for right sidebar and title area
     st.markdown("""
     <style>
