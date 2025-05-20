@@ -1,5 +1,6 @@
 import os
 import json
+import re
 
 from crewai import Agent, Task, Crew, Process
 from utils.input import DateTimeEncoder
@@ -23,7 +24,7 @@ def general_purpose_agent():
     
     return Agent(
         role="Women's Career Guidance Specialist",
-        goal="Provide personalized, empathetic career guidance to women at various stages of their careers",
+        goal="Provide personalized, concise career guidance to women at various stages of their careers",
         backstory="""You are an expert career advisor with deep understanding of challenges and 
         opportunities for women in the workplace. You specialize in supporting women who are 
         starting, restarting, or raising their careers with empathetic, practical advice. 
@@ -33,7 +34,84 @@ def general_purpose_agent():
         llm=llm
     )
 
-def get_answer_task(profile_analysis):
+def direct_response_agent():
+    """Agent specifically for handling simple direct questions without profile analysis"""
+    llm = ChatLiteLLM(
+        model="gemini/gemini-2.0-flash-lite",
+        api_key=GEMINI_API_KEY,
+        temperature=0.2
+    )
+    
+    return Agent(
+        role="Career Information Specialist",
+        goal="Provide clear, concise answers to straightforward career questions",
+        backstory="""You are a knowledgeable career advisor who specializes in providing
+        direct, to-the-point answers on career topics, courses, and skills development.
+        Your responses are helpful, clear, and appropriately brief.""",
+        verbose=True,
+        llm=llm
+    )
+
+def is_simple_query(query):
+    """Determine if a query requires a simple direct answer vs full profile analysis"""
+    simple_patterns = [
+        r"suggest (a|some) .* course",
+        r"recommend (a|some) .* course",
+        r"free course",
+        r"best course",
+        r"how (to|do|can) .{5,50}\?",
+        r"what is .{5,50}\?",
+        r"where can i .{5,50}\?",
+        r"tips for",
+        r"advice (on|for)",
+        r"difference between",
+        r"meaning of",
+        r"examples? of",
+        r"define",
+        r"explain",
+    ]
+    
+    query_lower = query.lower()
+    
+    # Check if query matches any simple patterns
+    for pattern in simple_patterns:
+        if re.search(pattern, query_lower):
+            return True
+            
+    # Check for general simplicity (short query)
+    if len(query.split()) < 15 and "?" in query:
+        return True
+        
+    return False
+
+def get_direct_response_task(query):
+    """Create a task for direct, concise responses to simple questions"""
+    return Task(
+        description=f"""
+        Respond to this straightforward career question: "{query}"
+        
+        Your response should be:
+        1. Direct and concise (no more than 2-3 paragraphs for most questions)
+        2. Helpful and informative, providing exactly what was asked
+        3. Personalized for a woman in her career journey without being overly formal
+        4. Written in casual, friendly Indian English
+        5. Include 1-2 relevant emojis at most if appropriate
+        6. For resource recommendations (like courses), include 3-5 relevant options with brief descriptions
+        
+        DO NOT:
+        - Create elaborate section headers
+        - Provide a full career analysis
+        - Use extensive formatting
+        - Write more than needed to answer the specific question
+        
+        Simply provide a friendly, helpful answer that directly addresses the question.
+        """,
+        agent=direct_response_agent(),
+        expected_output="A concise, direct response to the user's question"
+    )
+
+def get_full_guidance_task(profile_analysis):
+    """Task for comprehensive career guidance based on profile analysis"""
     return Task(
         description=f"""
         Based on this detailed profile analysis: {profile_analysis},
@@ -47,18 +125,20 @@ def get_answer_task(profile_analysis):
         4. Suggest resources, certifications, communities, or mentorship platforms specifically 
            beneficial for women in her field
         5. Address any career gaps or challenges with positive, constructive advice
-        6. Use humanized Indian English, format your response in markdown , use relevant icons and emoji's to make it visually appealing.
+        6. Use humanized Indian English, format your response in markdown with light formatting, use 
+           at most 2-3 relevant emojis to enhance readability
         7. Be explicitly supportive of women's empowerment while maintaining professionalism
         
         Focus only on career development, education, entrepreneurship, and skill development.
         Be encouraging and confidence-building in your tone.
         
-        Format your response in professional markdown that's visually appealing with appropriate
-        section headers, bullet points, and relevant emoji icons.
+        Format your response in professional yet concise markdown with appropriate
+        section headers and bullet points.
         """,
-        agent=general_purpose_agent(),  # Call the function to get the Agent instance
+        agent=general_purpose_agent(),
         expected_output="A personalized, empathetic career guidance response in markdown format"
     )
+
 def _get_general_career_guidance(candidate_profile):
     
     # Create required agents
@@ -90,11 +170,23 @@ def _get_general_career_guidance(candidate_profile):
     
     # Step 2: Generate career guidance response
     print("Generating response...")
-    response_agent = general_purpose_agent()  # Create the agent instance
-    task = get_answer_task(profile_analysis)  # Pass the profile analysis to the task
+    task = get_full_guidance_task(profile_analysis)
     
     crew = Crew(
-        agents=[response_agent],
+        agents=[general_purpose_agent()],
+        tasks=[task],
+        verbose=True,
+        process=Process.sequential
+    )
+    result = crew.kickoff()
+    return result
+
+def get_direct_answer(user_query):
+    """Generate a direct response for simple questions without profile analysis"""
+    task = get_direct_response_task(user_query)
+    
+    crew = Crew(
+        agents=[direct_response_agent()],
         tasks=[task],
         verbose=True,
         process=Process.sequential
@@ -130,19 +222,23 @@ def get_career_guidance(user_query, candidate_profile):
         "weather", "sports scores", "celebrity gossip", "political news", "local events"
     ]
 
-    
-    # Check if query contains any relevant keywords
+    # Check if query contains any irrelevant keywords
     if any(keyword in user_query.lower() for keyword in irrelevant_keywords):
         return irrelevant_response
     
-    # Augment profile analysis with specific user query
-    enhanced_profile = candidate_profile.copy()
-    enhanced_profile["current_query"] = user_query
-    
-    # Get personalized career guidance
-    guidance_response = _get_general_career_guidance(enhanced_profile)
-    
-    return guidance_response
+    # Determine if we need a simple direct response
+    if is_simple_query(user_query):
+        print("Generating direct response for simple query...")
+        return get_direct_answer(user_query)
+    else:
+        # For complex career guidance, use full profile analysis
+        print("Generating comprehensive career guidance with profile analysis...")
+        # Augment profile analysis with specific user query
+        enhanced_profile = candidate_profile.copy()
+        enhanced_profile["current_query"] = user_query
+        
+        # Get personalized career guidance
+        return _get_general_career_guidance(enhanced_profile)
 
 # Example usage with the provided sample profile
 if __name__ == "__main__":
@@ -168,6 +264,9 @@ if __name__ == "__main__":
     # Example query
     user_query = "How to prepare DSA to crack tech interviews for Google SDE roles?"
      
+    # Test simple query detection
+    print(f"Is simple query? {is_simple_query(user_query)}")
+    
     # Get career guidance
     response = get_career_guidance(user_query, sample_profile)
     print(response)
