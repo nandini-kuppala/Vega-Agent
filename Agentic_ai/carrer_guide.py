@@ -72,9 +72,8 @@ def get_career_guidance_task(profile_analysis, user_query):
         The user has asked: "{user_query}"
         Their profile summary is: {profile_analysis}
         
-        Your task is to:
-        - Provide personalized, empowering career guidance tailored to the user's background and question
-        - Focus on actionable steps, relevant opportunities, and skill development
+        Your task is to Provide personalized response to the query
+       
         - Keep the response clear and concise
         """,
         agent=general_purpose_agent(),
