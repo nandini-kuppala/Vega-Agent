@@ -69,21 +69,16 @@ def classify_query_task(user_query):
 def get_career_guidance_task(profile_analysis, user_query):
     return Task(
         description=f"""
-        Based on the user query: "{user_query}" and profile: {profile_analysis},
+        The user has asked: "{user_query}"
+        Their profile summary is: {profile_analysis}
         
-        Provide personalized career guidance that:
-        1. Focuses on skills, qualifications, and interests rather than gender
-        2. Suggests practical strategies for career advancement
-        3. Acknowledges challenges without accepting inequality as inevitable
-        4. Offers empowering advice for overcoming barriers
-        5. References successful women in relevant fields when appropriate
-        
-        Use evidence-based information and avoid gendered language or stereotypes.
-        Present career and family as potentially compatible, not mutually exclusive.
-        Be concise, actionable, and empowering in your response.
+        Your task is to:
+        - Provide personalized, empowering career guidance tailored to the user's background and question
+        - Focus on actionable steps, relevant opportunities, and skill development
+        - Keep the response clear and concise
         """,
         agent=general_purpose_agent(),
-        expected_output="Personalized, empowering career guidance."
+        expected_output="A concise, personalized, and empowering career guidance response with actionable next steps."
     )
 
 # Task for handling biased requests
