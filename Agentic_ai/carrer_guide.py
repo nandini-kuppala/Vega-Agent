@@ -23,186 +23,211 @@ def general_purpose_agent():
     )
     
     return Agent(
-        role="Women's Career Empowerment Advisor",
-        goal="Provide empowering, factual, and unbiased career guidance that helps women thrive professionally while challenging stereotypes and discrimination.",
+        role="Women's Career Empowerment Assistant",
+        goal="Provide inclusive, empowering career guidance for women while maintaining ethical boundaries and detecting bias",
         backstory="""
-        You are an experienced career advisor specializing in women's professional development and empowerment.
-        Your responses are always supportive, fact-based, and tailored to help women overcome barriers and reach their full potential.
-        You understand the unique challenges women face in the workplace and offer guidance that is both practical and empowering.
-        You recognize gender-based stereotypes and biases and actively work to dispel them through evidence-based responses.
+        You are an empathetic and informed career assistant specialized in supporting women's professional growth.
+        Your purpose is to empower users with practical career advice, challenge stereotypes, and provide
+        evidence-based guidance for navigating workplace challenges. You maintain a positive, solution-oriented
+        approach while recognizing the complex interplay of gender and career development.
         """,
         verbose=True,
         llm=llm
     )
 
-# Define bias detection function
-def detect_bias_in_query(query):
-    """
-    Analyze query for potential gender bias or inappropriate content
-    Returns a tuple of (bias_detected, bias_type, response_guidance)
-    """
-    # Common biases to detect
-    bias_patterns = {
-        "stereotyping": [
-            r"women are better at|naturally suited|women should focus on|women are not good at|maternal instinct",
-            r"better for women to|feminine traits|women are too emotional|women can't handle",
-            r"naturally better suited for women|women should avoid|women aren't built for"
-        ],
-        "work_family_conflict": [
-            r"primary role as a mother|choose between career and family|interfere with motherhood",
-            r"work-life balance for women|working mothers|after having children|family responsibilities"
-        ],
-        "appearance_focus": [
-            r"how to dress|look professional as a woman|appearance for women|feminine appearance",
-            r"be taken seriously as a woman|look less intimidating|feminine attire|dress code for women"
-        ],
-        "pay_inequality": [
-            r"accept lower pay|gender pay differences|paid less than men|accept wage gap",
-            r"traditional breadwinners|pay is not important for women|settle for less compensation"
-        ],
-        "harassment_normalization": [
-            r"without making waves|deal with harassment|flirting at work|accept comments|avoid reporting",
-            r"just ignore it|get used to|unwanted attention|just part of the job"
-        ],
-        "derogatory_language": [
-            r"stupid|idiotic|emotional|bossy|hysterical|bitchy|shrill|nagging|too aggressive",
-            r"difficult woman|drama|high maintenance|sensitive|overreacting|hormonal"
-        ]
-    }
-    
-    # Check for bias patterns
-    for bias_type, patterns in bias_patterns.items():
-        for pattern in patterns:
-            if re.search(pattern, query.lower()):
-                # Define response guidance based on bias type
-                response_guidelines = {
-                    "stereotyping": "Challenge gender stereotypes with evidence and examples of women succeeding across diverse fields",
-                    "work_family_conflict": "Present career and family as compatible options with shared responsibility, not mutually exclusive choices",
-                    "appearance_focus": "Redirect to professional skills and competence rather than appearance and emphasize workplace equality",
-                    "pay_inequality": "Advocate for equal pay for equal work and provide negotiation strategies",
-                    "harassment_normalization": "Clarify that harassment is never acceptable and provide proper reporting resources",
-                    "derogatory_language": "Address the inappropriate characterization and provide examples of successful women leaders"
-                }
-                return (True, bias_type, response_guidelines.get(bias_type))
-    
-    # Check for non-career related queries
-    non_career_patterns = [
-        r"dating|relationship advice|marriage|divorce",
-        r"medical|health issue|diagnosis|symptom",
-        r"cryptocurrency|gambling|quick money|get rich",
-        r"political|election|voted for|political party|government",
-        r"religion|god|spiritual|faith|religious",
-        r"recipe|cooking|baking|food",
-        r"travel|vacation|hotel|flight",
-        r"[a-z]{1,3}\s?[a-z]{1,3}\s?[a-z]{1,3}$"  # Gibberish detection
-    ]
-    
-    for pattern in non_career_patterns:
-        if re.search(pattern, query.lower()):
-            return (True, "off_topic", "Redirect to career focus while being respectful and supportive")
-    
-    return (False, None, None)
+# Define classification function for incoming queries
+def classify_query_task(user_query):
+    return Task(
+        description=f"""
+        Analyze the following user query: "{user_query}"
+        
+        Classify it into one of these categories:
+        1. CAREER_GUIDANCE - Legitimate career-related questions
+        2. IRRELEVANT_BENIGN - Off-topic but harmless questions
+        3. BIASED_REQUEST - Questions containing gender stereotypes or bias
+        4. HARASSMENT_RELATED - Questions about workplace harassment
+        5. DISCRIMINATION_RELATED - Questions about workplace discrimination
+        6. MOOD_PERSONAL - Personal emotional questions
+        7. CONTROVERSIAL - Provocative or inflammatory statements
+        8. GIBBERISH - Nonsensical input
+        
+        Return only the category name.
+        """,
+        agent=general_purpose_agent(),
+        expected_output="A category classification"
+    )
 
-# Task for personalized guidance with enhanced guardrails
-def get_answer_task(profile_analysis, user_query):
-    # First detect potential bias
-    bias_detected, bias_type, response_guidance = detect_bias_in_query(user_query)
-    
-    bias_handling_instruction = ""
-    if bias_detected:
-        bias_handling_instruction = f"""
-        This query contains potential {bias_type} bias or is off-topic. 
-        Your response should: {response_guidance}.
-        """
-    
+# Task for personalized career guidance
+def get_career_guidance_task(profile_analysis, user_query):
     return Task(
         description=f"""
         Based on the user query: "{user_query}" and profile: {profile_analysis},
         
-        {bias_handling_instruction}
+        Provide personalized career guidance that:
+        1. Focuses on skills, qualifications, and interests rather than gender
+        2. Suggests practical strategies for career advancement
+        3. Acknowledges challenges without accepting inequality as inevitable
+        4. Offers empowering advice for overcoming barriers
+        5. References successful women in relevant fields when appropriate
         
-        GUARDRAILS TO STRICTLY FOLLOW:
-        
-        1. EQUAL OPPORTUNITY FOCUS: Never suggest career paths based on gender. Focus on skills, interests, and qualifications.
-        
-        2. EMPOWERMENT ORIENTATION: Never encourage accepting discrimination. Present strategies to overcome barriers.
-        
-        3. STEREOTYPE REJECTION: Challenge gender stereotypes about leadership, capabilities, or "appropriate" roles.
-        
-        4. BALANCED PERSPECTIVE: Present career and family as compatible choices with shared responsibility, not mutually exclusive paths.
-        
-        5. LEGAL AWARENESS: For workplace discrimination scenarios, acknowledge legal protections and rights.
-        
-        6. ETHICAL BOUNDARIES: Never suggest unethical career advancement strategies, even if framed as "realistic."
-        
-        7. EVIDENCE-BASED GUIDANCE: Base career advice on research and data, not cultural assumptions about gender.
-        
-        8. INDIVIDUAL FOCUS: Treat each user as an individual with unique goals, not as a representative of her gender.
-        
-        9. HARASSMENT RECOGNITION: For workplace harassment questions, provide supportive, actionable guidance that prioritizes safety.
-        
-        10. INTERSECTIONAL AWARENESS: Acknowledge how gender intersects with other identity aspects affecting career paths.
-        
-        11. SOLUTION-ORIENTED APPROACH: Focus on practical strategies to overcome barriers rather than accepting limitations.
-        
-        12. LANGUAGE SENSITIVITY: Avoid gendered language that reinforces stereotypes.
-        
-        RESPONSE TYPES:
-        
-        FOR BIASED OR INAPPROPRIATE QUERIES:
-        - Begin by gently reframing the premise in an educational way
-        - Provide factual context challenging any biases or stereotypes
-        - Share relevant examples of women succeeding in the area being discussed
-        - Redirect to constructive career guidance
-        - Always maintain respect while firmly challenging biases
-        
-        FOR OFF-TOPIC QUERIES:
-        - Acknowledge their question briefly without engaging with inappropriate content
-        - Clearly state your purpose: "I'm here to provide career guidance and resources for professional advancement"
-        - Ask a redirecting question focused on their career interests or goals
-        - Be warm and supportive while maintaining boundaries
-        
-        FOR GIBBERISH OR RANDOM TEXT:
-        - Respond with: "I'm here to provide career guidance, upskilling resources, and address your questions about career advancement. How can I help with your professional development today?"
-        
-        FOR EMOTIONAL SUPPORT REQUESTS:
-        - Show empathy but connect it to career context: "I understand feeling [emotion]. Many professionals experience this when..."
-        - Ask if their feelings relate to workplace challenges you can help address
-        - Offer career-focused strategies that might help their situation
-        
-        HANDLING SPECIFIC EDGE CASES:
-        
-        1. If asked about balancing motherhood and career: Focus on shared parental responsibility, workplace policies, and time management strategies without assuming women must make sacrifices men don't.
-        
-        2. If asked about "female-friendly" careers: Emphasize that all fields can be pursued regardless of gender, highlight women succeeding in diverse industries, and focus on matching interests to careers.
-        
-        3. If asked about workplace harassment: Never suggest "putting up with it" or "not making waves." Provide information on reporting channels, documentation strategies, and support resources.
-        
-        4. If asked about being "less intimidating" or "more likable" as a female leader: Challenge the premise and provide examples of effective leadership styles across genders.
-        
-        5. If asked about accepting lower pay: Advocate for equal pay for equal work, provide negotiation strategies, and highlight the long-term impact of pay gaps.
-        
-        6. If asked about "using femininity" to advance: Redirect to professional skills, competence, and ethical strategies that work for all genders.
-        
-        7. If facing derogatory statements about women: Firmly counter with evidence of women's achievements and leadership success.
-        
-        8. If asked about appearance or dress codes: Focus on professionalism that applies to all genders rather than "female-appropriate" appearance.
-        
-        Always maintain a warm, supportive tone while enforcing these guardrails.
-        
-        For unrelated or inappropriate queries, provide context on why the question contains problematic assumptions, then redirect with compassion toward meaningful career assistance.
-        
-        Use natural, human-like responses that are helpful and constructive.
+        Use evidence-based information and avoid gendered language or stereotypes.
+        Present career and family as potentially compatible, not mutually exclusive.
+        Be concise, actionable, and empowering in your response.
         """,
         agent=general_purpose_agent(),
-        expected_output="An empowering, bias-free response that provides valuable career guidance while challenging any stereotypes or inappropriate assumptions."
+        expected_output="Personalized, empowering career guidance."
     )
 
-# Profile analysis + response generation
-def _get_general_career_guidance(candidate_profile, user_query):
-    profile_analyzer = create_profile_analyzer_agent()
-    
+# Task for handling biased requests
+def handle_biased_request_task(user_query):
+    return Task(
+        description=f"""
+        The user has asked: "{user_query}" 
+        
+        This appears to contain gender bias or stereotypes. Respond by:
+        1. Politely but firmly challenging the assumptions in the query
+        2. Providing factual evidence that counters the stereotype
+        3. Offering specific examples of women who have excelled in relevant areas
+        4. Redirecting to how you can provide constructive career guidance
+        
+        For example, if the query suggests women aren't good leaders, mention research showing diverse leadership improves outcomes and cite examples like Mary Barra at GM or Indra Nooyi at PepsiCo.
+        
+        Be educational without being condescending. Close by redirecting to how you can provide constructive career guidance.
+        """,
+        agent=general_purpose_agent(),
+        expected_output="A response that respectfully counters bias with facts and examples."
+    )
+
+# Task for handling harassment-related questions
+def handle_harassment_task(user_query):
+    return Task(
+        description=f"""
+        The user has asked about workplace harassment: "{user_query}"
+        
+        Provide a response that:
+        1. Takes the issue seriously and validates concerns
+        2. Offers practical guidance on documentation and reporting options
+        3. Suggests resources like HR, ombudsperson, or external support organizations
+        4. Emphasizes that harassment is never the recipient's fault
+        5. Balances practical advice with acknowledgment of systemic challenges
+        
+        Avoid suggesting that the person should simply accept or work around harassment.
+        Include information about legal protections where relevant but clarify you're not providing legal advice.
+        """,
+        agent=general_purpose_agent(),
+        expected_output="Supportive guidance for handling workplace harassment."
+    )
+
+# Task for handling discrimination-related questions  
+def handle_discrimination_task(user_query):
+    return Task(
+        description=f"""
+        The user has asked about workplace discrimination: "{user_query}"
+        
+        Provide a response that:
+        1. Acknowledges the reality of discrimination while empowering the user
+        2. Offers practical strategies for addressing discriminatory practices
+        3. Provides information about relevant resources or legal protections
+        4. Suggests approaches for building allies and support networks
+        5. Balances individual strategies with recognition of systemic issues
+        
+        Focus on solutions rather than accepting limitations. Provide specific, actionable advice.
+        Acknowledge intersectionality when relevant. Clarify you're not providing legal advice.
+        """,
+        agent=general_purpose_agent(),
+        expected_output="Empowering guidance for navigating workplace discrimination."
+    )
+
+# Task for handling irrelevant but benign questions
+def handle_irrelevant_task(user_query):
+    return Task(
+        description=f"""
+        The user has asked an off-topic question: "{user_query}"
+        
+        Provide a friendly response that:
+        1. Acknowledges their question briefly without going into detail
+        2. Politely explains your focus on career guidance for women
+        3. Redirects the conversation by suggesting relevant career topics
+        4. Offers a sample question they could ask instead
+        
+        Keep your response warm and inviting rather than dismissive. Be concise but helpful.
+        """,
+        agent=general_purpose_agent(),
+        expected_output="A friendly redirection to career-related topics."
+    )
+
+# Task for handling mood or personal questions
+def handle_mood_personal_task(user_query):
+    return Task(
+        description=f"""
+        The user has shared a personal or emotional concern: "{user_query}"
+        
+        Provide a response that:
+        1. Shows empathy for their feelings without overstepping boundaries
+        2. Gently connects their emotional state to potential career implications if relevant
+        3. Asks if there are specific work-related aspects you can help with
+        4. Reminds them of your focus on career guidance
+        
+        For example, if they mention feeling down, you might ask if work stress is contributing
+        and offer to discuss career management strategies. Don't provide general mood improvement
+        advice unrelated to career development.
+        """,
+        agent=general_purpose_agent(),
+        expected_output="An empathetic response that redirects to career relevance."
+    )
+
+# Task for handling controversial statements
+def handle_controversial_task(user_query):
+    return Task(
+        description=f"""
+        The user has made a controversial statement: "{user_query}"
+        
+        Provide a response that:
+        1. Addresses any misinformation with factual evidence
+        2. Presents counter-examples and research that challenge stereotypes
+        3. Maintains a respectful, educational tone
+        4. Redirects to constructive career guidance
+        
+        For example, if they claim women are poor leaders, cite research on diverse leadership
+        effectiveness and provide examples of successful women leaders. Be firm but not combative.
+        Close by offering to help with specific career guidance needs.
+        """,
+        agent=general_purpose_agent(),
+        expected_output="A factual, educational response that counters misinformation."
+    )
+
+# Task for handling gibberish
+def handle_gibberish_task():
+    return Task(
+        description="""
+        The user has entered text that appears to be nonsensical or gibberish.
+        
+        Provide a friendly response that:
+        1. Notes that you didn't quite understand their message
+        2. Explains your purpose as a career guidance assistant for women
+        3. Invites them to ask a career-related question
+        4. Offers a few example questions they might ask
+        
+        Keep your response brief, helpful and friendly.
+        """,
+        agent=general_purpose_agent(),
+        expected_output="A friendly clarification response."
+    )
+
+# Main handler with enhanced guardrails and edge case handling
+def get_career_guidance(user_query, candidate_profile):
+    """
+    Handles user query with comprehensive guardrails and edge case detection.
+
+    Args:
+        user_query (str): User's input
+        candidate_profile (dict): User profile from database
+
+    Returns:
+        str: Appropriate, guardrail-compliant response
+    """
     # Step 1: Analyze profile
+    profile_analyzer = create_profile_analyzer_agent()
     profile_analysis_task = create_profile_analysis_task(profile_analyzer, candidate_profile)
     profile_crew = Crew(
         agents=[profile_analyzer],
@@ -221,10 +246,39 @@ def _get_general_career_guidance(candidate_profile, user_query):
             profile_analysis = json.loads(profile_analysis_str)
     except json.JSONDecodeError:
         profile_analysis = {"raw_result": profile_analysis_str}
-
-    # Step 2: Generate response
+    
+    # Step 2: Classify query type
+    classifier_agent = general_purpose_agent()
+    classify_task = classify_query_task(user_query)
+    
+    classify_crew = Crew(
+        agents=[classifier_agent],
+        tasks=[classify_task],
+        verbose=False,
+        process=Process.sequential
+    )
+    category_result = classify_crew.kickoff()
+    category = str(category_result).strip()
+    
+    # Step 3: Handle based on category
     response_agent = general_purpose_agent()
-    task = get_answer_task(profile_analysis, user_query)
+    
+    if "CAREER_GUIDANCE" in category:
+        task = get_career_guidance_task(profile_analysis, user_query)
+    elif "BIASED_REQUEST" in category:
+        task = handle_biased_request_task(user_query)
+    elif "HARASSMENT_RELATED" in category:
+        task = handle_harassment_task(user_query)
+    elif "DISCRIMINATION_RELATED" in category:
+        task = handle_discrimination_task(user_query)
+    elif "MOOD_PERSONAL" in category:
+        task = handle_mood_personal_task(user_query)
+    elif "CONTROVERSIAL" in category:
+        task = handle_controversial_task(user_query)
+    elif "GIBBERISH" in category:
+        task = handle_gibberish_task()
+    else:  # IRRELEVANT_BENIGN or any unclassified queries
+        task = handle_irrelevant_task(user_query)
     
     crew = Crew(
         agents=[response_agent],
@@ -233,22 +287,34 @@ def _get_general_career_guidance(candidate_profile, user_query):
         process=Process.sequential
     )
     result = crew.kickoff()
-    return result
-
-# Main handler
-def get_career_guidance(user_query, candidate_profile):
-    """
-    Handles user query and returns an appropriate, concise or personalized response.
-
-    Args:
-        user_query (str): User's input
-        candidate_profile (dict): User profile from database
-
-    Returns:
-        str: Appropriate chatbot response
-    """
-    # Simple pre-check for empty or extremely short queries
-    if not user_query or len(user_query.strip()) < 3:
-        return "I'm here to provide career guidance and resources for your professional advancement. How can I help with your career goals today?"
     
-    return _get_general_career_guidance(candidate_profile, user_query)
+    # Apply final guardrail check to ensure the response is appropriate
+    guardrail_check_task = Task(
+        description=f"""
+        Review this response for appropriateness: "{result}"
+        
+        Ensure it:
+        1. Contains no gender stereotypes or biased language
+        2. Avoids suggesting acceptance of discrimination or inequality
+        3. Focuses on empowerment rather than limitations
+        4. Uses inclusive, respectful language
+        5. Provides evidence-based guidance when making claims
+        6. Balances realism with optimism and actionable strategies
+        7. Uses gender-neutral language where appropriate
+        
+        If any issues are found, revise the response to comply with these guidelines.
+        If the response is appropriate, return it unchanged.
+        """,
+        agent=general_purpose_agent(),
+        expected_output="A guardrail-compliant response."
+    )
+    
+    final_crew = Crew(
+        agents=[response_agent],
+        tasks=[guardrail_check_task],
+        verbose=False,
+        process=Process.sequential
+    )
+    
+    final_result = final_crew.kickoff()
+    return final_result
