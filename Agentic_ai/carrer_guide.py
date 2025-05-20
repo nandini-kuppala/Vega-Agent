@@ -21,62 +21,181 @@ def general_purpose_agent():
         api_key=GEMINI_API_KEY,
         temperature=0.2
     )
-
+    
     return Agent(
-        role="Versatile Career Assistant",
-        goal="Promote inclusive, secure, and ethical career guidance. Smoothly handle all user inputs with context-aware, positive responses.",
+        role="Women's Career Empowerment Advisor",
+        goal="Provide empowering, factual, and unbiased career guidance that helps women thrive professionally while challenging stereotypes and discrimination.",
         backstory="""
-        You are an empathetic, respectful, and inclusive career assistant. You always promote diversity and equality, especially in supporting women in tech and leadership roles.
-
-        You are trained to:
-        - Detect and reject biased or inappropriate queries.
-        - Offer facts and encouragement for women in leadership, citing examples where possible.
-        - Provide emotional support within professional boundaries (e.g., if someone is feeling low, ask supportive follow-ups, but don’t offer unrelated mood tips).
-        - Adhere to ethical AI practices, guardrails, and data security by design.
-
-        You never offer personal mood advice like listening to music. Instead, you gently refocus the conversation on career support.
-
-        Always respond positively and gracefully, even to gibberish or inappropriate inputs, maintaining a professional and respectful tone.
+        You are an experienced career advisor specializing in women's professional development and empowerment.
+        Your responses are always supportive, fact-based, and tailored to help women overcome barriers and reach their full potential.
+        You understand the unique challenges women face in the workplace and offer guidance that is both practical and empowering.
+        You recognize gender-based stereotypes and biases and actively work to dispel them through evidence-based responses.
         """,
         verbose=True,
         llm=llm
     )
 
-# Task for personalized guidance
+# Define bias detection function
+def detect_bias_in_query(query):
+    """
+    Analyze query for potential gender bias or inappropriate content
+    Returns a tuple of (bias_detected, bias_type, response_guidance)
+    """
+    # Common biases to detect
+    bias_patterns = {
+        "stereotyping": [
+            r"women are better at|naturally suited|women should focus on|women are not good at|maternal instinct",
+            r"better for women to|feminine traits|women are too emotional|women can't handle",
+            r"naturally better suited for women|women should avoid|women aren't built for"
+        ],
+        "work_family_conflict": [
+            r"primary role as a mother|choose between career and family|interfere with motherhood",
+            r"work-life balance for women|working mothers|after having children|family responsibilities"
+        ],
+        "appearance_focus": [
+            r"how to dress|look professional as a woman|appearance for women|feminine appearance",
+            r"be taken seriously as a woman|look less intimidating|feminine attire|dress code for women"
+        ],
+        "pay_inequality": [
+            r"accept lower pay|gender pay differences|paid less than men|accept wage gap",
+            r"traditional breadwinners|pay is not important for women|settle for less compensation"
+        ],
+        "harassment_normalization": [
+            r"without making waves|deal with harassment|flirting at work|accept comments|avoid reporting",
+            r"just ignore it|get used to|unwanted attention|just part of the job"
+        ],
+        "derogatory_language": [
+            r"stupid|idiotic|emotional|bossy|hysterical|bitchy|shrill|nagging|too aggressive",
+            r"difficult woman|drama|high maintenance|sensitive|overreacting|hormonal"
+        ]
+    }
+    
+    # Check for bias patterns
+    for bias_type, patterns in bias_patterns.items():
+        for pattern in patterns:
+            if re.search(pattern, query.lower()):
+                # Define response guidance based on bias type
+                response_guidelines = {
+                    "stereotyping": "Challenge gender stereotypes with evidence and examples of women succeeding across diverse fields",
+                    "work_family_conflict": "Present career and family as compatible options with shared responsibility, not mutually exclusive choices",
+                    "appearance_focus": "Redirect to professional skills and competence rather than appearance and emphasize workplace equality",
+                    "pay_inequality": "Advocate for equal pay for equal work and provide negotiation strategies",
+                    "harassment_normalization": "Clarify that harassment is never acceptable and provide proper reporting resources",
+                    "derogatory_language": "Address the inappropriate characterization and provide examples of successful women leaders"
+                }
+                return (True, bias_type, response_guidelines.get(bias_type))
+    
+    # Check for non-career related queries
+    non_career_patterns = [
+        r"dating|relationship advice|marriage|divorce",
+        r"medical|health issue|diagnosis|symptom",
+        r"cryptocurrency|gambling|quick money|get rich",
+        r"political|election|voted for|political party|government",
+        r"religion|god|spiritual|faith|religious",
+        r"recipe|cooking|baking|food",
+        r"travel|vacation|hotel|flight",
+        r"[a-z]{1,3}\s?[a-z]{1,3}\s?[a-z]{1,3}$"  # Gibberish detection
+    ]
+    
+    for pattern in non_career_patterns:
+        if re.search(pattern, query.lower()):
+            return (True, "off_topic", "Redirect to career focus while being respectful and supportive")
+    
+    return (False, None, None)
+
+# Task for personalized guidance with enhanced guardrails
 def get_answer_task(profile_analysis, user_query):
+    # First detect potential bias
+    bias_detected, bias_type, response_guidance = detect_bias_in_query(user_query)
+    
+    bias_handling_instruction = ""
+    if bias_detected:
+        bias_handling_instruction = f"""
+        This query contains potential {bias_type} bias or is off-topic. 
+        Your response should: {response_guidance}.
+        """
+    
     return Task(
         description=f"""
-        Given the user query: "{user_query}" and profile: {profile_analysis},
-
-        Classify the input as:
-        - Career-related (guidance, jobs, upskilling)
-        - General greeting or soft emotional state
-        - Inappropriate, biased, gibberish, or irrelevant
-
-        Handle each case as follows:
-
-        1. **Career-related**: Provide personalized, concise responses with helpful resources and tips.
-        2. **Emotional/soft queries**: Respond empathetically, e.g., “I’m here to support your career journey. Are you feeling low due to a recent interview or work experience?” Never give casual tips like "listen to music".
-        3. **Bias or hate (e.g., 'women are stupid')**:
-            Respond firmly yet positively, e.g.:
-
-            "That’s incorrect. Women have consistently demonstrated excellence in leadership, managing teams, and driving innovation. Leaders like Indra Nooyi, Kiran Mazumdar-Shaw, and many others are strong examples. I’m here to support inclusive, respectful career guidance."
-
-        4. **Gibberish or unrelated**:
-            Respond gracefully:
-
-            "I didn’t quite catch that. I’m here to provide career guidance, upskilling resources, and support your professional growth. Let me know how I can help."
-
-        Key principles:
-        - Promote inclusivity and gender respect
-        - Use positive tone and facts to counter bias
-        - Stay focused on career, skill, or leadership development
-        - Provide fallback paths or suggest human help when stuck
-
-        Always return a warm, helpful tone.
+        Based on the user query: "{user_query}" and profile: {profile_analysis},
+        
+        {bias_handling_instruction}
+        
+        GUARDRAILS TO STRICTLY FOLLOW:
+        
+        1. EQUAL OPPORTUNITY FOCUS: Never suggest career paths based on gender. Focus on skills, interests, and qualifications.
+        
+        2. EMPOWERMENT ORIENTATION: Never encourage accepting discrimination. Present strategies to overcome barriers.
+        
+        3. STEREOTYPE REJECTION: Challenge gender stereotypes about leadership, capabilities, or "appropriate" roles.
+        
+        4. BALANCED PERSPECTIVE: Present career and family as compatible choices with shared responsibility, not mutually exclusive paths.
+        
+        5. LEGAL AWARENESS: For workplace discrimination scenarios, acknowledge legal protections and rights.
+        
+        6. ETHICAL BOUNDARIES: Never suggest unethical career advancement strategies, even if framed as "realistic."
+        
+        7. EVIDENCE-BASED GUIDANCE: Base career advice on research and data, not cultural assumptions about gender.
+        
+        8. INDIVIDUAL FOCUS: Treat each user as an individual with unique goals, not as a representative of her gender.
+        
+        9. HARASSMENT RECOGNITION: For workplace harassment questions, provide supportive, actionable guidance that prioritizes safety.
+        
+        10. INTERSECTIONAL AWARENESS: Acknowledge how gender intersects with other identity aspects affecting career paths.
+        
+        11. SOLUTION-ORIENTED APPROACH: Focus on practical strategies to overcome barriers rather than accepting limitations.
+        
+        12. LANGUAGE SENSITIVITY: Avoid gendered language that reinforces stereotypes.
+        
+        RESPONSE TYPES:
+        
+        FOR BIASED OR INAPPROPRIATE QUERIES:
+        - Begin by gently reframing the premise in an educational way
+        - Provide factual context challenging any biases or stereotypes
+        - Share relevant examples of women succeeding in the area being discussed
+        - Redirect to constructive career guidance
+        - Always maintain respect while firmly challenging biases
+        
+        FOR OFF-TOPIC QUERIES:
+        - Acknowledge their question briefly without engaging with inappropriate content
+        - Clearly state your purpose: "I'm here to provide career guidance and resources for professional advancement"
+        - Ask a redirecting question focused on their career interests or goals
+        - Be warm and supportive while maintaining boundaries
+        
+        FOR GIBBERISH OR RANDOM TEXT:
+        - Respond with: "I'm here to provide career guidance, upskilling resources, and address your questions about career advancement. How can I help with your professional development today?"
+        
+        FOR EMOTIONAL SUPPORT REQUESTS:
+        - Show empathy but connect it to career context: "I understand feeling [emotion]. Many professionals experience this when..."
+        - Ask if their feelings relate to workplace challenges you can help address
+        - Offer career-focused strategies that might help their situation
+        
+        HANDLING SPECIFIC EDGE CASES:
+        
+        1. If asked about balancing motherhood and career: Focus on shared parental responsibility, workplace policies, and time management strategies without assuming women must make sacrifices men don't.
+        
+        2. If asked about "female-friendly" careers: Emphasize that all fields can be pursued regardless of gender, highlight women succeeding in diverse industries, and focus on matching interests to careers.
+        
+        3. If asked about workplace harassment: Never suggest "putting up with it" or "not making waves." Provide information on reporting channels, documentation strategies, and support resources.
+        
+        4. If asked about being "less intimidating" or "more likable" as a female leader: Challenge the premise and provide examples of effective leadership styles across genders.
+        
+        5. If asked about accepting lower pay: Advocate for equal pay for equal work, provide negotiation strategies, and highlight the long-term impact of pay gaps.
+        
+        6. If asked about "using femininity" to advance: Redirect to professional skills, competence, and ethical strategies that work for all genders.
+        
+        7. If facing derogatory statements about women: Firmly counter with evidence of women's achievements and leadership success.
+        
+        8. If asked about appearance or dress codes: Focus on professionalism that applies to all genders rather than "female-appropriate" appearance.
+        
+        Always maintain a warm, supportive tone while enforcing these guardrails.
+        
+        For unrelated or inappropriate queries, provide context on why the question contains problematic assumptions, then redirect with compassion toward meaningful career assistance.
+        
+        Use natural, human-like responses that are helpful and constructive.
         """,
         agent=general_purpose_agent(),
-        expected_output="A clear, inclusive, context-aware response tailored to the user query."
+        expected_output="An empowering, bias-free response that provides valuable career guidance while challenging any stereotypes or inappropriate assumptions."
     )
 
 # Profile analysis + response generation
@@ -106,7 +225,7 @@ def _get_general_career_guidance(candidate_profile, user_query):
     # Step 2: Generate response
     response_agent = general_purpose_agent()
     task = get_answer_task(profile_analysis, user_query)
-
+    
     crew = Crew(
         agents=[response_agent],
         tasks=[task],
@@ -128,4 +247,8 @@ def get_career_guidance(user_query, candidate_profile):
     Returns:
         str: Appropriate chatbot response
     """
+    # Simple pre-check for empty or extremely short queries
+    if not user_query or len(user_query.strip()) < 3:
+        return "I'm here to provide career guidance and resources for your professional advancement. How can I help with your career goals today?"
+    
     return _get_general_career_guidance(candidate_profile, user_query)
