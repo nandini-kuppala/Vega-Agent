@@ -85,14 +85,26 @@ def get_career_guidance_task(profile_analysis, user_query):
         The user has asked: "{user_query}"
         Their profile summary is: {profile_analysis}
         
-        Your task is to Provide personalized response to the query
-       
+        Previous session context:
+        {context_data.get('context_summary', 'No previous context available.')}
+        
+        Key points to remember from previous sessions:
+        {', '.join(context_data.get('key_context_points', ['None']))}
+        
+        User interaction patterns:
+        {user_patterns if user_patterns else 'No established patterns yet.'}
+        
+        Your task is to provide a personalized response to the query.
         - Keep the response clear and concise
+        - Reference relevant information from previous sessions when applicable
+        - Adapt your response style to the user's preferences
+        - print Previous session context
+        - Key points to remember from previous sessions
+        - give a follow up message at the end using Previous session context 
         """,
         agent=general_purpose_agent(),
         expected_output="A concise, personalized, and empowering career guidance response with actionable next steps."
     )
-
 # Task for handling biased requests
 def handle_biased_request_task(user_query):
     return Task(
