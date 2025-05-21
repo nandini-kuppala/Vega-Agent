@@ -1,3 +1,5 @@
+#career_guide.py
+
 import os
 import json
 import re
@@ -11,6 +13,11 @@ from Agentic_ai.herkey_rag import parse_json_result
 import google.generativeai as genai
 from langchain_community.chat_models import ChatLiteLLM
 import streamlit as st
+# Add imports for session management agents
+from session_context.session_context_manager import generate_consolidated_context, generate_contextual_followups
+from session_context.user_pattern_manager import analyze_pattern_evolution, get_personalization_recommendations
+from session_context.session_summarizer_agent import process_session_for_summary
+from session_context.pattern_analyzer_agent import analyze_session_pattern, analyze_cross_session_patterns
 
 GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
 
@@ -67,6 +74,12 @@ def classify_query_task(user_query):
 
 # Task for personalized career guidance
 def get_career_guidance_task(profile_analysis, user_query):
+        # Get context from previous sessions
+    context_data = generate_consolidated_context(st.session_state.get('user_id'), current_session_id=st.session_state.get('session_id'), current_query=user_query)
+    
+    # Get personalization recommendations based on user patterns
+    user_patterns = get_personalization_recommendations(st.session_state.get('user_id'))
+
     return Task(
         description=f"""
         The user has asked: "{user_query}"
