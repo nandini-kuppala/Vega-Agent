@@ -180,40 +180,11 @@ def generate_consolidated_context(user_id, current_session_id=None, current_quer
                 context_data = {
                     "key_context_points": [],
                     "follow_up_recommendations": [],
-                    "context_summary": result_str[:300]  # Truncate if needed
+                    "context_summary": result_str  # Truncate if needed
                 }
     
     return context_data
 
-def get_relevant_summaries_by_topic(user_id, topic_keywords, max_summaries=2):
-    """
-    Get session summaries most relevant to specific topics
-    
-    Args:
-        user_id: User ID
-        topic_keywords: List of topic keywords to search for
-        max_summaries: Maximum number of summaries to return
-        
-    Returns:
-        List of relevant session summary documents
-    """
-    # Convert keywords to regex pattern for search
-    # This is a simplistic approach - in production, you might use vector search
-    keyword_patterns = [{"summary_data.main_topics": {"$regex": keyword, "$options": "i"}} 
-                     for keyword in topic_keywords]
-    
-    # Search for summaries that match any of the keywords
-    query = {
-        "user_id": user_id,
-        "$or": keyword_patterns
-    }
-    
-    summaries = list(db.session_summaries.find(
-        query,
-        {"session_id": 1, "summary_data": 1, "created_at": 1}
-    ).sort("created_at", -1).limit(max_summaries))
-    
-    return summaries
 
 def prepare_contextual_followup_task(consolidated_context, current_query):
     """
@@ -315,58 +286,7 @@ def generate_contextual_followups(user_id, current_query, consolidated_context=N
     
     return followup_data.get("follow_up_suggestions", [])
 
-def create_context_enhanced_prompt(base_prompt, user_id, current_query=None, current_session_id=None):
-    """
-    Create a context-enhanced prompt by incorporating relevant previous session context
-    
-    Args:
-        base_prompt: Base prompt text
-        user_id: User ID
-        current_query: Optional current user query
-        current_session_id: Optional current session ID
-        
-    Returns:
-        Enhanced prompt with contextual information
-    """
-    # Generate consolidated context
-    context = generate_consolidated_context(
-        user_id, 
-        current_session_id=current_session_id, 
-        current_query=current_query
-    )
-    
-    # If no meaningful context is available, return the base prompt
-    if context.get("context_summary", "") == "No previous session context available.":
-        return base_prompt
-    
-    # Format context points
-    key_points = "\n".join([f"- {point}" for point in context.get("key_context_points", [])])
-    ongoing_interests = ", ".join(context.get("ongoing_interests", []))
-    previous_recommendations = "\n".join([f"- {rec}" for rec in context.get("previous_recommendations", [])])
-    follow_ups = "\n".join([f"- {follow}" for follow in context.get("follow_up_recommendations", [])])
-    
-    # Construct context-enhanced prompt
-    enhanced_prompt = f"""
-{base_prompt}
-
-Previous Session Context:
-{context.get("context_summary", "")}
-
-Key points from previous sessions:
-{key_points}
-
-Ongoing career interests: {ongoing_interests}
-
-Previous recommendations:
-{previous_recommendations}
-
-Suggested follow-up points:
-{follow_ups}
-
-Please use this context to provide a personalized and continuous experience for the user.
-"""
-    
-    return enhanced_prompt
+###################################################################################################################
 
 def get_unresolved_questions(user_id, limit=3):
     """

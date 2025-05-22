@@ -39,6 +39,43 @@ from Screens.profile import display_profile_modal
 from Screens.chat_page import display_chat_page
 
 
+from session_context.session_summarizer_agent import process_session_for_summary
+from session_context.pattern_analyzer_agent import analyze_session_pattern
+from session_context.user_pattern_manager import should_update_preferences, analyze_pattern_evolution, should_update_preferences
+from session_context.session_context_manager import generate_consolidated_context
+
+def handle_session_analysis():
+    """Handle session analysis when starting new session or after inactivity"""
+    user_id = st.session_state.get('user_id')
+    current_session_id = st.session_state.get('current_session_id')
+    
+    if not user_id:
+        return
+    
+    # Get current session messages
+    messages = st.session_state.get('messages', [])
+    
+    # Process session for summary if needed
+    if len(messages) > 0:
+        try:
+            summary_id = process_session_for_summary(
+                user_id=user_id,
+                session_id=current_session_id,
+                messages=messages
+            )
+            
+            # Analyze session patterns
+            if len(messages) >= 5:  # Only analyze if sufficient interaction
+                analyze_session_pattern(user_id, current_session_id, messages)
+                
+                # Check if cross-session analysis is needed
+                
+                if should_update_preferences(user_id):
+                    analyze_pattern_evolution(user_id)
+                    
+        except Exception as e:
+            st.error(f"Error in session analysis: {str(e)}")
+
 def main():
     # Configure page
     st.set_page_config(
@@ -91,12 +128,17 @@ def main():
     if st.session_state.get('authenticated') and st.session_state.get('user_id'):
         # Initialize current session if not exists
         if 'current_session_id' not in st.session_state:
+            # Process previous session if switching sessions
+            if st.session_state.get('messages'):
+                handle_session_analysis()
+
             # Check if we have a session_id in URL params
             query_params = st.query_params
             if 'session_id' in query_params:
                 st.session_state['current_session_id'] = query_params['session_id']
             else:
                 # Create new session
+                handle_session_analysis()
                 result = create_chat_session(st.session_state['user_id'])
                 if result["status"] == "success":
                     st.session_state['current_session_id'] = result["session_id"]
@@ -221,7 +263,8 @@ def main():
                 # Save current session before logout
                 if st.session_state.get('current_session_id') and st.session_state.get('messages'):
                     save_session_messages(st.session_state['current_session_id'], st.session_state.messages)
-                
+                    handle_session_analysis()
+                    
                 # Clear session storage to completely log out
                 for key in list(st.session_state.keys()):
                     del st.session_state[key]

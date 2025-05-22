@@ -27,6 +27,7 @@ api_key = st.secrets["GEMINI_API_KEY"]
 if "user_patterns" not in db.list_collection_names():
     db.create_collection("user_patterns")
 
+
 def create_pattern_analyzer_agent(api_key):
     """Create an agent specialized in identifying patterns in user behavior across sessions."""
     llm = ChatLiteLLM(

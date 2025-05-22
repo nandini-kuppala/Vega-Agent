@@ -15,9 +15,7 @@ from langchain_community.chat_models import ChatLiteLLM
 import streamlit as st
 # Add imports for session management agents
 from session_context.session_context_manager import generate_consolidated_context, generate_contextual_followups
-from session_context.user_pattern_manager import analyze_pattern_evolution, get_personalization_recommendations
-from session_context.session_summarizer_agent import process_session_for_summary
-from session_context.pattern_analyzer_agent import analyze_session_pattern, analyze_cross_session_patterns
+from session_context.user_pattern_manager import apply_personalization_to_prompt
 
 GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
 
@@ -72,39 +70,46 @@ def classify_query_task(user_query):
         expected_output="A category classification"
     )
 
-# Task for personalized career guidance
-def get_career_guidance_task(profile_analysis, user_query):
-        # Get context from previous sessions
-    context_data = generate_consolidated_context(st.session_state.get('user_id'), current_session_id=st.session_state.get('session_id'), current_query=user_query)
-    
-    # Get personalization recommendations based on user patterns
-    user_patterns = get_personalization_recommendations(st.session_state.get('user_id'))
 
+def get_career_guidance_task(profile_analysis, user_query):
+    user_id = st.session_state.get('user_id')
+    session_id = st.session_state.get('current_session_id')  # Use current_session_id
+    
+    # Get context from previous sessions
+    context_data = generate_consolidated_context(user_id, session_id, current_query=user_query)
+    follow_ups=generate_contextual_followups(user_id, current_query=user_query, consolidated_context=None)
+    
+    # Apply personalization to base prompt
+    base_description = f"""
+    The user has asked: "{user_query}"
+    Their profile summary is: {profile_analysis}
+    """
+    
+    personalized_description = apply_personalization_to_prompt(base_description, user_id)
+    
     return Task(
         description=f"""
-        The user has asked: "{user_query}"
-        Their profile summary is: {profile_analysis}
+        {personalized_description}
         
         Previous session context:
         {context_data.get('context_summary', 'No previous context available.')}
         
-        Key points to remember from previous sessions:
+        Key points from previous sessions:
         {', '.join(context_data.get('key_context_points', ['None']))}
         
-        User interaction patterns:
-        {user_patterns if user_patterns else 'No established patterns yet.'}
+        Follow-up recommendations from previous sessions:
+        {follow_ups}
         
-        Your task is to provide a personalized response to the query.
-        - Keep the response clear and concise
-        - Reference relevant information from previous sessions when applicable
-        - Adapt your response style to the user's preferences
-        - print Previous session context
-        - Key points to remember from previous sessions
-        - give a follow up message at the end using Previous session context 
+        Your task is to provide a personalized response considering:
+        - Reference relevant information from previous sessions
+        - Adapt response style based on user preferences and answer to the query concisely
+        - Include a follow-up question at the end using Follow-up recommendations from previous sessions
+        - Be concise yet informational
         """,
         agent=general_purpose_agent(),
-        expected_output="A concise, personalized, and empowering career guidance response with actionable next steps."
+        expected_output="A personalized career guidance response with contextual follow-up."
     )
+
 # Task for handling biased requests
 def handle_biased_request_task(user_query):
     return Task(
