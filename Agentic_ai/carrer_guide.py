@@ -15,7 +15,7 @@ from langchain_community.chat_models import ChatLiteLLM
 import streamlit as st
 # Add imports for session management agents
 from session_context.session_context_manager import generate_consolidated_context, generate_contextual_followups
-from session_context.user_pattern_manager import apply_personalization_to_prompt
+from session_context.user_pattern_manager import get_personalization_recommendations
 
 GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
 
@@ -78,25 +78,21 @@ def get_career_guidance_task(profile_analysis, user_query):
     # Get context from previous sessions
     context_data = generate_consolidated_context(user_id, session_id, current_query=user_query)
     follow_ups=generate_contextual_followups(user_id, current_query=user_query, consolidated_context=None)
-    
-    # Apply personalization to base prompt
-    base_description = f"""
-    The user has asked: "{user_query}"
-    Their profile summary is: {profile_analysis}
-    """
-    
-    personalized_description = apply_personalization_to_prompt(base_description, user_id)
+        
+    preferences_data = get_personalization_recommendations(user_id)
     
     return Task(
         description=f"""
-        {personalized_description}
-        
+               
         Previous session context:
         {context_data.get('context_summary', 'No previous context available.')}
         
         Key points from previous sessions:
         {', '.join(context_data.get('key_context_points', ['None']))}
         
+        user prefernces data:
+        {preferences_data}
+
         Follow-up recommendations from previous sessions:
         {follow_ups}
         
