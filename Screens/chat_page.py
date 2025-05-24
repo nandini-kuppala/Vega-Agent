@@ -106,7 +106,6 @@ def detect_language(text):
         logger.error(f"Language detection error: {str(e)}")
         return "en-IN"  # Default to English if detection fails
  
-
 def translate_text(text, source_language, target_language):
     """Translate text using Sarvam AI API"""
     import requests
@@ -194,7 +193,6 @@ def process_user_query(prompt):
                     save_session_messages(st.session_state['current_session_id'], st.session_state.messages)
                 logger.error(f"Error generating response: {str(e)}")
                 logger.error(traceback.format_exc())
-
 
 def display_chat_page():
     """Display a chat interface with session management in Streamlit sidebar"""

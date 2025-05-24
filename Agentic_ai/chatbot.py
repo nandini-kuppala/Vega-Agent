@@ -119,7 +119,7 @@ class CareerGuidanceChatbot:
                 return self._get_event_recommendations()
         
         # Community recommendations
-        if any(kw in query_lower for kw in ["community", "groups", "network"]):
+        if any(kw in query_lower for kw in ["community", "groups", "network", "communities"]):
             if "suggest" in query_lower or "recommend" in query_lower:
                 return self._get_community_recommendations()
         
