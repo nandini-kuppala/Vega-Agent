@@ -37,6 +37,7 @@ from utils.design_utils import inject_global_styles
 from Screens.home import display_home_page
 from Screens.profile import display_profile_modal
 from Screens.chat_page import display_chat_page
+from Screens.create_posts import display_post_creation_page
 
 
 def main():
@@ -167,6 +168,15 @@ def main():
                 st.query_params.update(current_params)
                 st.rerun()
 
+            if st.button("🚀 Posts", key="post_btn", use_container_width=True):
+                st.session_state['page'] = 'post'
+                st.session_state['show_profile'] = False
+                # Update page in query params
+                current_params = dict(st.query_params)
+                current_params['page'] = 'post'
+                st.query_params.update(current_params)
+                st.rerun()
+
             if st.button("🧠 Daily Knowledge Dose", key="knowledge_btn", use_container_width=True):
                 st.session_state['page'] = 'knowledge_dose'
                 st.session_state['show_profile'] = False
@@ -266,6 +276,8 @@ def main():
         display_chat_page()   
     elif page == 'resume_builder':
         display_resume_builder_page() 
+    elif page == 'post':
+        display_post_creation_page()
     elif page == 'knowledge_dose':
         display_daily_knowledge_page()
     else:
