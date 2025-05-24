@@ -23,6 +23,7 @@ import streamlit as st
 
 api_key = st.secrets["GEMINI_API_KEY"]
 
+
 # Initialize pattern storage collection if it doesn't exist
 if "user_patterns" not in db.list_collection_names():
     db.create_collection("user_patterns")
@@ -264,42 +265,6 @@ def analyze_session_pattern(user_id, session_id, messages):
     
     return pattern_id
 
-def should_analyze_cross_session_patterns(user_id):
-    """
-    Determine if cross-session pattern analysis should be performed
-    
-    Args:
-        user_id: User ID
-    
-    Returns:
-        bool: Whether cross-session analysis should be performed
-    """
-    # Get the last cross-session analysis
-    last_analysis = db.user_patterns.find_one(
-        {"user_id": user_id},
-        sort=[("updated_at", -1)]
-    )
-    
-    # If no previous analysis, do it if we have at least 2 sessions
-    if not last_analysis:
-        session_count = db.session_patterns.count_documents({"user_id": user_id})
-        return session_count >= 2
-    
-    # If previous analysis exists, check if it's older than 24 hours 
-    # and we have new session patterns since then
-    last_update = last_analysis["updated_at"]
-    time_since_update = datetime.now(timezone.utc) - last_update
-    
-    if time_since_update > timedelta(hours=24):
-        # Check if we have new session patterns since last update
-        new_patterns = db.session_patterns.count_documents({
-            "user_id": user_id,
-            "created_at": {"$gt": last_update}
-        })
-        return new_patterns > 0
-    
-    return False
-
 def analyze_cross_session_patterns(user_id, max_sessions=5):
     """
     Analyze patterns across multiple sessions for a user
@@ -397,3 +362,4 @@ def get_user_pattern_summary(user_id):
         }
     
     return None
+

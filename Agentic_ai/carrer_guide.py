@@ -13,10 +13,15 @@ from Agentic_ai.herkey_rag import parse_json_result
 import google.generativeai as genai
 from langchain_community.chat_models import ChatLiteLLM
 import streamlit as st
-# Add imports for session management agents
-from session_context.session_context_manager import generate_consolidated_context, generate_contextual_followups
-from session_context.user_pattern_manager import get_personalization_recommendations
-
+from session_context.session_context_manager import (
+    generate_consolidated_context, 
+    generate_contextual_followups
+)
+from session_context.user_pattern_anlaysis import (
+    enhanced_cross_session_analysis,
+    get_user_pattern_summary,
+    should_analyze_cross_session_patterns
+)
 GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
 
 # General-purpose LLM setup
@@ -71,40 +76,145 @@ def classify_query_task(user_query):
     )
 
 
+
 def get_career_guidance_task(profile_analysis, user_query):
+    """
+    Enhanced career guidance task with integrated session context and pattern analysis
+    """
     user_id = st.session_state.get('user_id')
-    session_id = st.session_state.get('current_session_id')  # Use current_session_id
+    session_id = st.session_state.get('current_session_id')
     
-    # Get context from previous sessions
-    context_data = generate_consolidated_context(user_id, session_id, current_query=user_query)
-    follow_ups=generate_contextual_followups(user_id, current_query=user_query, consolidated_context=None)
+    # Initialize default values
+    context_data = {}
+    follow_ups = []
+    pattern_summary = None
+    
+    try:
+        # 1. Get consolidated context from previous sessions
+        print(f"🔍 Getting consolidated context for user {user_id}")
+        context_data = generate_consolidated_context(
+            user_id=user_id, 
+            current_session_id=session_id,
+            current_query=user_query,
+            limit=3
+        ) or {}
         
-    preferences_data = get_personalization_recommendations(user_id)
+        # 2. Analyze user patterns (generate if needed)
+        print(f"🧠 Analyzing user patterns for user {user_id}")
+        
+        # Check if we should analyze cross-session patterns
+        if should_analyze_cross_session_patterns(user_id):
+            print("📊 Generating cross-session pattern analysis...")
+            pattern_id = enhanced_cross_session_analysis(user_id, force_generate_missing=True)
+            if pattern_id:
+                print(f"✅ Cross-session analysis completed: {pattern_id}")
+        
+        # Get user pattern summary
+        pattern_summary = get_user_pattern_summary(user_id)
+        
+        # 3. Generate contextual follow-ups
+        print(f"💡 Generating contextual follow-ups for user {user_id}")
+        follow_ups = generate_contextual_followups(
+            user_id=user_id,
+            current_query=user_query,
+            consolidated_context=context_data
+        ) or []
+        
+    except Exception as e:
+        print(f"⚠️ Error in context/pattern analysis: {e}")
+        # Continue with empty context if there's an error
+        context_data = {}
+        follow_ups = []
+        pattern_summary = None
+    
+    
+    # Build the enhanced task description
+    task_description = f"""
+            You are providing personalized career guidance with full context awareness.
+
+            **Current User Query:** {user_query}
+
+            **Previous Session Context:**
+            {context_data.get('context_summary', 'This appears to be a new user with no previous session history.')}
+
+            **Key Context from Previous Sessions:**
+            {', '.join(context_data.get('key_context_points', ['No previous context available']))}
+
+            **User's Ongoing Interests:**
+            {', '.join(context_data.get('ongoing_interests', ['To be determined from this session']))}
+
+            **Previous Recommendations Given:**
+            {', '.join(context_data.get('previous_recommendations', ['None']))}
+
+            **User Learning & Interaction Patterns:**
+            {format_pattern_summary(pattern_summary) if pattern_summary else 'Pattern analysis pending - adapt based on user responses in this session.'}
+
+            **Contextual Follow-up Suggestions:**
+            {format_followups(follow_ups)}
+
+            **Your Task:**
+            1. Provide a comprehensive, personalized response to the user's current query
+            2. Reference relevant information from previous sessions naturally (don't explicitly mention "in previous sessions")
+            3. Adapt your communication style based on the user's identified patterns:
+            - If exploratory learner: Provide options and broader context
+            - If systematic learner: Give structured, step-by-step guidance
+            - If goal-oriented: Focus on actionable next steps
+            4. End with a natural follow-up question that builds on previous conversations and recommendations
+            5. Be conversational and avoid mentioning this is a "follow-up question" - make it feel natural
+            6. Keep the response concise yet informational (aim for 150-250 words)
+
+            **Important:** Your response should feel like a continuation of an ongoing conversation, naturally referencing past discussions while addressing the current query.
+            """
     
     return Task(
-        description=f"""
-               
-        Previous session context:
-        {context_data.get('context_summary', 'No previous context available.')}
-        
-        Key points from previous sessions:
-        {', '.join(context_data.get('key_context_points', ['None']))}
-        
-        user prefernces data:
-        {preferences_data}
-
-        Follow-up recommendations from previous sessions:
-        {follow_ups}
-        
-        Your task is to provide a personalized response considering:
-        - Reference relevant information from previous sessions
-        - Adapt response style based on user preferences and answer to the query concisely
-        - Include a follow-up question at the end using Follow-up recommendations from previous sessions
-        - Be concise yet informational
-        """,
+        description=task_description,
         agent=general_purpose_agent(),
-        expected_output="A personalized career guidance response with contextual follow-up."
+        expected_output="A personalized career guidance response that naturally incorporates previous session context, adapts to user patterns, and includes a contextual follow-up question."
     )
+
+
+def format_pattern_summary(pattern_summary):
+    """Format pattern summary for inclusion in task description"""
+    if not pattern_summary:
+        return "No established patterns yet."
+    
+    parts = []
+    
+    if pattern_summary.get('learning_style_pattern'):
+        parts.append(f"Learning Style: {pattern_summary['learning_style_pattern']}")
+    
+    if pattern_summary.get('preferred_learning_depth'):
+        parts.append(f"Learning Depth: {pattern_summary['preferred_learning_depth']}")
+    
+    if pattern_summary.get('consistent_interests'):
+        interests = pattern_summary['consistent_interests'][:3]  # Limit to top 3
+        parts.append(f"Key Interests: {', '.join(interests)}")
+    
+    if pattern_summary.get('recommended_approach'):
+        parts.append(f"Recommended Approach: {pattern_summary['recommended_approach']}")
+    
+    return ' | '.join(parts) if parts else "Analysis in progress."
+
+def format_followups(follow_ups):
+    """Format follow-up suggestions for inclusion in task description"""
+    if not follow_ups:
+        return "Generate appropriate follow-up based on current conversation."
+    
+    formatted = []
+    for i, followup in enumerate(follow_ups[:2], 1):  # Limit to 2 suggestions
+        if isinstance(followup, dict):
+            question = followup.get('question', followup.get('suggestion', ''))
+            rationale = followup.get('rationale', '')
+            if question:
+                formatted.append(f"{i}. {question}")
+                if rationale:
+                    formatted.append(f"   Rationale: {rationale}")
+        else:
+            formatted.append(f"{i}. {followup}")
+    
+    return '\n'.join(formatted) if formatted else "Generate contextually appropriate follow-up."
+
+
 
 # Task for handling biased requests
 def handle_biased_request_task(user_query):

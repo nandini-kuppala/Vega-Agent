@@ -8,10 +8,6 @@ from st_audiorec import st_audiorec
 from backend.database import save_chat_history, get_chat_history, sanitize_response,get_user_chat_sessions, get_chat_session, save_session_messages, delete_chat_session, create_chat_session, update_session_title
 
 import json
-from session_context.pattern_analyzer_agent import analyze_session_pattern, should_analyze_cross_session_patterns, analyze_cross_session_patterns
-from session_context.session_summarizer_agent import process_session_for_summary
-from session_context.pattern_analyzer_agent import analyze_session_pattern, should_analyze_cross_session_patterns, analyze_cross_session_patterns
-from session_context.user_pattern_manager import analyze_pattern_evolution, should_update_preferences
 
 # Configure logging
 logging.basicConfig(
@@ -19,82 +15,6 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
-def handle_session_analysis():
-    """Handle session analysis when starting new session or after inactivity"""
-    user_id = st.session_state.get('user_id')
-    current_session_id = st.session_state.get('current_session_id')
-    
-    if not user_id or not current_session_id:
-        return
-    
-    # Get current session messages
-    messages = st.session_state.get('messages', [])
-    
-    # Only process if we have actual conversation (exclude initial assistant message)
-    conversation_messages = [msg for msg in messages if msg.get('role') in ['user', 'assistant'] and msg.get('content')]
-    
-    if len(conversation_messages) <= 1:  # Only initial message
-        return
-        
-    try:
-        # Process session for summary
-        summary_id = process_session_for_summary(
-            user_id=user_id,
-            session_id=current_session_id,
-            messages=conversation_messages
-        )
-        print(f"Generated summary with ID: {summary_id}")
-        
-        # Analyze session patterns if we have enough interaction
-        if len(conversation_messages) >= 4:  # At least 2 user messages and 2 assistant responses
-            pattern_result = analyze_session_pattern(user_id, current_session_id, conversation_messages)
-            print(f"Session pattern analysis result: {pattern_result}")
-            
-            # Check if cross-session analysis is needed
-            if should_analyze_cross_session_patterns(user_id):
-                cross_session_result = analyze_cross_session_patterns(user_id)
-                print(f"Cross-session analysis result: {cross_session_result}")
-                
-            # Update user preferences if needed
-            if should_update_preferences(user_id):
-                pattern_evolution_result = analyze_pattern_evolution(user_id)
-                print(f"Pattern evolution analysis result: {pattern_evolution_result}")
-                
-    except Exception as e:
-        print(f"Error in session analysis: {str(e)}")
-        st.error(f"Error in session analysis: {str(e)}")
-
-
-def trigger_incremental_analysis():
-    """Trigger analysis during active conversation"""
-    user_id = st.session_state.get('user_id')
-    current_session_id = st.session_state.get('current_session_id')
-    messages = st.session_state.get('messages', [])
-    
-    if not user_id or not current_session_id:
-        return
-    
-    # Count actual conversation messages (exclude initial greeting)
-    conversation_messages = [msg for msg in messages if msg.get('role') in ['user', 'assistant'] and msg.get('content')]
-    
-    # Trigger incremental analysis every 10-15 messages
-    if len(conversation_messages) > 1 and len(conversation_messages) % 10 == 0:
-        try:
-            # Generate incremental summary
-            summary_id = process_session_for_summary(
-                user_id=user_id,
-                session_id=current_session_id,
-                messages=conversation_messages,
-                is_incremental=True
-            )
-            print(f"Generated incremental summary at {len(conversation_messages)} messages")
-            
-            # Update patterns
-            if len(conversation_messages) >= 6:
-                analyze_session_pattern(user_id, current_session_id, conversation_messages)
-                
-        except Exception as e:
-            print(f"Error in incremental analysis: {str(e)}")
 
 
 def transcribe_audio(audio_data):
@@ -812,7 +732,6 @@ def display_chat_page():
 
                             if st.session_state.get('current_session_id'):
                                 save_session_messages(st.session_state['current_session_id'], st.session_state.messages)
-                                trigger_incremental_analysis()
                             st.rerun()
                             
                         except Exception as e:
