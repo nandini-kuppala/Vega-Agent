@@ -27,7 +27,7 @@ from backend.database import db
 import streamlit as st
 
 # Import session summarizer functions
-from session_summarizer_agent import (
+from session_context.session_summarizer_agent import (
     create_summarizer_agent, 
     summarize_session_task, 
     save_session_summary

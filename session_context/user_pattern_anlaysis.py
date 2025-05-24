@@ -9,7 +9,7 @@ import json
 from datetime import datetime, timezone
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from bson import ObjectId
-
+from crewai import Crew, Process
 # Import the pattern analyzer functions
 from session_context.pattern_analyzer_agent import (
     analyze_session_pattern,
