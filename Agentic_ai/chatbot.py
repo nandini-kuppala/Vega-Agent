@@ -113,23 +113,18 @@ class CareerGuidanceChatbot:
         # Normalize query for intent matching
         query_lower = query.lower().strip()
         
-        # Job recommendations
-        if any(kw in query_lower for kw in ["job", "work", "employment", "career", "position", "opportunities"]):
-            if "suggest" in query_lower or "recommend" in query_lower or "find" in query_lower:
-                return self._get_job_recommendations()
-        
         # Event recommendations
         if any(kw in query_lower for kw in ["event", "conference", "meetup", "gathering"]):
             if "suggest" in query_lower or "recommend" in query_lower or "upcoming" in query_lower:
                 return self._get_event_recommendations()
         
         # Community recommendations
-        if any(kw in query_lower for kw in ["community", "group", "network", "connect", "join"]):
+        if any(kw in query_lower for kw in ["community", "groups", "network"]):
             if "suggest" in query_lower or "recommend" in query_lower:
                 return self._get_community_recommendations()
         
         # Learning session recommendations
-        if any(kw in query_lower for kw in ["learn", "webinar", "workshop", "session", "upskill", "training"]):
+        if any(kw in query_lower for kw in ["webinar", "workshop", "session"]):
             if "suggest" in query_lower or "recommend" in query_lower:
                 return self._get_session_recommendations()
         
