@@ -516,6 +516,10 @@ def display_post_creation_page():
     st.write("")
     st.write("")
     st.write("")
+    st.write("")
+    st.write("")
+    st.write("")
+    st.write("")
     # Input area
     input_container = st.container()
     with input_container:
