@@ -501,9 +501,10 @@ def display_post_creation_page():
             if st.button("Cancel", key="cancel_linkedin"):
                 st.session_state.show_linkedin_input = False
                 st.rerun()
-    
+    st.write("")
+    st.write("")
     # Chat interface
-    st.markdown("### 💬 Chat with ASHA AI")
+    st.markdown("##### 💬 What would you like to post today?")
     
     # Display chat messages
     chat_container = st.container()
@@ -511,7 +512,10 @@ def display_post_creation_page():
         for message in st.session_state.post_messages:
             with st.chat_message(message["role"], avatar="🤖" if message["role"] == "assistant" else "👤"):
                 st.markdown(message["content"])
-    
+    st.write("")
+    st.write("")
+    st.write("")
+    st.write("")
     # Input area
     input_container = st.container()
     with input_container:
