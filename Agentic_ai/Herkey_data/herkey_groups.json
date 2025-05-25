@@ -588,6 +588,7 @@
     {
         "name": "PowerMoms",
         "type": "private",
+        "member_count": 2,
         "featured": true,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/PowerMoms-icon.jpg",
         "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/PowerMoms-creatives_Group_Banner.jpg",
@@ -924,6 +925,24 @@
         "featured": true,
         "icon_url": "https://d2jbshxkjdydpu.cloudfront.net/4556629_549715d621f24948ac3b4862933fbd4b.jpg",
         "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/HerFit_Tribe-creatives_Group_Banner.jpg",
+        "joinable": true,
+        "join_button_text": "Join"
+    },
+    {
+        "name": "HerRising 2025 Delegates Group",
+        "type": "private",
+        "featured": false,
+        "icon_url": "https://d2jbshxkjdydpu.cloudfront.net/4556629_331f021cab1d42dc8804a7667c759534.jpg",
+        "category": "trending",
+        "joinable": true,
+        "join_button_text": "Join"
+    },
+    {
+        "name": "Official HerRising 2025 Group",
+        "type": "public",
+        "featured": false,
+        "icon_url": "https://d2jbshxkjdydpu.cloudfront.net/4556629_191415b89f6d4794a09e10959b8bd54c.jpg",
+        "category": "trending",
         "joinable": true,
         "join_button_text": "Join"
     }

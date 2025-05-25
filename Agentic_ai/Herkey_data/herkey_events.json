@@ -1,23 +1,8 @@
 [
     {
-        "title": "SkillReBoot program: Restart Your Career Journey",
-        "date": "21st Apr, 2025 to 20th May, 2025",
-        "time": "6:00pm to 11:00pm",
-        "location": "Any",
-        "event_type": "Online",
-        "categories": [
-            "Career Development"
-        ],
-        "registration_status": "Open",
-        "registration_text": "Register",
-        "price": "₹ 1\n₹ 30000",
-        "url": "https://events.herkey.com/events/skillreboot-program:-restart-your-career-journey/1663",
-        "featured": true
-    },
-    {
         "title": "HerFreshStart: Scholarships of up to 75% for Mothers Returning to Work",
         "date": "8th May, 2025 to 25th May, 2025",
-        "time": "3:43pm to 6:00pm",
+        "time": "3:43pm to 11:59pm",
         "location": "India",
         "event_type": "Offline",
         "categories": [
@@ -44,6 +29,21 @@
         "registration_text": "Register",
         "price": "Free",
         "url": "https://events.herkey.com/events/advance-your-career-with-a-premier-executive-mba-from-great-lakes/1669",
+        "featured": true
+    },
+    {
+        "title": "SkillReBoot program: Restart Your Career Journey",
+        "date": "21st Apr, 2025 to 30th Jun, 2025",
+        "time": "6:00pm to 11:00pm",
+        "location": "Any",
+        "event_type": "Online",
+        "categories": [
+            "Career Development"
+        ],
+        "registration_status": "Open",
+        "registration_text": "Register",
+        "price": "₹ 1\n₹ 30000",
+        "url": "https://events.herkey.com/events/skillreboot-program:-restart-your-career-journey/1663",
         "featured": true
     },
     {

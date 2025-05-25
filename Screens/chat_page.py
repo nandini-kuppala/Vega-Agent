@@ -569,7 +569,7 @@ def display_chat_page():
                                 except Exception as e:
                                     # Log error but allow the chat to continue working
                                     print(f"Error saving session messages: {str(e)}")
-                                st.rerun()
+                                
                             
                             # Thumbs down button
                             if cols[1].button("👎", key=f"thumbs_down_{i}"):
@@ -586,7 +586,7 @@ def display_chat_page():
                                 })
                                 if st.session_state.get('current_session_id'):
                                     save_session_messages(st.session_state['current_session_id'], st.session_state.messages)
-                                st.rerun()
+                                
         
         # Create a spacer to ensure content is visible above the fixed input bar
         st.markdown("<div style='padding-bottom: 80px;'></div>", unsafe_allow_html=True)
