@@ -9,7 +9,8 @@ from utils.input import DateTimeEncoder
 from Agentic_ai.herkey_rag import create_profile_analyzer_agent
 from Agentic_ai.herkey_rag import create_profile_analysis_task
 from Agentic_ai.herkey_rag import parse_json_result
-
+from tavily import TavilyClient
+from backend.database import get_profile
 import google.generativeai as genai
 from langchain_community.chat_models import ChatLiteLLM
 import streamlit as st
@@ -76,10 +77,162 @@ def classify_query_task(user_query):
     )
 
 
+# Initialize Tavily client
+tavily_client = TavilyClient("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")
+
+def get_user_preferences_summary(profile_data):
+    """
+    Extract and summarize user preferences from profile for query personalization
+    """
+    if not profile_data or profile_data.get('status') != 'success':
+        return {}
+    
+    profile = profile_data.get('profile', {})
+    
+    preferences = {
+        'skills': profile.get('skills', []),
+        'experience_years': profile.get('experience_years', 0),
+        'job_type': profile.get('job_preferences', {}).get('type', ''),
+        'preferred_roles': profile.get('job_preferences', {}).get('roles', []),
+        'location': profile.get('location', {}).get('city', ''),
+        'work_mode': profile.get('location', {}).get('work_mode', ''),
+        'relocation': profile.get('location', {}).get('relocation', False),
+        'current_status': profile.get('current_status', ''),
+        'education': profile.get('education', ''),
+        'last_job': profile.get('last_job', {}),
+        'short_term_goal': profile.get('job_preferences', {}).get('short_term_goal', ''),
+        'long_term_goal': profile.get('job_preferences', {}).get('long_term_goal', '')
+    }
+    
+    return preferences
+
+def personalize_tavily_query(user_query, preferences):
+    """
+    Personalize the Tavily search query based on user profile and preferences
+    """
+    base_query = user_query.lower()
+    
+    # Add skills context if not already specified
+    if preferences.get('skills') and not any(skill.lower() in base_query for skill in preferences['skills']):
+        relevant_skills = preferences['skills'][:3]  # Top 3 skills
+        skills_text = " ".join(relevant_skills)
+        base_query = f"{base_query} {skills_text}"
+    
+    # Add experience level context
+    exp_years = preferences.get('experience_years', 0)
+    if exp_years == 0:
+        experience_level = "fresher entry level"
+    elif exp_years <= 2:
+        experience_level = "junior"
+    elif exp_years <= 5:
+        experience_level = "mid level"
+    else:
+        experience_level = "senior"
+    
+    # Add work mode preference
+    work_mode = preferences.get('work_mode', '').lower()
+    job_type = preferences.get('job_type', '').lower()
+    
+    if 'remote' in job_type or 'work from home' in base_query:
+        base_query += " remote work from home"
+    elif 'flexible' in work_mode:
+        base_query += " flexible hybrid"
+    
+    # Add location context if not specified
+    location = preferences.get('location', '')
+    if location and not any(city in base_query for city in ['bangalore', 'mumbai', 'delhi', 'hyderabad', 'pune', 'chennai']):
+        if not preferences.get('relocation', False):
+            base_query += f" in {location}"
+    
+    # Add salary expectations for job searches
+    if any(keyword in base_query for keyword in ['job', 'position', 'role', 'hiring']):
+        if exp_years >= 3:
+            base_query += " salary above 15 LPA"
+        elif exp_years >= 1:
+            base_query += " salary above 8 LPA"
+    
+    return base_query.strip()
+
+def get_tavily_search_results(query, search_type="general"):
+    """
+    Get search results from Tavily with error handling
+    """
+    try:
+        if search_type == "jobs":
+            # For job searches, include specific parameters
+            response = tavily_client.search(
+                query=query,
+                search_depth="advanced",
+                max_results=8
+            )
+        else:
+            # For general searches (courses, resources, communities)
+            response = tavily_client.search(
+                query=query,
+                search_depth="basic",
+                max_results=6
+            )
+        
+        return response
+    except Exception as e:
+        print(f"Error in Tavily search: {e}")
+        return None
+
+def format_tavily_results(tavily_response, query_type="general"):
+    """
+    Format Tavily search results for better presentation
+    """
+    if not tavily_response or not tavily_response.get('results'):
+        return "I couldn't find specific results at the moment. Please try refining your search."
+    
+    results = tavily_response['results']
+    formatted_results = []
+    
+    for result in results:
+        title = result.get('title', 'No title')
+        url = result.get('url', '#')
+        content = result.get('content', '')[:200] + "..." if result.get('content') else ''
+        
+        formatted_results.append({
+            'title': title,
+            'url': url,
+            'content': content
+        })
+    
+    return formatted_results
+
+def get_resources_with_links(user_query):
+    """
+    Enhanced function to get resources using Tavily search
+    """
+    user_id = st.session_state.get('user_id')
+    
+    # Get user profile for personalization
+    profile_data = get_profile(user_id) if user_id else None
+    preferences = get_user_preferences_summary(profile_data)
+    
+    # Personalize the query
+    personalized_query = personalize_tavily_query(user_query, preferences)
+    
+    # Determine search type
+    search_type = "jobs" if any(keyword in user_query.lower() for keyword in ['job', 'hiring', 'position', 'vacancy']) else "general"
+    
+    # Get Tavily results
+    tavily_response = get_tavily_search_results(personalized_query, search_type)
+    
+    if tavily_response:
+        formatted_results = format_tavily_results(tavily_response, search_type)
+        return {
+            'search_results': formatted_results,
+            'personalized_query': personalized_query,
+            'original_query': user_query
+        }
+    
+    return None
 
 def get_career_guidance_task(profile_analysis, user_query):
     """
-    Enhanced career guidance task with integrated session context and pattern analysis
+    Enhanced career guidance task with integrated Tavily search and session context
     """
     user_id = st.session_state.get('user_id')
     session_id = st.session_state.get('current_session_id')
@@ -88,9 +241,10 @@ def get_career_guidance_task(profile_analysis, user_query):
     context_data = {}
     follow_ups = []
     pattern_summary = None
+    tavily_data = None
     
     try:
-        # 1. Get consolidated context from previous sessions
+        # Get consolidated context from previous sessions
         print(f"🔍 Getting consolidated context for user {user_id}")
         context_data = generate_consolidated_context(
             user_id=user_id, 
@@ -99,20 +253,18 @@ def get_career_guidance_task(profile_analysis, user_query):
             limit=3
         ) or {}
         
-        # 2. Analyze user patterns (generate if needed)
+        # Analyze user patterns
         print(f"🧠 Analyzing user patterns for user {user_id}")
         
-        # Check if we should analyze cross-session patterns
         if should_analyze_cross_session_patterns(user_id):
             print("📊 Generating cross-session pattern analysis...")
             pattern_id = enhanced_cross_session_analysis(user_id, force_generate_missing=True)
             if pattern_id:
                 print(f"✅ Cross-session analysis completed: {pattern_id}")
         
-        # Get user pattern summary
         pattern_summary = get_user_pattern_summary(user_id)
         
-        # 3. Generate contextual follow-ups
+        # Generate contextual follow-ups
         print(f"💡 Generating contextual follow-ups for user {user_id}")
         follow_ups = generate_contextual_followups(
             user_id=user_id,
@@ -120,57 +272,115 @@ def get_career_guidance_task(profile_analysis, user_query):
             consolidated_context=context_data
         ) or []
         
+        # Get Tavily search results if applicable
+        print(f"🔍 Checking if Tavily search is needed for query: {user_query}")
+        category = "CAREER_GUIDANCE"  # Assuming this since we're in career guidance task
+        
+        print("🌐 Using Tavily search for enhanced results...")
+        tavily_data = get_resources_with_links(user_query)
+        if tavily_data:
+            print(f"✅ Tavily search completed with {len(tavily_data.get('search_results', []))} results")
+        
     except Exception as e:
         print(f"⚠️ Error in context/pattern analysis: {e}")
-        # Continue with empty context if there's an error
         context_data = {}
         follow_ups = []
         pattern_summary = None
+        tavily_data = None
     
+    # Build the enhanced task description with Tavily integration
+    tavily_section = ""
+    if tavily_data and tavily_data.get('search_results'):
+        tavily_section = f"""
+        **Live Search Results (From Web Search):**
+        Based on your query "{user_query}", here are the most relevant and up-to-date results:
+        
+        {format_search_results_for_prompt(tavily_data['search_results'])}
+        
+        **Instructions for using search results:**
+        - Prioritize information from these live search results as they are current
+        - Include specific links and resources mentioned in the results
+        - Format job listings with company names, roles, and application links
+        - For courses/resources, include direct links and brief descriptions
+        - For communities, provide joining instructions and links
+        """
     
-    # Build the enhanced task description
     task_description = f"""
-            You are providing personalized career guidance with full context awareness.
+        You are providing personalized career guidance with full context awareness and live web search results.
 
-            **Current User Query:** {user_query}
+        **Current User Query:** {user_query}
 
-            **Previous Session Context:**
-            {context_data.get('context_summary', 'This appears to be a new user with no previous session history.')}
+        **Previous Session Context:**
+        {context_data.get('context_summary', 'This appears to be a new user with no previous session history.')}
 
-            **Key Context from Previous Sessions:**
-            {', '.join(context_data.get('key_context_points', ['No previous context available']))}
+        **Key Context from Previous Sessions:**
+        {', '.join(context_data.get('key_context_points', ['No previous context available']))}
 
-            **User's Ongoing Interests:**
-            {', '.join(context_data.get('ongoing_interests', ['To be determined from this session']))}
+        **User's Ongoing Interests:**
+        {', '.join(context_data.get('ongoing_interests', ['To be determined from this session']))}
 
-            **Previous Recommendations Given:**
-            {', '.join(context_data.get('previous_recommendations', ['None']))}
+        **Previous Recommendations Given:**
+        {', '.join(context_data.get('previous_recommendations', ['None']))}
 
-            **User Learning & Interaction Patterns:**
-            {format_pattern_summary(pattern_summary) if pattern_summary else 'Pattern analysis pending - adapt based on user responses in this session.'}
+        **User Learning & Interaction Patterns:**
+        {format_pattern_summary(pattern_summary) if pattern_summary else 'Pattern analysis pending - adapt based on user responses in this session.'}
+        
+        **live search results:**
+        {tavily_section}
 
-            **Contextual Follow-up Suggestions:**
-            {format_followups(follow_ups)}
+        **Contextual Follow-up Suggestions:**
+        {format_followups(follow_ups)}
 
-            **Your Task:**
-            1. Provide a comprehensive, personalized response to the user's current query
-            2. Reference relevant information from previous sessions naturally (don't explicitly mention "in previous sessions")
-            3. Adapt your communication style based on the user's identified patterns:
-            - If exploratory learner: Provide options and broader context
-            - If systematic learner: Give structured, step-by-step guidance
-            - If goal-oriented: Focus on actionable next steps
-            4. End with a natural follow-up question that builds on previous conversations and recommendations
-            5. Be conversational and avoid mentioning this is a "follow-up question" - make it feel natural
-            6. Keep the response concise yet informational (aim for 150-250 words)
+        **Your Task:**
+        1. Provide a comprehensive, personalized response to the user's current query
+        2. **IMPORTANT**: If live search results are provided above, check if they are useful for the user query and format them properly, give them at last (hyperlinks are mandatory for those results) before follow up question 
+        3. Include specific links, resources, and actionable information from the search results
+        4. Reference relevant information from previous sessions naturally 
+        5. Adapt your communication style based on the user's identified patterns:
+           - If exploratory learner: Provide options and broader context
+           - If systematic learner: Give structured, step-by-step guidance
+           - If goal-oriented: Focus on actionable next steps
+        6. For job searches: Include company names, role titles, salary ranges (if available), and direct application links
+        7. For learning resources: Include course links, free/paid options, and learning roadmaps
+        8. For communities: Provide joining links and steps to engage
+        9. For resume help: Suggest specific tools with links and guidance
+        10. End with a relevant follow-up question from Contextual Follow-up Suggestions
+        11. Be conversational and avoid mentioning this is a "follow-up question" - make it feel natural
+        12. Keep the response informative yet concise (aim for 200-300 words)
+        13. Use emojis (4-8 emojis) and have nice formatting with headings, subheadings and points
+        14. **Format all links as clickable hyperlinks in markdown format: [Link Text](URL)**
 
-            **Important:** Your response should feel like a continuation of an ongoing conversation, naturally referencing past discussions while addressing the current query.
-            """
+        **Important:** Your response should feel like a continuation of an ongoing conversation, naturally incorporating both live search results and past discussions while addressing the current query with specific, actionable information.
+        """
     
     return Task(
         description=task_description,
         agent=general_purpose_agent(),
-        expected_output="A personalized career guidance response that naturally incorporates previous session context, adapts to user patterns, and includes a contextual follow-up question."
+        expected_output="A personalized career guidance response that incorporates live search results, previous session context, adapts to user patterns, and includes specific links and actionable information with a contextual follow-up question."
     )
+
+def format_search_results_for_prompt(search_results):
+    """
+    Format search results for inclusion in the prompt
+    """
+    if not search_results:
+        return "No search results available."
+    
+    formatted = []
+    for i, result in enumerate(search_results, 1):
+        title = result.get('title', 'No title')
+        url = result.get('url', '#')
+        content = result.get('content', '')
+        
+        formatted.append(f"""
+        {i}. **{title}**
+           Link: {url}
+           Description: {content}
+        """)
+    
+    return "\n".join(formatted)
+
+
 
 
 def format_pattern_summary(pattern_summary):
