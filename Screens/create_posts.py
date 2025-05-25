@@ -419,54 +419,22 @@ def display_post_creation_page():
     if 'post_approved' not in st.session_state:
         st.session_state.post_approved = False
     
-    # Quick action buttons
-    st.markdown("### 🚀 Quick Actions")
-    
-    col1, col2, col3, col4 = st.columns(4)
-    
-    with col1:
-        if st.button("🏆 Achievement Post", key="achievement_post", help="Celebrate your wins!"):
-            sample_prompt = "I just won the ASHA AI hackathon! Write a celebration post."
-            st.session_state.post_messages.append({"role": "user", "content": sample_prompt})
-            with st.spinner("Creating your achievement post..."):
-                result = generate_post_with_ai(sample_prompt, "achievement")
-                if result["success"]:
-                    response = f"🎉 Here's your achievement post:\n\n{result['post']}"
-                    if not result["approved"]:
-                        response += f"\n\n⚠️ **Moderation Note**: {result['moderation']}"
-                    st.session_state.post_messages.append({"role": "assistant", "content": response})
-                    st.session_state.generated_post = result['post']
-                    st.session_state.post_approved = result['approved']
-                else:
-                    st.session_state.post_messages.append({"role": "assistant", "content": f"Sorry, I encountered an error: {result['error']}"})
-            st.rerun()
-    
-    with col2:
-        if st.button("💡 Industry Insight", key="insight_post", help="Share your expertise"):
-            sample_prompt = "Write a post about the importance of women in tech leadership roles"
-            st.session_state.post_messages.append({"role": "user", "content": sample_prompt})
-            with st.spinner("Creating your insight post..."):
-                result = generate_post_with_ai(sample_prompt, "insight")
-                if result["success"]:
-                    response = f"💡 Here's your industry insight post:\n\n{result['post']}"
-                    if not result["approved"]:
-                        response += f"\n\n⚠️ **Moderation Note**: {result['moderation']}"
-                    st.session_state.post_messages.append({"role": "assistant", "content": response})
-                    st.session_state.generated_post = result['post']
-                    st.session_state.post_approved = result['approved']
-                else:
-                    st.session_state.post_messages.append({"role": "assistant", "content": f"Sorry, I encountered an error: {result['error']}"})
-            st.rerun()
-    
-    with col3:
-        if st.button("🔄 LinkedIn Repost", key="repost_action", help="Repost from LinkedIn"):
+    # Section: Quick Action - Repost from LinkedIn
+    st.markdown("<br>", unsafe_allow_html=True)  # Top space
+    st.markdown("## 🚀 Quick Action")
+    st.markdown("Easily repost content from your LinkedIn profile.")
+
+    # Centered single-column layout
+    col_center = st.columns([1, 2, 1])[1]  # Create padding on both sides
+
+    with col_center:
+        if st.button("🔄 Repost from LinkedIn", key="repost_action", help="Fetch and repost LinkedIn content"):
             st.session_state.show_linkedin_input = True
             st.rerun()
+
+    st.markdown("<br>", unsafe_allow_html=True)  # Bottom space
+
     
-    with col4:
-        if st.button("🎯 Custom Post", key="custom_post", help="Create your own"):
-            st.session_state.show_custom_input = True
-            st.rerun()
     
     # LinkedIn repost interface
     if st.session_state.get('show_linkedin_input', False):
