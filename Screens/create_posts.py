@@ -68,7 +68,7 @@ def create_post_generation_task(agent, prompt, post_type="general"):
         1. **Post Type**: {post_type}
         2. **Content Requirements**:
            - Professional and empowering tone
-           - Include relevant emojis (2-4 per post)
+           - Include relevant emojis (5-7 per post)
            - Add appropriate hashtags (5-8 hashtags)
            - Keep it authentic and engaging
            - Focus on women's empowerment and career growth
@@ -101,11 +101,12 @@ def create_moderation_task(agent, content):
         3. Unprofessional language
         4. Potentially offensive content
         5. Compliance with professional networking standards
+        6. use relevant emojis (3 to 4) and fomat it properly with bold headings, sub headings and points
         
         Provide:
         - APPROVED/NEEDS_REVISION status
         - Brief explanation of any issues
-        - Suggestions for improvement if needed
+        - Suggestions for improvement if needed , use min 4 to 5 emojis
         
         Focus on maintaining empowerment while ensuring professionalism.
         """,

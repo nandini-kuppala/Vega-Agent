@@ -168,7 +168,7 @@ def main():
                 st.query_params.update(current_params)
                 st.rerun()
 
-            if st.button("🚀 Posts", key="post_btn", use_container_width=True):
+            if st.button("✨ Create Post", key="post_btn", use_container_width=True):
                 st.session_state['page'] = 'post'
                 st.session_state['show_profile'] = False
                 # Update page in query params
