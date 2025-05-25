@@ -133,7 +133,7 @@ def personalize_tavily_query(user_query, preferences):
     work_mode = preferences.get('work_mode', '').lower()
     job_type = preferences.get('job_type', '').lower()
 
-    if 'remote' in base_query or 'work from home' in base_query or 'remote' in job_type:
+    if 'remote' in base_query or 'work from home' in base_query and 'remote' in job_type:
         base_query += " remote work from home"
     
     elif 'flexible' in work_mode:
