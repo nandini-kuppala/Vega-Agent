@@ -239,6 +239,7 @@ streamlit-toggle-switch
 streamlit-vertical-slider
 streamlit-webrtc
 sympy
+tavily-python
 tenacity
 threadpoolctl
 tiktoken

@@ -16,7 +16,7 @@ import time
 from Screens.chat_page import transcribe_audio, detect_language, translate_text
 
 from st_audiorec import st_audiorec
-
+from Screens.linkedin_repost import scrape_linkedin_post
 
 GEMINI_API_KEY =st.secrets["GEMINI_API_KEY"]
 
@@ -113,23 +113,6 @@ def create_moderation_task(agent, content):
         expected_output="Moderation result with status and feedback"
     )
 
-def scrape_linkedin_post(url):
-    """Scrape LinkedIn post content (placeholder - requires proper implementation)"""
-    try:
-        # This is a placeholder implementation
-        # In production, you'd need to handle LinkedIn's authentication and scraping policies
-        return {
-            "success": True,
-            "content": "Sample LinkedIn post content for demonstration",
-            "author": "Sample Author",
-            "message": "Successfully extracted post content"
-        }
-    except Exception as e:
-        return {
-            "success": False,
-            "content": "",
-            "message": f"Error scraping LinkedIn post: {str(e)}"
-        }
 
 def generate_post_with_ai(prompt, post_type="general"):
     """Generate post using AI agents"""
