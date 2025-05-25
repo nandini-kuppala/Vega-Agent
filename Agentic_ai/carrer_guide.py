@@ -129,18 +129,6 @@ def personalize_tavily_query(user_query, preferences):
     else:
         experience_level = "senior"
     
-    # Add work mode preference
-    work_mode = preferences.get('work_mode', '').lower()
-    job_type = preferences.get('job_type', '').lower()
-
-    if 'remote' in base_query or 'work from home' in base_query and 'remote' in job_type:
-        base_query += " remote work from home"
-    
-    elif 'flexible' in work_mode:
-        base_query += " flexible hybrid"
-
-    else:
-        base_query +=""
     
     # Add location context if not specified
     location = preferences.get('location', '')
