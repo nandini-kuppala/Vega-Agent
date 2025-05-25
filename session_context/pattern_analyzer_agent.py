@@ -258,10 +258,6 @@ def analyze_session_pattern(user_id, session_id, messages):
     # Save the pattern analysis to MongoDB
     pattern_id = save_session_pattern(user_id, session_id, pattern_data)
     
-    # Check if we should update cross-session analysis
-    should_update_cross_session = should_analyze_cross_session_patterns(user_id)
-    if should_update_cross_session:
-        analyze_cross_session_patterns(user_id)
     
     return pattern_id
 

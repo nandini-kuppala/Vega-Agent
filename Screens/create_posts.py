@@ -102,7 +102,7 @@ def create_moderation_task(agent, content):
         4. Potentially offensive content
         5. Compliance with professional networking standards
         6. use relevant emojis (3 to 4) and fomat it properly with bold headings, sub headings and points
-        
+
         Provide:
         - APPROVED/NEEDS_REVISION status
         - Brief explanation of any issues
@@ -515,7 +515,7 @@ def display_post_creation_page():
     # Input area
     input_container = st.container()
     with input_container:
-        col1, col2, col3 = st.columns([0.8, 0.1, 0.1])
+        col1, col2 = st.columns([0.9, 0.1])
         
         with col1:
             user_input = st.chat_input("Ask me to create a post... (e.g., 'I got promoted to Senior Developer, write a celebration post')")
@@ -545,13 +545,6 @@ def display_post_creation_page():
                                 st.rerun()
                 except Exception as e:
                     st.error(f"Voice input error: {str(e)}")
-        
-        with col3:
-            # Image upload button
-            uploaded_image = st.file_uploader("🖼️", type=['png', 'jpg', 'jpeg'], help="Upload image", label_visibility="collapsed")
-            if uploaded_image:
-                st.session_state.uploaded_image = uploaded_image
-                st.success("Image uploaded!")
         
         # Process user input
         if user_input:
