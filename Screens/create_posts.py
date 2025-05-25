@@ -515,11 +515,6 @@ def display_post_creation_page():
     st.write("")
     st.write("")
     st.write("")
-    st.write("")
-    st.write("")
-    st.write("")
-    st.write("")
-    st.write("")
     # Input area
     input_container = st.container()
     with input_container:
@@ -553,7 +548,9 @@ def display_post_creation_page():
                                 st.rerun()
                 except Exception as e:
                     st.error(f"Voice input error: {str(e)}")
-        
+                    st.write("")
+        st.write("")
+        st.write("")
         # Process user input
         if user_input:
             st.session_state.post_messages.append({"role": "user", "content": user_input})
