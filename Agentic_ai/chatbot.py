@@ -84,10 +84,10 @@ class CareerGuidanceChatbot:
         # Determine user type
         if is_woman_with_break:
             self.user_type = "restarter"
-        elif exp_years < 2:
-            self.user_type = "starter"
-        else:
+        elif exp_years > 5:
             self.user_type = "raiser"
+        else:
+            self.user_type = "starter"
         
         logger.info(f"User determined to be a {self.user_type}")
     
