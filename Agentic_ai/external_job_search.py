@@ -41,7 +41,7 @@ class TavilyJobAgent:
         try:
             # Create a detailed prompt for Gemini
             prompt = f"""
-            Based on the following user profile, generate an effective job search query for Tavily that will find the most relevant job opportunities. The query should be concise but comprehensive enough to capture the user's requirements.
+            Based on the following user profile, generate a highly specific and effective job search query for Tavily that will find the most relevant job opportunities. The query should be concise but comprehensive enough to capture the user's requirements.
 
             User Profile:
             - Skills: {', '.join(profile.get('skills', []))}
@@ -63,7 +63,7 @@ class TavilyJobAgent:
             4. Location preferences
             5. Work arrangement preferences
 
-            Return ONLY the one sentence search query, nothing else.
+            Return ONLY the search query, nothing else. Make it optimized for job search engines.
             """
 
             response = self.gemini_model.generate_content(prompt)
@@ -72,7 +72,7 @@ class TavilyJobAgent:
             # Clean up the query
             query = query.replace('"', '').replace("'", "")
             
-            logger.info(f"Generated personalized query with Gemini: {query}")
+            logger.info(f"Generated personalized query: {query}")
             return query
             
         except Exception as e:
@@ -136,8 +136,6 @@ class TavilyJobAgent:
             )
             
             logger.info(f"Tavily search completed. Found {len(response.get('results', []))} results")
-            logger.info({response})
-            print({response})
             return response
             
         except Exception as e:
@@ -241,7 +239,7 @@ class TavilyJobAgent:
             # Step 1: Generate personalized query
             query = self.generate_personalized_query(profile)
             logger.info(f"Using query: {query}")
-            print({query})
+            
             # Step 2: Search jobs using Tavily
             tavily_response = self.search_jobs(query)
             
@@ -254,8 +252,7 @@ class TavilyJobAgent:
             
             # Step 3: Format results
             formatted_jobs = self.format_job_results(tavily_response, profile)
-            print({formatted_jobs})
-
+            
             return {
                 "status": "success",
                 "query_used": query,
@@ -282,7 +279,7 @@ def get_tavily_search_results(query: str, search_type: str = "general") -> Optio
             response = agent.tavily_client.search(
                 query=query,
                 search_depth="basic",
-                max_results=5
+                max_results=6
             )
             return response
         except Exception as e:
