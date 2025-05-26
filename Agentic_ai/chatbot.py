@@ -68,7 +68,7 @@ class CareerGuidanceChatbot:
             return
         
         # Get experience years (handle different possible formats)
-        experience_data = self.user_profile.get('experience_years', 0)
+        experience_data = self.user_profile.get('experience_years', 6)
         if isinstance(experience_data, dict) and '$numberInt' in experience_data:
             exp_years = int(experience_data['$numberInt'])
         else:
