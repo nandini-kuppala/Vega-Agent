@@ -18,13 +18,13 @@ class TavilyJobAgent:
             self.gemini_api_key = st.secrets.get("GEMINI_API_KEY")
             if self.gemini_api_key:
                 genai.configure(api_key=self.gemini_api_key)
-                self.gemini_model = genai.GenerativeModel('gemini-pro')
+                self.gemini_model = genai.GenerativeModel('gemini-1.5-flash')
             else:
                 logger.warning("GEMINI_API_KEY not found in secrets")
                 self.gemini_model = None
             
             # Initialize Tavily
-            self.tavily_api_key = "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"
+            self.tavily_api_key = st.secrets["TAVILY_API_KEY"]
             self.tavily_client = TavilyClient(self.tavily_api_key)
             
         except Exception as e:
@@ -53,11 +53,10 @@ class TavilyJobAgent:
             - Work Mode: {profile.get('location', {}).get('work_mode', 'N/A')}
 
             Generate a job search query that includes:
-            1. Key skills and technologies
-            2. Job titles/roles
+            1. Skill or technology
+            2. Specific Role 
             3. Experience level
-            4. Location preferences
-            5. Work arrangement preferences
+            4. Location preferences - use the user's location if 'in-office', otherwise default to 'remote' or 'hybrid' as per their preference.
 
             Return ONLY the search query, nothing else. Make it optimized for job search engines.
             """
