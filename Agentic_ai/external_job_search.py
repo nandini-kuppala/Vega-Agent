@@ -18,13 +18,13 @@ class TavilyJobAgent:
             self.gemini_api_key = st.secrets.get("GEMINI_API_KEY")
             if self.gemini_api_key:
                 genai.configure(api_key=self.gemini_api_key)
-                self.gemini_model = genai.GenerativeModel('gemini-1.5-flash')
+                self.gemini_model = genai.GenerativeModel('gemini-pro')
             else:
                 logger.warning("GEMINI_API_KEY not found in secrets")
                 self.gemini_model = None
             
             # Initialize Tavily
-            self.tavily_api_key = st.secrets["TAVILY_API_KEY"]
+            self.tavily_api_key = "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"
             self.tavily_client = TavilyClient(self.tavily_api_key)
             
         except Exception as e:
@@ -47,14 +47,10 @@ class TavilyJobAgent:
             - Skills: {', '.join(profile.get('skills', []))}
             - Experience: {profile.get('experience_years', 0)} years
             - Last Job: {profile.get('last_job', {}).get('title', 'N/A')} at {profile.get('last_job', {}).get('company', 'N/A')}
-            - Education: {profile.get('education', 'N/A')}
             - Job Preferences: {profile.get('job_preferences', {}).get('type', 'N/A')}
             - Preferred Roles: {', '.join(profile.get('job_preferences', {}).get('roles', []))}
             - Location: {profile.get('location', {}).get('city', 'N/A')}
             - Work Mode: {profile.get('location', {}).get('work_mode', 'N/A')}
-            - Relocation: {profile.get('location', {}).get('relocation', False)}
-            - Short-term Goal: {profile.get('job_preferences', {}).get('short_term_goal', '')}
-            - Long-term Goal: {profile.get('job_preferences', {}).get('long_term_goal', '')}
 
             Generate a job search query that includes:
             1. Key skills and technologies
@@ -90,10 +86,19 @@ class TavilyJobAgent:
         # Build query components
         query_parts = []
         
-        # Add primary skills
+        # Add primary skills and specific roles
         if skills:
-            primary_skills = skills[:3]  # Take top 3 skills
-            query_parts.append(' '.join(primary_skills))
+            # Focus on specific job roles based on skills
+            if any(skill.lower() in ['ai', 'ml', 'nlp', 'dl'] for skill in skills):
+                query_parts.append("AI Engineer Machine Learning Developer")
+            if any(skill.lower() in ['python', 'java', 'web development'] for skill in skills):
+                query_parts.append("Software Developer Backend Developer")
+            if any(skill.lower() in ['app development', 'mobile'] for skill in skills):
+                query_parts.append("Mobile App Developer")
+            
+            # Add top skills as backup
+            primary_skills = skills[:2]
+            query_parts.extend(primary_skills)
         
         # Add job roles
         if roles:
