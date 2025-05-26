@@ -290,11 +290,12 @@ def get_career_guidance_task(profile_analysis, user_query):
         {format_search_results_for_prompt(tavily_data['search_results'])}
         
         **Instructions for using search results:**
-        - Prioritize information from these live search results as they are current
+        - Prioritize information from these live search results based on query if the query doesn't require just give them as some useful resources for you
         - Include specific links and resources mentioned in the results
         - Format job listings with company names, roles, and application links
         - For courses/resources, include direct links and brief descriptions
         - For communities, provide joining instructions and links
+        
         """
     
     task_description = f"""
@@ -325,7 +326,9 @@ def get_career_guidance_task(profile_analysis, user_query):
 
         **Your Task:**
         1. Provide a comprehensive, personalized response to the user's current query
-        2. **IMPORTANT**: If live search results are provided above, check if they are useful for the user query and format them properly, give them at last (hyperlinks are mandatory for those results) before follow up question 
+        2. 2. **RESOURCE INCLUSION RULES**:
+           - **For job/course/tool queries**: Include relevant external links and resources from live search results (hyper links are mandarory)
+           - **For advice queries**: Focus on guidance first, Present live search results as supplementary resources relating them with your main response          
         3. Include specific links, resources, and actionable information from the search results
         4. Reference relevant information from previous sessions naturally 
         5. Adapt your communication style based on the user's identified patterns:
@@ -338,8 +341,8 @@ def get_career_guidance_task(profile_analysis, user_query):
         9. For resume help: Suggest specific tools with links and guidance
         10. End with a relevant follow-up question from Contextual Follow-up Suggestions
         11. Be conversational and avoid mentioning this is a "follow-up question" - make it feel natural
-        12. Keep the response informative yet concise (aim for 200-300 words)
-        13. Use emojis (4-8 emojis) and have nice formatting with headings, subheadings and points
+        12. Keep the response informative yet concise (aim for 250-350 words)
+        13. Use emojis (6-8 emojis) and have nice formatting with headings, subheadings and points
         14. **Format all links as clickable hyperlinks in markdown format: [Link Text](URL)**
 
         **Important:** Your response should feel like a continuation of an ongoing conversation, naturally incorporating both live search results and past discussions while addressing the current query with specific, actionable information.

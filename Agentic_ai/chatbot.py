@@ -114,7 +114,7 @@ class CareerGuidanceChatbot:
         query_lower = query.lower().strip()
         
         # Event recommendations
-        if any(kw in query_lower for kw in ["event", "conference", "meetup", "gathering", "upskilling programs"]):
+        if any(kw in query_lower for kw in ["event", "conference", "meetup", "gathering"]):
             if "suggest" in query_lower or "recommend" in query_lower or "upcoming" in query_lower:
                 return self._get_event_recommendations()
         
@@ -124,7 +124,7 @@ class CareerGuidanceChatbot:
                 return self._get_community_recommendations()
         
         # Learning session recommendations
-        if any(kw in query_lower for kw in ["webinar", "workshop", "session"]):
+        if any(kw in query_lower for kw in ["webinar", "workshop", "session", "upskilling programs"]):
             if "suggest" in query_lower or "recommend" in query_lower:
                 return self._get_session_recommendations()
         
