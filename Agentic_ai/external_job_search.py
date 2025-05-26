@@ -5,7 +5,7 @@ from tavily import TavilyClient
 import streamlit as st
 from typing import Dict, List, Optional
 import logging
-
+import streamlit as st
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -15,10 +15,10 @@ class TavilyJobAgent:
         """Initialize the Tavily Job Agent with API keys."""
         try:
             # Initialize Gemini
-            self.gemini_api_key = st.secrets.get("GEMINI_API_KEY")
+            self.gemini_api_key = st.secrets["GEMINI_API_KEY"]
             if self.gemini_api_key:
                 genai.configure(api_key=self.gemini_api_key)
-                self.gemini_model = genai.GenerativeModel('gemini-pro')
+                self.gemini_model = genai.GenerativeModel('gemini-1.5-flash')
             else:
                 logger.warning("GEMINI_API_KEY not found in secrets")
                 self.gemini_model = None
@@ -39,38 +39,53 @@ class TavilyJobAgent:
             return self._generate_fallback_query(profile)
         
         try:
+            # Get experience level first
+            experience_years = profile.get('experience_years', 0)
+            if experience_years == 0:
+                experience_level = "entry level junior"
+            elif experience_years <= 2:
+                experience_level = "junior"
+            elif experience_years <= 5:
+                experience_level = "mid level"
+            else:
+                experience_level = "senior"
+            
             # Create a detailed prompt for Gemini
             prompt = f"""
-                Based on the following user profile, generate a highly specific and effective job search query for Tavily that will find the most relevant job opportunities. The query should be concise but comprehensive enough to capture the user's requirements.
+            Based on the following user profile, generate a highly specific and effective job search query for Tavily that will find the most relevant job opportunities. The query should be concise but comprehensive enough to capture the user's requirements.
 
-                User Profile:
-                - Skills: {', '.join(profile.get('skills', []))}
-                - Experience: {profile.get('experience_years', 0)} years
-                - Last Job: {profile.get('last_job', {}).get('title', 'N/A')} at {profile.get('last_job', {}).get('company', 'N/A')}
-                - Job Preferences: {profile.get('job_preferences', {}).get('type', 'N/A')}
-                - Preferred Roles: {', '.join(profile.get('job_preferences', {}).get('roles', []))}
-                - Location: {profile.get('location', {}).get('city', 'N/A')}
-                - Work Mode: {profile.get('location', {}).get('work_mode', 'N/A')}
+            User Profile:
+            - Skills: {', '.join(profile.get('skills', []))}
+            - Experience: {experience_years} years
+            - Experience Level: {experience_level}
+            - Last Job: {profile.get('last_job', {}).get('title', 'N/A')} at {profile.get('last_job', {}).get('company', 'N/A')}
+            - Job Preferences: {profile.get('job_preferences', {}).get('type', 'N/A')}
+            - Preferred Roles: {', '.join(profile.get('job_preferences', {}).get('roles', []))}
+            - Location: {profile.get('location', {}).get('city', 'N/A')}
+            - Work Mode: {profile.get('location', {}).get('work_mode', 'N/A')}
 
-                Generate a job search query that includes:
-                1. Skill or technology
-                2. Specific Role 
-                3. Experience level based on these rules:
-                - 0 years → "entry level junior"
-                - 1–2 years → "junior"
-                - 3–5 years → "mid level"
-                - 6+ years → "senior"
-                4. Location preferences — use the user's location if 'in-office', otherwise default to 'remote' or 'hybrid' as per their preference.
+            Generate a job search query that includes:
+            1. Skill or technology
+            2. Specific Role 
+            3. Experience level: {experience_level}
+            4. Location preferences — use the user's location if 'in-office', otherwise default to 'remote' or 'hybrid' as per their preference.
 
-                Return ONLY the search query, nothing else. Make it optimized for job search engines.
-                """
-
+            Return ONLY the search query, nothing else. Make it optimized for job search engines.
+            """
 
             response = self.gemini_model.generate_content(prompt)
             query = response.text.strip()
             
             # Clean up the query
             query = query.replace('"', '').replace("'", "")
+            
+            # Double-check that the correct experience level is in the query
+            if experience_years > 5 and "entry level" in query.lower():
+                query = query.replace("entry level", "senior").replace("junior", "senior")
+            elif experience_years > 2 and experience_years <= 5 and ("entry level" in query.lower() or "senior" in query.lower()):
+                query = query.replace("entry level", "mid level").replace("senior", "mid level").replace("junior", "mid level")
+            elif experience_years <= 2 and experience_years > 0 and ("entry level" in query.lower() or "senior" in query.lower()):
+                query = query.replace("entry level", "junior").replace("senior", "junior")
             
             logger.info(f"Generated personalized query: {query}")
             return query
