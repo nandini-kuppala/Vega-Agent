@@ -12,7 +12,7 @@ from Agentic_ai.herkey_rag import get_session_recommendations
 
 from Agentic_ai.herkey_rag import get_community_recommendations
 
-from Agentic_ai.external_jobs import JobHuntingAgent
+from Agentic_ai.external_job_search import TavilyJobAgent
 from Agentic_ai.carrer_guide import get_career_guidance
 
 import streamlit as st
@@ -37,20 +37,6 @@ class CareerGuidanceChatbot:
         self.user_profile = None
         self.user_type = None  # "starter", "restarter", or "raiser"
         
-        # Load API keys from environment variables if not provided
-        self.firecrawl_api_key = firecrawl_api_key or st.secrets["FIRECRAWL_API_KEY"]
-        self.groq_api_key = groq_api_key or st.secrets["GROQ_API_KEY"]
-        
-        # Initialize job hunting agent if API keys are available
-        if self.firecrawl_api_key and self.groq_api_key:
-            self.job_agent = JobHuntingAgent(
-                firecrawl_api_key=self.firecrawl_api_key,
-                groq_api_key=self.groq_api_key,
-                model_id="llama3-70b-8192" 
-            )
-        else:
-            self.job_agent = None
-            logger.warning("API keys not provided. External job recommendations will be unavailable.")
     
     def load_profile(self, user_id: str = None, profile_data: Dict = None) -> bool:
         """
@@ -159,14 +145,15 @@ class CareerGuidanceChatbot:
             # Get recommendations from HerKey
             herkey_jobs = get_job_recommendations(self.user_profile)
             
-            # Get external job recommendations if API keys are available
+            # Get external job recommendations 
             external_recommendations = {}
-            if self.job_agent:
-                try:
-                    external_recommendations = self.job_agent.generate_recommendations(self.user_profile)
-                except Exception as e:
-                    logger.error(f"Error getting external job recommendations: {e}")
-            
+            if self.user_profile:
+                tavily_result = self.tavily_agent.get_job_recommendations(self.user_profile)
+                if tavily_result["status"] == "success":
+                    external_recommendations = tavily_result
+            #ccall th efuntions here for tavily suggested ext_jobs
+
+
             # Format response
             response = self._format_personalized_greeting()
             response += "\n\n### Job Recommendations Just For You\n\n"
@@ -182,19 +169,25 @@ class CareerGuidanceChatbot:
                         response += f"   - [Apply Here]({job.get('job_url')})\n"
                     response += "\n"
             
-            # Add external jobs
+            # Add external jobs from Tavily
             if external_recommendations and "recommendations" in external_recommendations:
                 ext_jobs = external_recommendations["recommendations"]
                 if ext_jobs:
                     response += "**From External Job Sites:**\n\n"
-                    for i, job in enumerate(ext_jobs[:3], 1):
-                        response += f"{i}. **{job.get('job_title')}** at {job.get('company')}\n"
-                        response += f"   - Location: {job.get('location')}\n"
-                        response += f"   - Experience: {job.get('experience_required')}\n"
-                        response += f"   - Match: {job.get('match_percentage')}%\n"
-                        response += f"   - Skills Match: {', '.join(job.get('skills_match', []))}\n"
+                    for i, job in enumerate(ext_jobs[:5], 1):  # Show top 5 results
+                        response += f"{i}. **{job.get('job_title', 'Job Opportunity')}** at {job.get('company', 'Company')}\n"
+                        response += f"   * Location: {job.get('location', 'Not specified')}\n"
+                        response += f"   * Experience: {job.get('experience_required', 'Not specified')}\n"
+                        response += f"   * Match: {job.get('match_percentage', 75.0):.1f}%\n"
+                        
+                        # Skills match
+                        skills_match = job.get('skills_match', [])
+                        if skills_match:
+                            response += f"   * Skills Match: {', '.join(skills_match[:3])}\n"
+                        
+                        # Apply link
                         if job.get('job_link'):
-                            response += f"   - [Apply Here]({job.get('job_link')})\n"
+                            response += f"   * [Apply Here]({job.get('job_link')})\n"
                         response += "\n"
             
             # Add user type specific advice
@@ -611,15 +604,9 @@ def main():
     """
     Main function to test the chatbot functionality.
     """
-    # Get API keys from environment variables
-    firecrawl_api_key = st.secrets["FIRECRAWL_API_KEY"]
-    groq_api_key = st.secrets["GROQ_API_KEY"]
     
     # Initialize the chatbot
-    chatbot = CareerGuidanceChatbot(
-        firecrawl_api_key=firecrawl_api_key,
-        groq_api_key=groq_api_key
-    )
+    chatbot = CareerGuidanceChatbot()
     
     # Sample profile data for testing
     sample_profile = {
