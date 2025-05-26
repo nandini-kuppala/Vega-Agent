@@ -45,7 +45,8 @@ class CareerGuidanceChatbot:
         if self.firecrawl_api_key and self.groq_api_key:
             self.job_agent = JobHuntingAgent(
                 firecrawl_api_key=self.firecrawl_api_key,
-                groq_api_key=self.groq_api_key
+                groq_api_key=self.groq_api_key,
+                model_id="llama3-70b-8192" 
             )
         else:
             self.job_agent = None
