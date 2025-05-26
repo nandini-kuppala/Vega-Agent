@@ -36,6 +36,7 @@ class CareerGuidanceChatbot:
         """Initialize the career guidance chatbot with API keys."""
         self.user_profile = None
         self.user_type = None  # "starter", "restarter", or "raiser"
+        self.tavily_agent = TavilyJobAgent()
         
     
     def load_profile(self, user_id: str = None, profile_data: Dict = None) -> bool:
