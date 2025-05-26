@@ -72,7 +72,7 @@ class CareerGuidanceChatbot:
         if isinstance(experience_data, dict) and '$numberInt' in experience_data:
             exp_years = int(experience_data['$numberInt'])
         else:
-            exp_years = int(experience_data) if experience_data else 0
+            exp_years = int(experience_data) if experience_data else 5
 
         
         # Check for restarter (women who took a career break)
@@ -87,7 +87,7 @@ class CareerGuidanceChatbot:
         # Determine user type
         if is_woman_with_break:
             self.user_type = "restarter"
-        elif exp_years > 5:
+        elif exp_years >= 5:
             self.user_type = "raiser"
         else:
             self.user_type = "starter"

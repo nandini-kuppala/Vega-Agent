@@ -37,17 +37,10 @@ class TavilyJobAgent:
         if not self.gemini_model:
             # Fallback query generation without AI
             return self._generate_fallback_query(profile)
-                # Get experience years (handle different possible formats)
-        experience_data = self.user_profile.get('experience_years', 0)
-        if isinstance(experience_data, dict) and '$numberInt' in experience_data:
-            experience = int(experience_data['$numberInt'])
-        else:
-            experience = int(experience_data) if experience_data else 0
         
         try:
             # Get experience level first
-                    # Get experience years (handle different possible formats)
-        
+            experience_years = profile.get('experience_years', 6)
             if experience_years == 0:
                 experience_level = "entry level junior"
             elif experience_years <= 2:
