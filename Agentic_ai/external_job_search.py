@@ -5,7 +5,8 @@ from tavily import TavilyClient
 import streamlit as st
 from typing import Dict, List, Optional
 import logging
-import streamlit as st
+from backend.database import get_profile
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -14,6 +15,13 @@ class TavilyJobAgent:
     def __init__(self):
         """Initialize the Tavily Job Agent with API keys."""
         try:
+            # Initialize profile
+            self.profile = None
+            if 'user_id' in st.session_state:
+                profile_res = get_profile(st.session_state['user_id'])
+                if profile_res["status"] == "success":
+                    self.profile = profile_res["profile"]
+            
             # Initialize Gemini
             self.gemini_api_key = st.secrets["GEMINI_API_KEY"]
             if self.gemini_api_key:
@@ -31,6 +39,7 @@ class TavilyJobAgent:
             logger.error(f"Error initializing TavilyJobAgent: {e}")
             self.gemini_model = None
             self.tavily_client = None
+            self.profile = None
 
     def generate_personalized_query(self, profile: Dict) -> str:
         """Generate a personalized job search query using Gemini AI."""
@@ -40,7 +49,7 @@ class TavilyJobAgent:
         
         try:
             # Get experience level first
-            experience_years = profile.get('experience_years', 6)
+            experience_years = profile.get('experience_years', 0)
             if experience_years == 0:
                 experience_level = "entry level junior"
             elif experience_years <= 2:
@@ -78,14 +87,6 @@ class TavilyJobAgent:
             
             # Clean up the query
             query = query.replace('"', '').replace("'", "")
-            
-            # Double-check that the correct experience level is in the query
-            if experience_years > 5 and "entry level" in query.lower():
-                query = query.replace("entry level", "senior").replace("junior", "senior")
-            elif experience_years > 2 and experience_years <= 5 and ("entry level" in query.lower() or "senior" in query.lower()):
-                query = query.replace("entry level", "mid level").replace("senior", "mid level").replace("junior", "mid level")
-            elif experience_years <= 2 and experience_years > 0 and ("entry level" in query.lower() or "senior" in query.lower()):
-                query = query.replace("entry level", "junior").replace("senior", "junior")
             
             logger.info(f"Generated personalized query: {query}")
             return query
@@ -257,11 +258,21 @@ class TavilyJobAgent:
         
         return info
 
-    def get_job_recommendations(self, profile: Dict) -> Dict:
+    def get_job_recommendations(self, profile: Optional[Dict] = None) -> Dict:
         """Main method to get job recommendations for a user profile."""
         try:
+            # Use provided profile or instance profile
+            user_profile = profile if profile is not None else self.profile
+            
+            if not user_profile:
+                return {
+                    "status": "error",
+                    "message": "No user profile available",
+                    "recommendations": []
+                }
+            
             # Step 1: Generate personalized query
-            query = self.generate_personalized_query(profile)
+            query = self.generate_personalized_query(user_profile)
             logger.info(f"Using query: {query}")
             
             # Step 2: Search jobs using Tavily
@@ -275,7 +286,7 @@ class TavilyJobAgent:
                 }
             
             # Step 3: Format results
-            formatted_jobs = self.format_job_results(tavily_response, profile)
+            formatted_jobs = self.format_job_results(tavily_response, user_profile)
             
             return {
                 "status": "success",
@@ -300,12 +311,15 @@ def get_tavily_search_results(query: str, search_type: str = "general") -> Optio
         return agent.search_jobs(query)
     else:
         try:
-            response = agent.tavily_client.search(
-                query=query,
-                search_depth="basic",
-                max_results=6
-            )
-            return response
+            if agent.tavily_client:
+                response = agent.tavily_client.search(
+                    query=query,
+                    search_depth="basic",
+                    max_results=6
+                )
+                return response
+            else:
+                return None
         except Exception as e:
             logger.error(f"Error in general Tavily search: {e}")
             return None
