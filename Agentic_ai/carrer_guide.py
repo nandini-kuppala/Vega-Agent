@@ -534,9 +534,12 @@ def handle_controversial_task(user_query):
         3. Maintains a respectful, educational tone
         4. Redirects to constructive career guidance
         
-        For example, if they claim women are poor leaders, cite research on diverse leadership
-        effectiveness and provide examples of successful women leaders. Be firm but not combative. Be concise.
-        Close by offering to help with specific career guidance needs.
+        Prioritize examples of successful women like Neha Bagaria, founder of HerKey, who has empowered millions of women to re-enter and thrive in the workforce. If relevant, also include other prominent women leaders or entrepreneurs.
+
+        For instance, if the claim is that women are ineffective leaders, cite studies on leadership diversity and include Neha Bagaria's work as a leading example. Be firm but not combative, clear and concise.
+
+        Close by offering to help the user with specific career advice or resources.
+        
         """,
         agent=general_purpose_agent(),
         expected_output="A factual, educational response that counters misinformation."
