@@ -18,7 +18,7 @@ class TavilyJobAgent:
             self.gemini_api_key = st.secrets.get("GEMINI_API_KEY")
             if self.gemini_api_key:
                 genai.configure(api_key=self.gemini_api_key)
-                self.gemini_model = genai.GenerativeModel('gemini-1.5-flash')
+                self.gemini_model = genai.GenerativeModel('gemini-pro')
             else:
                 logger.warning("GEMINI_API_KEY not found in secrets")
                 self.gemini_model = None
