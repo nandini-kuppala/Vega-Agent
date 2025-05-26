@@ -8,7 +8,9 @@
         "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Ambassador_Club_Banner_Trust.jpg",
         "category": "most active",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Champions Club",
@@ -19,67 +21,9 @@
         "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Champions_Club_Banner.jpg",
         "category": "most active",
         "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "RestartHer Academy",
-        "type": "private",
-        "member_count": 34442,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/RestartHer.jpg",
-        "category": "trending",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Women on a Career Break",
-        "type": "public",
-        "member_count": 36445,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women-Career-break.jpg",
-        "category": "most active",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Women's March",
-        "type": "public",
-        "member_count": 6066,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/women_march_icon.jpg",
-        "category": "trending",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Career Growth",
-        "type": "public",
-        "member_count": 21940,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Career_Growth_Icon.jpg",
-        "category": "most active",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Work -Life Balance",
-        "type": "public",
-        "member_count": 1751,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Work_Life_Balance_Icon.jpg",
-        "category": "most active",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Work-From- Home",
-        "type": "public",
-        "member_count": 179015,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Work_From_Home_Icon.jpg",
-        "category": "trending",
-        "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Women in Tech",
@@ -89,140 +33,45 @@
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_in_Tech_Icon.jpg",
         "category": "trending",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
-        "name": "HerStart",
+        "name": "Women's March",
         "type": "public",
-        "member_count": 48,
+        "member_count": 6066,
         "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/HerStart_Icon.jpg",
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/women_march_icon.jpg",
+        "category": "trending",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
-        "name": "Women Achievers",
+        "name": "Career Growth",
         "type": "public",
-        "member_count": 50495,
+        "member_count": 21940,
         "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_Achievers_Icon.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Women Entrepreneurs",
-        "type": "public",
-        "member_count": 3040,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_Entrepreneurs_Icon.jpg",
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Career_Growth_Icon.jpg",
         "category": "most active",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
-        "name": "Women Freelancers",
+        "name": "Work -Life Balance",
         "type": "public",
-        "member_count": 95637,
+        "member_count": 1751,
         "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_Freelancerss_Icon.jpg",
-        "category": "trending",
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Work_Life_Balance_Icon.jpg",
+        "category": "most active",
         "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "HerTech Academy",
-        "type": "private",
-        "member_count": 29,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/HerTech_Icon.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "herShakti",
-        "type": "private",
-        "member_count": 49,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/herShakti_Icon.jpg",
-        "category": "trending",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Women in HR",
-        "type": "public",
-        "member_count": 6170,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_in_HR.jpg",
-        "category": "Trending",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Careers in Bangalore",
-        "type": "public",
-        "member_count": 5586,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers_in_Bangalore.jpg",
-        "category": "Most Active",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Women Content Writers",
-        "type": "public",
-        "member_count": 2287,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_Content_Writers.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Careers in NGO",
-        "type": "public",
-        "member_count": 1512,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers_in_NGO.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Careers in Mumbai",
-        "type": "public",
-        "member_count": 1425,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers_in_Mumbai.jpg",
-        "category": "Most Active",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Working Moms",
-        "type": "public",
-        "member_count": 1434,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Working_moms.jpg",
-        "category": "Most Active",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Building Gender Parity",
-        "type": "public",
-        "member_count": 1140,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Building_Gender_Parity.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Careers in Pharma",
-        "type": "public",
-        "member_count": 1009,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers_in_Pharma.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Careers in Education",
@@ -231,146 +80,9 @@
         "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers_in_Education.jpg",
         "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Women in Finance",
-        "type": "public",
-        "member_count": 821,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_in_Finance.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Women in Admin",
-        "type": "public",
-        "member_count": 701,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_in_Admin.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Women Bloggers",
-        "type": "public",
-        "member_count": 673,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_Bloggers.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Careers in Pune",
-        "type": "public",
-        "member_count": 692,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers_in_Pune.jpg",
-        "category": "Most Active",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Careers in Digital Marketing",
-        "type": "public",
-        "member_count": 631,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers_in_Digital_Marketing.jpg",
-        "category": "Most Active",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Careers in Hyderabad",
-        "type": "public",
-        "member_count": 604,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers_in_Hyderabad.jpg",
-        "category": "Most Active",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Careers in Delhi",
-        "type": "public",
-        "member_count": 454,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers_in_Delhi.jpg",
-        "category": "Most Active",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Careers in Interior Designing",
-        "type": "public",
-        "member_count": 165,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers_in_Interior_Designing-icon.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Careers in Media",
-        "type": "public",
-        "member_count": 164,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers_in_Media.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Careers in Hospitality & Travel",
-        "type": "public",
-        "member_count": 157,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers_in_Hospitality&Travel-icon.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Women in Consulting",
-        "type": "public",
-        "member_count": 174,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_in_Consulting.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Women Photgraphers",
-        "type": "public",
-        "member_count": 139,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_Photographers-icon.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Women in Indian Army",
-        "type": "public",
-        "member_count": 134,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_in_Indian_Army-icon.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Careers in Law",
-        "type": "public",
-        "member_count": 107,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers_in_Law-icon.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Careers in Manufacturing",
-        "type": "public",
-        "member_count": 92,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers_in_Manufacturing-icon.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Careers in Kochi",
@@ -379,53 +91,9 @@
         "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers_in_Kochi-icon.jpg",
         "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "HerRising",
-        "type": "public",
-        "member_count": 39405,
-        "featured": true,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/HerRising_Group_Icon_2.jpg",
-        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/HerRising_2205_group_banner.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Women Engineers",
-        "type": "public",
-        "member_count": 485,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women-Engineers.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Women Creatives",
-        "type": "public",
-        "member_count": 439,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women-Creatives.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Careers in Banking",
-        "type": "public",
-        "member_count": 447,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers-in-Banking.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Careers in Chennai",
-        "type": "public",
-        "member_count": 403,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers-in-Chennai.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Careers in Sales & Marketing",
@@ -434,110 +102,9 @@
         "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers-in-Sales-and-Marketing.jpg",
         "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Careers in BPO",
-        "type": "public",
-        "member_count": 290,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers-in-BPO.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Careers in Design Thinking",
-        "type": "public",
-        "member_count": 264,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers-in-Design-Thinking.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Women in Healthcare",
-        "type": "public",
-        "member_count": 270,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women-in-Healthcare.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Careers in Arts",
-        "type": "public",
-        "member_count": 232,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers-in-Arts.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Careers in Fashion Industry",
-        "type": "public",
-        "member_count": 237,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers-in-the-Fashion-Industry.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Women Architects",
-        "type": "public",
-        "member_count": 214,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women-Architects.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Women Art Directors",
-        "type": "public",
-        "member_count": 237,
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women-Art-Directors.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Open Ceiling Club",
-        "type": "private",
-        "member_count": 134,
-        "featured": true,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/OC_Groups_Icon.jpg",
-        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/OC_Groups_Banner.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Women in Automobile by Royal Enfield",
-        "type": "public",
-        "member_count": 1074,
-        "featured": true,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Royal_Enfield_Icon.jpg",
-        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Women_in_Automobile_by_Royal_Enfield.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Women in Finance (Cargill)",
-        "type": "public",
-        "member_count": 479,
-        "featured": true,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Cargill_Icon.jpg",
-        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Women_in_Finance_Groups_Banner.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "opHERations (Women in Operations) by Cargill",
-        "type": "public",
-        "member_count": 756,
-        "featured": true,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Cargill_Icon.jpg",
-        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Women_in_Operations_Cargill.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Women in FMCG Sales",
@@ -547,7 +114,144 @@
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_in_FMCG_Sales_Icon.jpg",
         "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Women_in_FMCG_Sales_Groups.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Work-From- Home",
+        "type": "public",
+        "member_count": 179015,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Work_From_Home_Icon.jpg",
+        "category": "trending",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Women in Admin",
+        "type": "public",
+        "member_count": 701,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_in_Admin.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Women Photgraphers",
+        "type": "public",
+        "member_count": 139,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_Photographers-icon.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Careers in Law",
+        "type": "public",
+        "member_count": 107,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers_in_Law-icon.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Careers in Arts",
+        "type": "public",
+        "member_count": 232,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers-in-Arts.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Women Art Directors",
+        "type": "public",
+        "member_count": 237,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women-Art-Directors.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Women on a Career Break",
+        "type": "public",
+        "member_count": 36445,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women-Career-break.jpg",
+        "category": "most active",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Careers in NGO",
+        "type": "public",
+        "member_count": 1512,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers_in_NGO.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Careers in Banking",
+        "type": "public",
+        "member_count": 447,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers-in-Banking.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Careers in Chennai",
+        "type": "public",
+        "member_count": 403,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers-in-Chennai.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Careers in Design Thinking",
+        "type": "public",
+        "member_count": 264,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers-in-Design-Thinking.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Open Ceiling Club",
+        "type": "private",
+        "member_count": 134,
+        "featured": true,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/OC_Groups_Icon.jpg",
+        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/OC_Groups_Banner.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Women in Procurement",
@@ -557,7 +261,9 @@
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_in_procurement_Icon.jpg",
         "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Women_in_procurement_Groups.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Women in Supply Chain",
@@ -566,7 +272,216 @@
         "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_in_Supply_Chain_Icon.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "HerStart",
+        "type": "public",
+        "member_count": 48,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/HerStart_Icon.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "herShakti",
+        "type": "private",
+        "member_count": 49,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/herShakti_Icon.jpg",
+        "category": "trending",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Careers in Bangalore",
+        "type": "public",
+        "member_count": 5586,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers_in_Bangalore.jpg",
+        "category": "Most Active",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Women Bloggers",
+        "type": "public",
+        "member_count": 673,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_Bloggers.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Careers in Media",
+        "type": "public",
+        "member_count": 164,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers_in_Media.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Careers in Manufacturing",
+        "type": "public",
+        "member_count": 92,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers_in_Manufacturing-icon.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "HerRising",
+        "type": "public",
+        "member_count": 39405,
+        "featured": true,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/HerRising_Group_Icon_2.jpg",
+        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/HerRising_2205_group_banner.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Women Creatives",
+        "type": "public",
+        "member_count": 439,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women-Creatives.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Careers in BPO",
+        "type": "public",
+        "member_count": 290,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers-in-BPO.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Women Achievers",
+        "type": "public",
+        "member_count": 50495,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_Achievers_Icon.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Women Freelancers",
+        "type": "public",
+        "member_count": 95637,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_Freelancerss_Icon.jpg",
+        "category": "trending",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Women Entrepreneurs",
+        "type": "public",
+        "member_count": 3040,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_Entrepreneurs_Icon.jpg",
+        "category": "most active",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Women in HR",
+        "type": "public",
+        "member_count": 6170,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_in_HR.jpg",
+        "category": "Trending",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Careers in Mumbai",
+        "type": "public",
+        "member_count": 1425,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers_in_Mumbai.jpg",
+        "category": "Most Active",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Working Moms",
+        "type": "public",
+        "member_count": 1434,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Working_moms.jpg",
+        "category": "Most Active",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Women Engineers",
+        "type": "public",
+        "member_count": 485,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women-Engineers.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Careers in Fashion Industry",
+        "type": "public",
+        "member_count": 237,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers-in-the-Fashion-Industry.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Women in Automobile by Royal Enfield",
+        "type": "public",
+        "member_count": 1074,
+        "featured": true,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Royal_Enfield_Icon.jpg",
+        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Women_in_Automobile_by_Royal_Enfield.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Women in Agriculture",
@@ -575,15 +490,9 @@
         "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_in_agriculture_Icon.jpg",
         "joinable": true,
-        "join_button_text": "Join"
-    },
-    {
-        "name": "Women in Product",
-        "type": "private",
-        "featured": false,
-        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_In_Product_Icon.jpg",
-        "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "PowerMoms",
@@ -593,7 +502,224 @@
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/PowerMoms-icon.jpg",
         "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/PowerMoms-creatives_Group_Banner.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "HerTech Academy",
+        "type": "private",
+        "member_count": 29,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/HerTech_Icon.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Women Content Writers",
+        "type": "public",
+        "member_count": 2287,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_Content_Writers.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Careers in Pharma",
+        "type": "public",
+        "member_count": 1009,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers_in_Pharma.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Careers in Digital Marketing",
+        "type": "public",
+        "member_count": 631,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers_in_Digital_Marketing.jpg",
+        "category": "Most Active",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Careers in Delhi",
+        "type": "public",
+        "member_count": 454,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers_in_Delhi.jpg",
+        "category": "Most Active",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Women in Indian Army",
+        "type": "public",
+        "member_count": 134,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_in_Indian_Army-icon.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Women Architects",
+        "type": "public",
+        "member_count": 214,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women-Architects.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Women in Finance (Cargill)",
+        "type": "public",
+        "member_count": 479,
+        "featured": true,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Cargill_Icon.jpg",
+        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Women_in_Finance_Groups_Banner.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "opHERations (Women in Operations) by Cargill",
+        "type": "public",
+        "member_count": 756,
+        "featured": true,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Cargill_Icon.jpg",
+        "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Women_in_Operations_Cargill.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Building Gender Parity",
+        "type": "public",
+        "member_count": 1140,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Building_Gender_Parity.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "RestartHer Academy",
+        "type": "private",
+        "member_count": 34442,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/RestartHer.jpg",
+        "category": "trending",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Women in Finance",
+        "type": "public",
+        "member_count": 821,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_in_Finance.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Careers in Pune",
+        "type": "public",
+        "member_count": 692,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers_in_Pune.jpg",
+        "category": "Most Active",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Careers in Hyderabad",
+        "type": "public",
+        "member_count": 604,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers_in_Hyderabad.jpg",
+        "category": "Most Active",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Careers in Interior Designing",
+        "type": "public",
+        "member_count": 165,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers_in_Interior_Designing-icon.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Careers in Hospitality & Travel",
+        "type": "public",
+        "member_count": 157,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Careers_in_Hospitality&Travel-icon.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Women in Consulting",
+        "type": "public",
+        "member_count": 174,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_in_Consulting.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Women in Healthcare",
+        "type": "public",
+        "member_count": 270,
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women-in-Healthcare.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
+    },
+    {
+        "name": "Women in Product",
+        "type": "private",
+        "featured": false,
+        "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Women_In_Product_Icon.jpg",
+        "joinable": true,
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "TechVisionHERies",
@@ -602,7 +728,9 @@
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/techvisionHERies_Icon.jpg",
         "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/techvisionHERies_Groups_Banner.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Women Influencers Network",
@@ -610,7 +738,9 @@
         "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/WIN_Groups_Icon.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "HerKey Team",
@@ -618,7 +748,9 @@
         "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/HerKey_Groups_Icon.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Women Recruiters Network",
@@ -626,7 +758,9 @@
         "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Recruitment_Network_Groups_Icon.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Back to Work",
@@ -634,7 +768,9 @@
         "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Back_to_Work_Groups_Icon.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Women's Sales Network",
@@ -642,7 +778,9 @@
         "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Sales_Network_Groups_Icon.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "HERizon",
@@ -651,7 +789,9 @@
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Herizon_Groups_Icon.jpg",
         "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Herizon_Groups_Banner.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Tech Thrivers – Group for experienced women professionals...",
@@ -659,7 +799,9 @@
         "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Tech-Thrivers-women-professionals_Icon_1.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Tech Thrivers – Group for engineering and non-engineering st...",
@@ -667,7 +809,9 @@
         "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Tech-Thrivers-engineering-and-non-engineering-students_Icon_1.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Women in Sales Connect",
@@ -675,7 +819,9 @@
         "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/RHA_Icon.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Sunrisers Group",
@@ -683,7 +829,9 @@
         "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/RHA_Icon.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Twilighters Group",
@@ -691,7 +839,9 @@
         "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/RHA_Icon.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "HerRising Contenders 2024",
@@ -699,7 +849,9 @@
         "featured": true,
         "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/HerRising_Groups_Banner.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "WIN Knowledge Connect",
@@ -707,7 +859,9 @@
         "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/RHA_Icon_WIN.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Women in Fintech",
@@ -716,7 +870,9 @@
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Finastra_Group_Icon_2_Aug.jpg",
         "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Finastra_HK_Group_Banner_2_Aug.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "The DivHERsity Club",
@@ -725,7 +881,9 @@
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/DivHERsity_Club_Group_Icon_2_Aug.jpg",
         "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/DivHERsity_Club_Group_Banner_2_Aug.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "EMPOWER.HER by Aptiv",
@@ -734,7 +892,9 @@
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Aptiv_Icon.jpg",
         "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Aptiv_Group_Banner.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Team Shakti",
@@ -744,7 +904,9 @@
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Shakti.jpg",
         "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Shakti_banner.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "WeEmpower",
@@ -754,7 +916,9 @@
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/WeEmpower_icon.jpg",
         "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/WeEmpower_Groups_Banner.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Women in Recruitment Connect",
@@ -763,7 +927,9 @@
         "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/RHA_Icon.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "HerShakti Knowledge Connect",
@@ -772,7 +938,9 @@
         "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/herShakti_Icon.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Open Ceiling Women’s Leadership Conclave 2024",
@@ -781,7 +949,9 @@
         "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/OPC_2024_GI_1.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "HERFuture in Manufacturing",
@@ -789,7 +959,9 @@
         "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/HerFuture-in-manufacture-Logo-icon.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "HERFuture in GCC ( Global Capability Center)",
@@ -798,7 +970,9 @@
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/HerFuture-in-GCC-Logo-icon.jpg",
         "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/HerFuture-in-GCC-Group-banner.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "HERFuture in Semicon",
@@ -806,7 +980,9 @@
         "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/HerFuture-in-semicom-Logo-icon.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "HERFuture in IT",
@@ -814,7 +990,9 @@
         "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/HerFuture-in-IT-Logo-icon.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "HERFuture in BFSI",
@@ -823,7 +1001,9 @@
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/HerFuture-in-BFSI-Logo-icon.jpg",
         "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/HerFuture-in-BFSI-Group-banner.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "WIN Knowledge Connect 2",
@@ -832,7 +1012,9 @@
         "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/RHA_Icon.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Women Who Innovate",
@@ -840,7 +1022,9 @@
         "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/WWI_logo.webp",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Skill ReBoot - Connect 1",
@@ -848,7 +1032,9 @@
         "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/SRC1.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Skill ReBoot - Connect 2",
@@ -856,7 +1042,9 @@
         "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/SRC1.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Skill ReBoot - Connect 3",
@@ -864,7 +1052,9 @@
         "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/SRC1.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Skill ReBoot - Connect 4",
@@ -872,7 +1062,9 @@
         "featured": false,
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/SRC1.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "EmpowerHer",
@@ -881,7 +1073,9 @@
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Future mug X HerKey private group_Group ICon.jpg",
         "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Future mug X HerKey private group-01.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Community Managers Connect",
@@ -890,7 +1084,9 @@
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Re Logo & Banner creation of Community Managers_icon 75-75.jpg",
         "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Re Logo & Banner creation of Community Managers_Group banner 600-300.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Skill ReBoot Programs",
@@ -899,7 +1095,9 @@
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/Artboard 1 copy-100.jpg",
         "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Ashoka_University_Deliverables_Group_Banner.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Full Stack (MERN) Developer Program",
@@ -908,7 +1106,9 @@
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/Hertech_Logo_Group_Banner.jpg",
         "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/Hertech_Simplilearn_Group_Banner_10_Mar.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "NTT DATA 's Our Women First Group",
@@ -917,7 +1117,9 @@
         "icon_url": "https://assets.jobsforher.com/herkeycom/assets/img/icons/v1/NTT_groupicon.jpg",
         "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/NTT_GroupBanner.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "HerFit.Tribe",
@@ -926,7 +1128,9 @@
         "icon_url": "https://d2jbshxkjdydpu.cloudfront.net/4556629_549715d621f24948ac3b4862933fbd4b.jpg",
         "banner_url": "https://assets.jobsforher.com/herkeycom/assets/img/banners/v2/HerFit_Tribe-creatives_Group_Banner.jpg",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "HerRising 2025 Delegates Group",
@@ -935,7 +1139,9 @@
         "icon_url": "https://d2jbshxkjdydpu.cloudfront.net/4556629_331f021cab1d42dc8804a7667c759534.jpg",
         "category": "trending",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     },
     {
         "name": "Official HerRising 2025 Group",
@@ -944,6 +1150,8 @@
         "icon_url": "https://d2jbshxkjdydpu.cloudfront.net/4556629_191415b89f6d4794a09e10959b8bd54c.jpg",
         "category": "trending",
         "joinable": true,
-        "join_button_text": "Join"
+        "join_button_text": "Join",
+        "group_url": "https://www.herkey.com/groups",
+        "group_id": ""
     }
 ]

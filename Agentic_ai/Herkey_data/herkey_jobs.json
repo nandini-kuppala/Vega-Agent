@@ -1,13 +1,23 @@
 [
     {
-        "title": "Product writer",
-        "company": "HerKey",
+        "title": "AVP, Analytics - PayPal (L10)",
+        "company": "Synchrony",
         "location": "Bangalore",
-        "work_type": "Hybrid",
-        "experience": "3-4 Yr",
-        "skills": "Product Writing • Ui +5",
+        "work_type": "Work From Office",
+        "experience": "5-10 Yr",
+        "skills": "Sql • Sas +2",
         "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/c8dc717b169103af90ddc1ce3c5b389d9983119a584262ccb7.jpg"
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/fe86a8b1b93021866b325afe4733cf.jpg",
+        "job_url": "https://www.herkey.com/jobs/avp-analytics---paypal-l10/174229",
+        "job_id": "174229",
+        "min_experience": 5,
+        "max_experience": 10,
+        "avg_experience": 7.5,
+        "skills_list": [
+            "Sql",
+            "Sas"
+        ],
+        "work_mode": "in-office"
     },
     {
         "title": "Process Lead, Canada Financial Control",
@@ -17,7 +27,17 @@
         "experience": "3-6 Yr",
         "skills": "Financial Statements • Reporting Finance +2",
         "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/3bb5af1294b8d88baef15109ff6f2f5ec515da00259610ee94.png"
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/3bb5af1294b8d88baef15109ff6f2f5ec515da00259610ee94.png",
+        "job_url": "https://www.herkey.com/jobs/process-lead-canada-financial-control/174244",
+        "job_id": "174244",
+        "min_experience": 3,
+        "max_experience": 6,
+        "avg_experience": 4.5,
+        "skills_list": [
+            "Financial Statements",
+            "Reporting Finance"
+        ],
+        "work_mode": "hybrid"
     },
     {
         "title": "Process Lead - CFO Risk",
@@ -27,177 +47,17 @@
         "experience": "3-6 Yr",
         "skills": "Risk Assessment • Sarbanes Oxley Compliance +4",
         "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/3bb5af1294b8d88baef15109ff6f2f5ec515da00259610ee94.png"
-    },
-    {
-        "title": "Customer Relations Associate",
-        "company": "Fidelity International",
-        "location": "Gurgaon",
-        "work_type": "Hybrid",
-        "experience": "1-2 Yr",
-        "skills": "Customer Service • Attention To Detail +1",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/3bb5af1294b8d88baef15109ff6f2f5ec515da00259610ee94.png"
-    },
-    {
-        "title": "Senior Software Engineer - Frontend",
-        "company": "HerKey",
-        "location": "Bangalore",
-        "work_type": "Hybrid",
-        "experience": "5-10 Yr",
-        "skills": "Reactjs • Redux +2",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/c8dc717b169103af90ddc1ce3c5b389d9983119a584262ccb7.jpg"
-    },
-    {
-        "title": "AVP, Analytics - PayPal (L10)",
-        "company": "Synchrony",
-        "location": "Bangalore",
-        "work_type": "Work From Office",
-        "experience": "5-10 Yr",
-        "skills": "Sql • Sas +2",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/fe86a8b1b93021866b325afe4733cf.jpg"
-    },
-    {
-        "title": "Angular_Software Developer",
-        "company": "Finastra",
-        "location": "Bangalore",
-        "work_type": "Work From Office",
-        "experience": "4-7 Yr",
-        "skills": "Angular • Typescript +4",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/8f0a2945e5e3d3960c7e7f6b02ad7de08c4649e1682ea44d01.jpg"
-    },
-    {
-        "title": "Senior Angular Software Developer",
-        "company": "Finastra",
-        "location": "Bangalore",
-        "work_type": "Work From Office",
-        "experience": "7-10 Yr",
-        "skills": "Angular • Typescript +4",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/8f0a2945e5e3d3960c7e7f6b02ad7de08c4649e1682ea44d01.jpg"
-    },
-    {
-        "title": "UB Service Operations Manager",
-        "company": "Finastra",
-        "location": "Bangalore",
-        "work_type": "Work From Office",
-        "experience": "10-13 Yr",
-        "skills": "Business Analysis • Lean Six Sigma +1",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/8f0a2945e5e3d3960c7e7f6b02ad7de08c4649e1682ea44d01.jpg"
-    },
-    {
-        "title": "Senior C++ Developer",
-        "company": "Finastra",
-        "location": "Bangalore",
-        "work_type": "Work From Office",
-        "experience": "5-8 Yr",
-        "skills": "C# Development Language • Sql",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/8f0a2945e5e3d3960c7e7f6b02ad7de08c4649e1682ea44d01.jpg"
-    },
-    {
-        "title": "Data Entry Executive",
-        "company": "Cars24",
-        "location": "Any",
-        "work_type": "Work From Home",
-        "experience": "1-3 Yr",
-        "skills": "Office Administration • Performance Appraisal",
-        "easy_apply": false,
-        "company_logo": "https://herkey-images.s3.ap-south-1.amazonaws.com/public/images/default-thumb-suitcase.png"
-    },
-    {
-        "title": "Online Research Participants (Remote/Part-Tim...",
-        "company": "PanelPlace",
-        "location": "Any",
-        "work_type": "Work From Home",
-        "experience": "0-1 Yr",
-        "skills": "Communication Skills • Data Entry",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/7da90ec23789efacfb0a0fe1906621227f5d24521bb4096c7b.jpg"
-    },
-    {
-        "title": "Customer Support Engineer",
-        "company": "HSR IT SOLUTIONS PVT LTD",
-        "location": "Bangalore",
-        "work_type": "Work From Office",
-        "experience": "0-1 Yr",
-        "skills": "Communication Skills • Analyze-Problem +1",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/employer/1894/hsr-it-solutions-pvt-ltd-logo-1479786147.png"
-    },
-    {
-        "title": "Freelance Content Writer",
-        "company": "WittyPen Media Services...",
-        "location": "Pune",
-        "work_type": "1-10 Yr",
-        "experience": "",
-        "skills": "Seo • Writing +3",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/employer/1878/oZHau4eZVP-1566888661.png"
-    },
-    {
-        "title": "Backend Intern (Python)",
-        "company": "HerKey",
-        "location": "Bangalore",
-        "work_type": "Hybrid",
-        "experience": "0-2 Yr",
-        "skills": "Python • Django +1",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/c8dc717b169103af90ddc1ce3c5b389d9983119a584262ccb7.jpg"
-    },
-    {
-        "title": "Influencer Marketing Manager",
-        "company": "DRIM",
-        "location": "Any",
-        "work_type": "Work From Home",
-        "experience": "0-9 Yr",
-        "skills": "Good Communication • Team Work +7",
-        "easy_apply": false,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/ab8a534f72bf04c9695d6673e1543c.jpg"
-    },
-    {
-        "title": "Marketing Content Specialist –Editor and Writ...",
-        "company": "Nextworld Consumer",
-        "location": "Any",
-        "work_type": "1-5 Yr",
-        "experience": "",
-        "skills": "Communication Skills • English +1",
-        "easy_apply": true,
-        "company_logo": "https://herkey-images.s3.ap-south-1.amazonaws.com/public/images/default-thumb-suitcase.png"
-    },
-    {
-        "title": "Software Quality Tester",
-        "company": "Orange Current Technolo...",
-        "location": "Mumbai",
-        "work_type": "1-3 Yr",
-        "experience": "",
-        "skills": "",
-        "easy_apply": true,
-        "company_logo": "https://herkey-images.s3.ap-south-1.amazonaws.com/public/images/default-thumb-suitcase.png"
-    },
-    {
-        "title": "Business Analyst",
-        "company": "Ocwen Financial Solutio...",
-        "location": "Bangalore",
-        "work_type": "1-8 Yr",
-        "experience": "",
-        "skills": "",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/328d8ecf455ef6779484826674d666.png"
-    },
-    {
-        "title": "Work From Home – Digital Task Associate",
-        "company": "TurtleHub Nexus Connect...",
-        "location": "India",
-        "work_type": "Work From Home",
-        "experience": "0-1 Yr",
-        "skills": "Social Media • Digital Mktg. +6",
-        "easy_apply": false,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/8c7009fafdda74b5d63fb0833615e596cef36ca8096a820fc6.png"
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/3bb5af1294b8d88baef15109ff6f2f5ec515da00259610ee94.png",
+        "job_url": "https://www.herkey.com/jobs/process-lead---cfo-risk/174245",
+        "job_id": "174245",
+        "min_experience": 3,
+        "max_experience": 6,
+        "avg_experience": 4.5,
+        "skills_list": [
+            "Risk Assessment",
+            "Sarbanes Oxley Compliance"
+        ],
+        "work_mode": "hybrid"
     },
     {
         "title": "Product writer",
@@ -207,27 +67,17 @@
         "experience": "3-4 Yr",
         "skills": "Product Writing • Ui +5",
         "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/c8dc717b169103af90ddc1ce3c5b389d9983119a584262ccb7.jpg"
-    },
-    {
-        "title": "Process Lead, Canada Financial Control",
-        "company": "Fidelity International",
-        "location": "Gurgaon",
-        "work_type": "Hybrid",
-        "experience": "3-6 Yr",
-        "skills": "Financial Statements • Reporting Finance +2",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/3bb5af1294b8d88baef15109ff6f2f5ec515da00259610ee94.png"
-    },
-    {
-        "title": "Process Lead - CFO Risk",
-        "company": "Fidelity International",
-        "location": "Gurgaon",
-        "work_type": "Hybrid",
-        "experience": "3-6 Yr",
-        "skills": "Risk Assessment • Sarbanes Oxley Compliance +4",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/3bb5af1294b8d88baef15109ff6f2f5ec515da00259610ee94.png"
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/c8dc717b169103af90ddc1ce3c5b389d9983119a584262ccb7.jpg",
+        "job_url": "https://www.herkey.com/jobs/product-writer/174242",
+        "job_id": "174242",
+        "min_experience": 3,
+        "max_experience": 4,
+        "avg_experience": 3.5,
+        "skills_list": [
+            "Product Writing",
+            "Ui"
+        ],
+        "work_mode": "hybrid"
     },
     {
         "title": "Customer Relations Associate",
@@ -237,7 +87,17 @@
         "experience": "1-2 Yr",
         "skills": "Customer Service • Attention To Detail +1",
         "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/3bb5af1294b8d88baef15109ff6f2f5ec515da00259610ee94.png"
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/3bb5af1294b8d88baef15109ff6f2f5ec515da00259610ee94.png",
+        "job_url": "https://www.herkey.com/jobs/customer-relations-associate/174243",
+        "job_id": "174243",
+        "min_experience": 1,
+        "max_experience": 2,
+        "avg_experience": 1.5,
+        "skills_list": [
+            "Customer Service",
+            "Attention To Detail"
+        ],
+        "work_mode": "hybrid"
     },
     {
         "title": "Senior Software Engineer - Frontend",
@@ -247,67 +107,17 @@
         "experience": "5-10 Yr",
         "skills": "Reactjs • Redux +2",
         "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/c8dc717b169103af90ddc1ce3c5b389d9983119a584262ccb7.jpg"
-    },
-    {
-        "title": "AVP, Analytics - PayPal (L10)",
-        "company": "Synchrony",
-        "location": "Bangalore",
-        "work_type": "Work From Office",
-        "experience": "5-10 Yr",
-        "skills": "Sql • Sas +2",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/fe86a8b1b93021866b325afe4733cf.jpg"
-    },
-    {
-        "title": "Angular_Software Developer",
-        "company": "Finastra",
-        "location": "Bangalore",
-        "work_type": "Work From Office",
-        "experience": "4-7 Yr",
-        "skills": "Angular • Typescript +4",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/8f0a2945e5e3d3960c7e7f6b02ad7de08c4649e1682ea44d01.jpg"
-    },
-    {
-        "title": "Senior Angular Software Developer",
-        "company": "Finastra",
-        "location": "Bangalore",
-        "work_type": "Work From Office",
-        "experience": "7-10 Yr",
-        "skills": "Angular • Typescript +4",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/8f0a2945e5e3d3960c7e7f6b02ad7de08c4649e1682ea44d01.jpg"
-    },
-    {
-        "title": "UB Service Operations Manager",
-        "company": "Finastra",
-        "location": "Bangalore",
-        "work_type": "Work From Office",
-        "experience": "10-13 Yr",
-        "skills": "Business Analysis • Lean Six Sigma +1",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/8f0a2945e5e3d3960c7e7f6b02ad7de08c4649e1682ea44d01.jpg"
-    },
-    {
-        "title": "Senior C++ Developer",
-        "company": "Finastra",
-        "location": "Bangalore",
-        "work_type": "Work From Office",
-        "experience": "5-8 Yr",
-        "skills": "C# Development Language • Sql",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/8f0a2945e5e3d3960c7e7f6b02ad7de08c4649e1682ea44d01.jpg"
-    },
-    {
-        "title": "Social Media Freelancer",
-        "company": "HerKey",
-        "location": "Bangalore",
-        "work_type": "Hybrid",
-        "experience": "1-3 Yr",
-        "skills": "Social Media • Digital Marketing Campaign",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/c8dc717b169103af90ddc1ce3c5b389d9983119a584262ccb7.jpg"
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/c8dc717b169103af90ddc1ce3c5b389d9983119a584262ccb7.jpg",
+        "job_url": "https://www.herkey.com/jobs/senior-software-engineer---frontend/174224",
+        "job_id": "174224",
+        "min_experience": 5,
+        "max_experience": 10,
+        "avg_experience": 7.5,
+        "skills_list": [
+            "Reactjs",
+            "Redux"
+        ],
+        "work_mode": "hybrid"
     },
     {
         "title": "SQA Engineer",
@@ -317,237 +127,251 @@
         "experience": "1-3 Yr",
         "skills": "Ui Testing • Web Testing +3",
         "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/d8a92f19ffcde494667856427068af5295dd76055a3cf5715f.png"
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/d8a92f19ffcde494667856427068af5295dd76055a3cf5715f.png",
+        "job_url": "https://www.herkey.com/jobs/sqa-engineer/174216",
+        "job_id": "174216",
+        "min_experience": 1,
+        "max_experience": 3,
+        "avg_experience": 2.0,
+        "skills_list": [
+            "Ui Testing",
+            "Web Testing"
+        ],
+        "work_mode": "remote"
     },
     {
-        "title": "Full stack developer",
-        "company": "Poocho",
-        "location": "Any",
-        "work_type": "Hybrid",
-        "experience": "3-6 Yr",
-        "skills": "Typescript • Nodejs +6",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/d8a92f19ffcde494667856427068af5295dd76055a3cf5715f.png"
-    },
-    {
-        "title": "Tech Lead FPGA Designer",
-        "company": "Ericsson",
+        "title": "Angular_Software Developer",
+        "company": "Finastra",
         "location": "Bangalore",
-        "work_type": "Hybrid",
-        "experience": "10-20 Yr",
-        "skills": "Vivado • Verilog Hdl",
+        "work_type": "Work From Office",
+        "experience": "4-7 Yr",
+        "skills": "Angular • Typescript +4",
         "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/e77e219b9680d11514b7769941a22e69779cd497376956f512.jpg"
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/8f0a2945e5e3d3960c7e7f6b02ad7de08c4649e1682ea44d01.jpg",
+        "job_url": "https://www.herkey.com/jobs/angularsoftware-developer/174220",
+        "job_id": "174220",
+        "min_experience": 4,
+        "max_experience": 7,
+        "avg_experience": 5.5,
+        "skills_list": [
+            "Angular",
+            "Typescript"
+        ],
+        "work_mode": "in-office"
     },
     {
-        "title": "B2B Content & Research Associate",
-        "company": "HerKey",
+        "title": "Senior Angular Software Developer",
+        "company": "Finastra",
         "location": "Bangalore",
-        "work_type": "Hybrid",
-        "experience": "2-4 Yr",
-        "skills": "Research • Content Writing +1",
+        "work_type": "Work From Office",
+        "experience": "7-10 Yr",
+        "skills": "Angular • Typescript +4",
         "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/c8dc717b169103af90ddc1ce3c5b389d9983119a584262ccb7.jpg"
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/8f0a2945e5e3d3960c7e7f6b02ad7de08c4649e1682ea44d01.jpg",
+        "job_url": "https://www.herkey.com/jobs/senior-angular-software-developer/174221",
+        "job_id": "174221",
+        "min_experience": 7,
+        "max_experience": 10,
+        "avg_experience": 8.5,
+        "skills_list": [
+            "Angular",
+            "Typescript"
+        ],
+        "work_mode": "in-office"
     },
     {
-        "title": "Digital Marketing Associate",
-        "company": "Dsights",
+        "title": "Senior C++ Developer",
+        "company": "Finastra",
+        "location": "Bangalore",
+        "work_type": "Work From Office",
+        "experience": "5-8 Yr",
+        "skills": "C# Development Language • Sql",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/8f0a2945e5e3d3960c7e7f6b02ad7de08c4649e1682ea44d01.jpg",
+        "job_url": "https://www.herkey.com/jobs/senior-c-developer/174222",
+        "job_id": "174222",
+        "min_experience": 5,
+        "max_experience": 8,
+        "avg_experience": 6.5,
+        "skills_list": [
+            "C# Development Language",
+            "Sql"
+        ],
+        "work_mode": "in-office"
+    },
+    {
+        "title": "Data Entry Executive",
+        "company": "Cars24",
         "location": "Any",
         "work_type": "Work From Home",
-        "experience": "0-30 Yr",
-        "skills": "Digital Mktg. • Content Mktg +4",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/employer/6414/JNnMYhGewb-1577079943.png"
-    },
-    {
-        "title": "Head of Silicon India",
-        "company": "Ericsson",
-        "location": "Bangalore",
-        "work_type": "Hybrid",
-        "experience": "15-20 Yr",
-        "skills": "Fpga • Asic",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/e77e219b9680d11514b7769941a22e69779cd497376956f512.jpg"
-    },
-    {
-        "title": "Tech Lead FPGA/ASIC Verification",
-        "company": "Ericsson",
-        "location": "Bangalore",
-        "work_type": "Hybrid",
-        "experience": "8-20 Yr",
-        "skills": "Uvm • Systemverilog +2",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/e77e219b9680d11514b7769941a22e69779cd497376956f512.jpg"
-    },
-    {
-        "title": "Technical Lead ASIC Designer",
-        "company": "Ericsson",
-        "location": "Bangalore",
-        "work_type": "Work From Office",
-        "experience": "5-15 Yr",
-        "skills": "Asic",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/e77e219b9680d11514b7769941a22e69779cd497376956f512.jpg"
-    },
-    {
-        "title": "Technical Lead ASIC Verifier",
-        "company": "Ericsson",
-        "location": "Bangalore",
-        "work_type": "Hybrid",
-        "experience": "10-13 Yr",
-        "skills": "Asic",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/e77e219b9680d11514b7769941a22e69779cd497376956f512.jpg"
-    },
-    {
-        "title": "Line Manager - ASIC",
-        "company": "Ericsson",
-        "location": "Bangalore",
-        "work_type": "Hybrid",
-        "experience": "15-18 Yr",
-        "skills": "Line Management • Asic",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/e77e219b9680d11514b7769941a22e69779cd497376956f512.jpg"
-    },
-    {
-        "title": "Operations Risk and Data Error, AVP",
-        "company": "Deutsche Bank Group",
-        "location": "Mumbai",
-        "work_type": "Work From Office",
-        "experience": "8-10 Yr",
-        "skills": "Risk Management • Advanced Excel +1",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/ecc00870c1a811b1ff43ca16ab8753e8185a4804b102d3d728.jpg"
-    },
-    {
-        "title": "Technical Project Manager - AI Projects - JFH...",
-        "company": "HerKey",
-        "location": "Bangalore",
-        "work_type": "Hybrid",
-        "experience": "8-20 Yr",
-        "skills": "It Project Management • Vendor Mgmt +2",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/c8dc717b169103af90ddc1ce3c5b389d9983119a584262ccb7.jpg"
-    },
-    {
-        "title": "Application Developer - Vapasi",
-        "company": "Thoughtworks",
-        "location": "Bangalore",
-        "work_type": "Work From Office",
-        "experience": "3-25 Yr",
-        "skills": "Python • C# +1",
+        "experience": "1-3 Yr",
+        "skills": "Office Administration • Performance Appraisal",
         "easy_apply": false,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/79f975cc9e43ca321ffafe9691169d4257b3020f7f741dec0b.jpg"
+        "company_logo": "https://herkey-images.s3.ap-south-1.amazonaws.com/public/images/default-thumb-suitcase.png",
+        "job_url": "https://www.herkey.com/jobs/data-entry-executive/164778",
+        "job_id": "164778",
+        "min_experience": 1,
+        "max_experience": 3,
+        "avg_experience": 2.0,
+        "skills_list": [
+            "Office Administration",
+            "Performance Appraisal"
+        ],
+        "work_mode": "remote"
     },
     {
-        "title": "Content Strategist (work from home)",
-        "company": "Busibud Solutions",
+        "title": "Online Research Participants (Remote/Part-Tim...",
+        "company": "PanelPlace",
         "location": "Any",
         "work_type": "Work From Home",
-        "experience": "0-3 Yr",
-        "skills": "Content Writing • Content Mktg +2",
+        "experience": "0-1 Yr",
+        "skills": "Communication Skills • Data Entry",
         "easy_apply": true,
-        "company_logo": "https://herkey-images.s3.ap-south-1.amazonaws.com/public/images/default-thumb-suitcase.png"
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/7da90ec23789efacfb0a0fe1906621227f5d24521bb4096c7b.jpg",
+        "job_url": "https://www.herkey.com/jobs/online-research-participants-remote-part-time-casual/172444",
+        "job_id": "172444",
+        "min_experience": 0,
+        "max_experience": 1,
+        "avg_experience": 0.5,
+        "skills_list": [
+            "Communication Skills",
+            "Data Entry"
+        ],
+        "work_mode": "remote"
     },
     {
-        "title": "Data Entry Executive (work from home)",
-        "company": "Busibud Solutions",
-        "location": "Any",
+        "title": "Customer Support Engineer",
+        "company": "HSR IT SOLUTIONS PVT LTD",
+        "location": "Bangalore",
         "work_type": "Work From Office",
-        "experience": "0-3 Yr",
-        "skills": "Microsoft Office • Computer Knowledge +1",
+        "experience": "0-1 Yr",
+        "skills": "Communication Skills • Analyze-Problem +1",
         "easy_apply": true,
-        "company_logo": "https://herkey-images.s3.ap-south-1.amazonaws.com/public/images/default-thumb-suitcase.png"
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/employer/1894/hsr-it-solutions-pvt-ltd-logo-1479786147.png",
+        "job_url": "https://www.herkey.com/jobs/customer-support-engineer/119016",
+        "job_id": "119016",
+        "min_experience": 0,
+        "max_experience": 1,
+        "avg_experience": 0.5,
+        "skills_list": [
+            "Communication Skills",
+            "Analyze-Problem"
+        ],
+        "work_mode": "in-office"
+    },
+    {
+        "title": "Freelance Content Writer",
+        "company": "WittyPen Media Services...",
+        "location": "Pune",
+        "work_type": "1-10 Yr",
+        "experience": "",
+        "skills": "Seo • Writing +3",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/employer/1878/oZHau4eZVP-1566888661.png",
+        "job_url": "https://www.herkey.com/jobs/freelance-content-writer/90422",
+        "job_id": "90422",
+        "min_experience": null,
+        "max_experience": null,
+        "avg_experience": null,
+        "skills_list": [
+            "Seo",
+            "Writing"
+        ],
+        "work_mode": "unknown"
+    },
+    {
+        "title": "Backend Intern (Python)",
+        "company": "HerKey",
+        "location": "Bangalore",
+        "work_type": "Hybrid",
+        "experience": "0-2 Yr",
+        "skills": "Python • Django +1",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/c8dc717b169103af90ddc1ce3c5b389d9983119a584262ccb7.jpg",
+        "job_url": "https://www.herkey.com/jobs/backend-intern-python/168720",
+        "job_id": "168720",
+        "min_experience": 0,
+        "max_experience": 2,
+        "avg_experience": 1.0,
+        "skills_list": [
+            "Python",
+            "Django"
+        ],
+        "work_mode": "hybrid"
     },
     {
         "title": "Influencer Marketing Manager",
         "company": "DRIM",
         "location": "Any",
         "work_type": "Work From Home",
-        "experience": "0-6 Yr",
+        "experience": "0-9 Yr",
         "skills": "Good Communication • Team Work +7",
         "easy_apply": false,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/ab8a534f72bf04c9695d6673e1543c.jpg"
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/ab8a534f72bf04c9695d6673e1543c.jpg",
+        "job_url": "https://www.herkey.com/jobs/influencer-marketing-manager/172692",
+        "job_id": "172692",
+        "min_experience": 0,
+        "max_experience": 9,
+        "avg_experience": 4.5,
+        "skills_list": [
+            "Good Communication",
+            "Team Work"
+        ],
+        "work_mode": "remote"
     },
     {
-        "title": "Senior Manager Data Engineering",
-        "company": "Publicis Sapient",
-        "location": "Gurgaon",
-        "work_type": "Work From Office",
-        "experience": "12-14 Yr",
-        "skills": "Data Engineering • Database Technologies +4",
+        "title": "Marketing Content Specialist –Editor and Writ...",
+        "company": "Nextworld Consumer",
+        "location": "Any",
+        "work_type": "1-5 Yr",
+        "experience": "",
+        "skills": "Communication Skills • English +1",
         "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/47b19f3d3e137e0ef5c90c813cb24c8a04fa60e9a9c0b883d6.jpg"
+        "company_logo": "https://herkey-images.s3.ap-south-1.amazonaws.com/public/images/default-thumb-suitcase.png",
+        "job_url": "https://www.herkey.com/jobs/marketing-content-specialist-editor-and-writer-consumer-fashion--beauty/41478",
+        "job_id": "41478",
+        "min_experience": null,
+        "max_experience": null,
+        "avg_experience": null,
+        "skills_list": [
+            "Communication Skills",
+            "English"
+        ],
+        "work_mode": "unknown"
     },
     {
-        "title": "Manager Data Engineering DE - Big Data Azure",
-        "company": "Publicis Sapient",
+        "title": "Software Quality Tester",
+        "company": "Orange Current Technolo...",
+        "location": "Mumbai",
+        "work_type": "1-3 Yr",
+        "experience": "",
+        "skills": "",
+        "easy_apply": true,
+        "company_logo": "https://herkey-images.s3.ap-south-1.amazonaws.com/public/images/default-thumb-suitcase.png",
+        "job_url": "https://www.herkey.com/jobs/software-quality-tester/61367",
+        "job_id": "61367",
+        "min_experience": null,
+        "max_experience": null,
+        "avg_experience": null,
+        "skills_list": [],
+        "work_mode": "unknown"
+    },
+    {
+        "title": "Business Analyst",
+        "company": "Ocwen Financial Solutio...",
         "location": "Bangalore",
-        "work_type": "Work From Office",
-        "experience": "8-14 Yr",
-        "skills": "Java • Scala +5",
+        "work_type": "1-8 Yr",
+        "experience": "",
+        "skills": "",
         "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/47b19f3d3e137e0ef5c90c813cb24c8a04fa60e9a9c0b883d6.jpg"
-    },
-    {
-        "title": "Manager Quality Engineering",
-        "company": "Publicis Sapient",
-        "location": "Gurgaon",
-        "work_type": "Work From Office",
-        "experience": "10-14 Yr",
-        "skills": "Java • Javascript +7",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/47b19f3d3e137e0ef5c90c813cb24c8a04fa60e9a9c0b883d6.jpg"
-    },
-    {
-        "title": "PI & Advisory Operations Associate",
-        "company": "Fidelity International",
-        "location": "Gurgaon",
-        "work_type": "Hybrid",
-        "experience": "1-2 Yr",
-        "skills": "Communication • German Language Study +1",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/3bb5af1294b8d88baef15109ff6f2f5ec515da00259610ee94.png"
-    },
-    {
-        "title": "Accounts Manager",
-        "company": "AapkaPainter Solutions ...",
-        "location": "Bangalore",
-        "work_type": "Work From Home",
-        "experience": "2-5 Yr",
-        "skills": "Analytics • Account Reconciliation +2",
-        "easy_apply": true,
-        "company_logo": "https://herkey-images.s3.ap-south-1.amazonaws.com/public/images/default-thumb-suitcase.png"
-    },
-    {
-        "title": "Expert RF Engineer",
-        "company": "Amdocs.com",
-        "location": "Gurgaon",
-        "work_type": "Hybrid",
-        "experience": "3-6 Yr",
-        "skills": "Telecommunications Networks • It Automation",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/5ae6e2c46c3f7bb540a78197b9558a.jpg"
-    },
-    {
-        "title": "Assistant Manager- Inside Sales",
-        "company": "HerKey",
-        "location": "Bangalore",
-        "work_type": "Hybrid",
-        "experience": "3-5 Yr",
-        "skills": "Sales",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/c8dc717b169103af90ddc1ce3c5b389d9983119a584262ccb7.jpg"
-    },
-    {
-        "title": "Data Analyst",
-        "company": "Amdocs.com",
-        "location": "Gurgaon",
-        "work_type": "Work From Office",
-        "experience": "4-5 Yr",
-        "skills": "Tableau • Sql +3",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/5ae6e2c46c3f7bb540a78197b9558a.jpg"
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/328d8ecf455ef6779484826674d666.png",
+        "job_url": "https://www.herkey.com/jobs/business-analyst/82084",
+        "job_id": "82084",
+        "min_experience": null,
+        "max_experience": null,
+        "avg_experience": null,
+        "skills_list": [],
+        "work_mode": "unknown"
     },
     {
         "title": "Work From Home – Digital Task Associate",
@@ -557,7 +381,775 @@
         "experience": "0-1 Yr",
         "skills": "Social Media • Digital Mktg. +6",
         "easy_apply": false,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/8c7009fafdda74b5d63fb0833615e596cef36ca8096a820fc6.png"
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/8c7009fafdda74b5d63fb0833615e596cef36ca8096a820fc6.png",
+        "job_url": "https://www.herkey.com/jobs/work-from-home--digital-task-associate/174083",
+        "job_id": "174083",
+        "min_experience": 0,
+        "max_experience": 1,
+        "avg_experience": 0.5,
+        "skills_list": [
+            "Social Media",
+            "Digital Mktg."
+        ],
+        "work_mode": "remote"
+    },
+    {
+        "title": "AVP, Analytics - PayPal (L10)",
+        "company": "Synchrony",
+        "location": "Bangalore",
+        "work_type": "Work From Office",
+        "experience": "5-10 Yr",
+        "skills": "Sql • Sas +2",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/fe86a8b1b93021866b325afe4733cf.jpg",
+        "job_url": "https://www.herkey.com/jobs/avp-analytics---paypal-l10/174229",
+        "job_id": "174229",
+        "min_experience": 5,
+        "max_experience": 10,
+        "avg_experience": 7.5,
+        "skills_list": [
+            "Sql",
+            "Sas"
+        ],
+        "work_mode": "in-office"
+    },
+    {
+        "title": "Process Lead, Canada Financial Control",
+        "company": "Fidelity International",
+        "location": "Gurgaon",
+        "work_type": "Hybrid",
+        "experience": "3-6 Yr",
+        "skills": "Financial Statements • Reporting Finance +2",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/3bb5af1294b8d88baef15109ff6f2f5ec515da00259610ee94.png",
+        "job_url": "https://www.herkey.com/jobs/process-lead-canada-financial-control/174244",
+        "job_id": "174244",
+        "min_experience": 3,
+        "max_experience": 6,
+        "avg_experience": 4.5,
+        "skills_list": [
+            "Financial Statements",
+            "Reporting Finance"
+        ],
+        "work_mode": "hybrid"
+    },
+    {
+        "title": "Process Lead - CFO Risk",
+        "company": "Fidelity International",
+        "location": "Gurgaon",
+        "work_type": "Hybrid",
+        "experience": "3-6 Yr",
+        "skills": "Risk Assessment • Sarbanes Oxley Compliance +4",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/3bb5af1294b8d88baef15109ff6f2f5ec515da00259610ee94.png",
+        "job_url": "https://www.herkey.com/jobs/process-lead---cfo-risk/174245",
+        "job_id": "174245",
+        "min_experience": 3,
+        "max_experience": 6,
+        "avg_experience": 4.5,
+        "skills_list": [
+            "Risk Assessment",
+            "Sarbanes Oxley Compliance"
+        ],
+        "work_mode": "hybrid"
+    },
+    {
+        "title": "Product writer",
+        "company": "HerKey",
+        "location": "Bangalore",
+        "work_type": "Hybrid",
+        "experience": "3-4 Yr",
+        "skills": "Product Writing • Ui +5",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/c8dc717b169103af90ddc1ce3c5b389d9983119a584262ccb7.jpg",
+        "job_url": "https://www.herkey.com/jobs/product-writer/174242",
+        "job_id": "174242",
+        "min_experience": 3,
+        "max_experience": 4,
+        "avg_experience": 3.5,
+        "skills_list": [
+            "Product Writing",
+            "Ui"
+        ],
+        "work_mode": "hybrid"
+    },
+    {
+        "title": "Customer Relations Associate",
+        "company": "Fidelity International",
+        "location": "Gurgaon",
+        "work_type": "Hybrid",
+        "experience": "1-2 Yr",
+        "skills": "Customer Service • Attention To Detail +1",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/3bb5af1294b8d88baef15109ff6f2f5ec515da00259610ee94.png",
+        "job_url": "https://www.herkey.com/jobs/customer-relations-associate/174243",
+        "job_id": "174243",
+        "min_experience": 1,
+        "max_experience": 2,
+        "avg_experience": 1.5,
+        "skills_list": [
+            "Customer Service",
+            "Attention To Detail"
+        ],
+        "work_mode": "hybrid"
+    },
+    {
+        "title": "Senior Software Engineer - Frontend",
+        "company": "HerKey",
+        "location": "Bangalore",
+        "work_type": "Hybrid",
+        "experience": "5-10 Yr",
+        "skills": "Reactjs • Redux +2",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/c8dc717b169103af90ddc1ce3c5b389d9983119a584262ccb7.jpg",
+        "job_url": "https://www.herkey.com/jobs/senior-software-engineer---frontend/174224",
+        "job_id": "174224",
+        "min_experience": 5,
+        "max_experience": 10,
+        "avg_experience": 7.5,
+        "skills_list": [
+            "Reactjs",
+            "Redux"
+        ],
+        "work_mode": "hybrid"
+    },
+    {
+        "title": "SQA Engineer",
+        "company": "Poocho",
+        "location": "Bangalore",
+        "work_type": "Work From Home",
+        "experience": "1-3 Yr",
+        "skills": "Ui Testing • Web Testing +3",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/d8a92f19ffcde494667856427068af5295dd76055a3cf5715f.png",
+        "job_url": "https://www.herkey.com/jobs/sqa-engineer/174216",
+        "job_id": "174216",
+        "min_experience": 1,
+        "max_experience": 3,
+        "avg_experience": 2.0,
+        "skills_list": [
+            "Ui Testing",
+            "Web Testing"
+        ],
+        "work_mode": "remote"
+    },
+    {
+        "title": "Angular_Software Developer",
+        "company": "Finastra",
+        "location": "Bangalore",
+        "work_type": "Work From Office",
+        "experience": "4-7 Yr",
+        "skills": "Angular • Typescript +4",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/8f0a2945e5e3d3960c7e7f6b02ad7de08c4649e1682ea44d01.jpg",
+        "job_url": "https://www.herkey.com/jobs/angularsoftware-developer/174220",
+        "job_id": "174220",
+        "min_experience": 4,
+        "max_experience": 7,
+        "avg_experience": 5.5,
+        "skills_list": [
+            "Angular",
+            "Typescript"
+        ],
+        "work_mode": "in-office"
+    },
+    {
+        "title": "Senior Angular Software Developer",
+        "company": "Finastra",
+        "location": "Bangalore",
+        "work_type": "Work From Office",
+        "experience": "7-10 Yr",
+        "skills": "Angular • Typescript +4",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/8f0a2945e5e3d3960c7e7f6b02ad7de08c4649e1682ea44d01.jpg",
+        "job_url": "https://www.herkey.com/jobs/senior-angular-software-developer/174221",
+        "job_id": "174221",
+        "min_experience": 7,
+        "max_experience": 10,
+        "avg_experience": 8.5,
+        "skills_list": [
+            "Angular",
+            "Typescript"
+        ],
+        "work_mode": "in-office"
+    },
+    {
+        "title": "Senior C++ Developer",
+        "company": "Finastra",
+        "location": "Bangalore",
+        "work_type": "Work From Office",
+        "experience": "5-8 Yr",
+        "skills": "C# Development Language • Sql",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/8f0a2945e5e3d3960c7e7f6b02ad7de08c4649e1682ea44d01.jpg",
+        "job_url": "https://www.herkey.com/jobs/senior-c-developer/174222",
+        "job_id": "174222",
+        "min_experience": 5,
+        "max_experience": 8,
+        "avg_experience": 6.5,
+        "skills_list": [
+            "C# Development Language",
+            "Sql"
+        ],
+        "work_mode": "in-office"
+    },
+    {
+        "title": "UB Service Operations Manager",
+        "company": "Finastra",
+        "location": "Bangalore",
+        "work_type": "Work From Office",
+        "experience": "10-13 Yr",
+        "skills": "Business Analysis • Lean Six Sigma +1",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/8f0a2945e5e3d3960c7e7f6b02ad7de08c4649e1682ea44d01.jpg",
+        "job_url": "https://www.herkey.com/jobs/ub-service-operations-manager/174223",
+        "job_id": "174223",
+        "min_experience": 10,
+        "max_experience": 13,
+        "avg_experience": 11.5,
+        "skills_list": [
+            "Business Analysis",
+            "Lean Six Sigma"
+        ],
+        "work_mode": "in-office"
+    },
+    {
+        "title": "Social Media Freelancer",
+        "company": "HerKey",
+        "location": "Bangalore",
+        "work_type": "Hybrid",
+        "experience": "1-3 Yr",
+        "skills": "Social Media • Digital Marketing Campaign",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/c8dc717b169103af90ddc1ce3c5b389d9983119a584262ccb7.jpg",
+        "job_url": "https://www.herkey.com/jobs/social-media-freelancer/174215",
+        "job_id": "174215",
+        "min_experience": 1,
+        "max_experience": 3,
+        "avg_experience": 2.0,
+        "skills_list": [
+            "Social Media",
+            "Digital Marketing Campaign"
+        ],
+        "work_mode": "hybrid"
+    },
+    {
+        "title": "Full stack developer",
+        "company": "Poocho",
+        "location": "Any",
+        "work_type": "Hybrid",
+        "experience": "3-6 Yr",
+        "skills": "Typescript • Nodejs +6",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/d8a92f19ffcde494667856427068af5295dd76055a3cf5715f.png",
+        "job_url": "https://www.herkey.com/jobs/full-stack-developer/174211",
+        "job_id": "174211",
+        "min_experience": 3,
+        "max_experience": 6,
+        "avg_experience": 4.5,
+        "skills_list": [
+            "Typescript",
+            "Nodejs"
+        ],
+        "work_mode": "hybrid"
+    },
+    {
+        "title": "B2B Content & Research Associate",
+        "company": "HerKey",
+        "location": "Bangalore",
+        "work_type": "Hybrid",
+        "experience": "2-4 Yr",
+        "skills": "Research • Content Writing +1",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/c8dc717b169103af90ddc1ce3c5b389d9983119a584262ccb7.jpg",
+        "job_url": "https://www.herkey.com/jobs/b2b-content--research-associate/174192",
+        "job_id": "174192",
+        "min_experience": 2,
+        "max_experience": 4,
+        "avg_experience": 3.0,
+        "skills_list": [
+            "Research",
+            "Content Writing"
+        ],
+        "work_mode": "hybrid"
+    },
+    {
+        "title": "Tech Lead FPGA Designer",
+        "company": "Ericsson",
+        "location": "Bangalore",
+        "work_type": "Hybrid",
+        "experience": "10-20 Yr",
+        "skills": "Vivado • Verilog Hdl",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/e77e219b9680d11514b7769941a22e69779cd497376956f512.jpg",
+        "job_url": "https://www.herkey.com/jobs/tech-lead-fpga-designer/174163",
+        "job_id": "174163",
+        "min_experience": 10,
+        "max_experience": 20,
+        "avg_experience": 15.0,
+        "skills_list": [
+            "Vivado",
+            "Verilog Hdl"
+        ],
+        "work_mode": "hybrid"
+    },
+    {
+        "title": "Digital Marketing Associate",
+        "company": "Dsights",
+        "location": "Any",
+        "work_type": "Work From Home",
+        "experience": "0-30 Yr",
+        "skills": "Digital Mktg. • Content Mktg +4",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/employer/6414/JNnMYhGewb-1577079943.png",
+        "job_url": "https://www.herkey.com/jobs/digital-marketing-associate/174191",
+        "job_id": "174191",
+        "min_experience": 0,
+        "max_experience": 30,
+        "avg_experience": 15.0,
+        "skills_list": [
+            "Digital Mktg.",
+            "Content Mktg"
+        ],
+        "work_mode": "remote"
+    },
+    {
+        "title": "Head of Silicon India",
+        "company": "Ericsson",
+        "location": "Bangalore",
+        "work_type": "Hybrid",
+        "experience": "15-20 Yr",
+        "skills": "Fpga • Asic",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/e77e219b9680d11514b7769941a22e69779cd497376956f512.jpg",
+        "job_url": "https://www.herkey.com/jobs/head-of-silicon-india/174164",
+        "job_id": "174164",
+        "min_experience": 15,
+        "max_experience": 20,
+        "avg_experience": 17.5,
+        "skills_list": [
+            "Fpga",
+            "Asic"
+        ],
+        "work_mode": "hybrid"
+    },
+    {
+        "title": "Tech Lead FPGA/ASIC Verification",
+        "company": "Ericsson",
+        "location": "Bangalore",
+        "work_type": "Hybrid",
+        "experience": "8-20 Yr",
+        "skills": "Uvm • Systemverilog +2",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/e77e219b9680d11514b7769941a22e69779cd497376956f512.jpg",
+        "job_url": "https://www.herkey.com/jobs/tech-lead-fpga-asic-verification/174162",
+        "job_id": "174162",
+        "min_experience": 8,
+        "max_experience": 20,
+        "avg_experience": 14.0,
+        "skills_list": [
+            "Uvm",
+            "Systemverilog"
+        ],
+        "work_mode": "hybrid"
+    },
+    {
+        "title": "Technical Lead ASIC Verifier",
+        "company": "Ericsson",
+        "location": "Bangalore",
+        "work_type": "Hybrid",
+        "experience": "10-13 Yr",
+        "skills": "Asic",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/e77e219b9680d11514b7769941a22e69779cd497376956f512.jpg",
+        "job_url": "https://www.herkey.com/jobs/technical-lead-asic-verifier/174158",
+        "job_id": "174158",
+        "min_experience": 10,
+        "max_experience": 13,
+        "avg_experience": 11.5,
+        "skills_list": [
+            "Asic"
+        ],
+        "work_mode": "hybrid"
+    },
+    {
+        "title": "Line Manager - ASIC",
+        "company": "Ericsson",
+        "location": "Bangalore",
+        "work_type": "Hybrid",
+        "experience": "15-18 Yr",
+        "skills": "Line Management • Asic",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/e77e219b9680d11514b7769941a22e69779cd497376956f512.jpg",
+        "job_url": "https://www.herkey.com/jobs/line-manager---asic/174161",
+        "job_id": "174161",
+        "min_experience": 15,
+        "max_experience": 18,
+        "avg_experience": 16.5,
+        "skills_list": [
+            "Line Management",
+            "Asic"
+        ],
+        "work_mode": "hybrid"
+    },
+    {
+        "title": "Operations Risk and Data Error, AVP",
+        "company": "Deutsche Bank Group",
+        "location": "Mumbai",
+        "work_type": "Work From Office",
+        "experience": "8-10 Yr",
+        "skills": "Risk Management • Advanced Excel +1",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/ecc00870c1a811b1ff43ca16ab8753e8185a4804b102d3d728.jpg",
+        "job_url": "https://www.herkey.com/jobs/operations-risk-and-data-error-avp/174148",
+        "job_id": "174148",
+        "min_experience": 8,
+        "max_experience": 10,
+        "avg_experience": 9.0,
+        "skills_list": [
+            "Risk Management",
+            "Advanced Excel"
+        ],
+        "work_mode": "in-office"
+    },
+    {
+        "title": "Executive Marketing",
+        "company": "HerKey",
+        "location": "Bangalore",
+        "work_type": "Hybrid",
+        "experience": "3-5 Yr",
+        "skills": "Marketing Campaign • Event Promotion +3",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/c8dc717b169103af90ddc1ce3c5b389d9983119a584262ccb7.jpg",
+        "job_url": "https://www.herkey.com/jobs/executive-marketing/174156",
+        "job_id": "174156",
+        "min_experience": 3,
+        "max_experience": 5,
+        "avg_experience": 4.0,
+        "skills_list": [
+            "Marketing Campaign",
+            "Event Promotion"
+        ],
+        "work_mode": "hybrid"
+    },
+    {
+        "title": "Technical Project Manager - AI Projects - JFH...",
+        "company": "HerKey",
+        "location": "Bangalore",
+        "work_type": "Hybrid",
+        "experience": "8-20 Yr",
+        "skills": "It Project Management • Vendor Mgmt +2",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/c8dc717b169103af90ddc1ce3c5b389d9983119a584262ccb7.jpg",
+        "job_url": "https://www.herkey.com/jobs/technical-project-manager---ai-projects---jfh-foundation/174137",
+        "job_id": "174137",
+        "min_experience": 8,
+        "max_experience": 20,
+        "avg_experience": 14.0,
+        "skills_list": [
+            "It Project Management",
+            "Vendor Mgmt"
+        ],
+        "work_mode": "hybrid"
+    },
+    {
+        "title": "Application Developer - Vapasi",
+        "company": "Thoughtworks",
+        "location": "Bangalore",
+        "work_type": "Work From Office",
+        "experience": "3-25 Yr",
+        "skills": "Python • C# +1",
+        "easy_apply": false,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/79f975cc9e43ca321ffafe9691169d4257b3020f7f741dec0b.jpg",
+        "job_url": "https://www.herkey.com/jobs/application-developer---vapasi/174143",
+        "job_id": "174143",
+        "min_experience": 3,
+        "max_experience": 25,
+        "avg_experience": 14.0,
+        "skills_list": [
+            "Python",
+            "C#"
+        ],
+        "work_mode": "in-office"
+    },
+    {
+        "title": "Content Strategist (work from home)",
+        "company": "Busibud Solutions",
+        "location": "Any",
+        "work_type": "Work From Home",
+        "experience": "0-3 Yr",
+        "skills": "Content Writing • Content Mktg +2",
+        "easy_apply": true,
+        "company_logo": "https://herkey-images.s3.ap-south-1.amazonaws.com/public/images/default-thumb-suitcase.png",
+        "job_url": "https://www.herkey.com/jobs/content-strategist-work-from-home/174135",
+        "job_id": "174135",
+        "min_experience": 0,
+        "max_experience": 3,
+        "avg_experience": 1.5,
+        "skills_list": [
+            "Content Writing",
+            "Content Mktg"
+        ],
+        "work_mode": "remote"
+    },
+    {
+        "title": "Data Entry Executive (work from home)",
+        "company": "Busibud Solutions",
+        "location": "Any",
+        "work_type": "Work From Office",
+        "experience": "0-3 Yr",
+        "skills": "Microsoft Office • Computer Knowledge +1",
+        "easy_apply": true,
+        "company_logo": "https://herkey-images.s3.ap-south-1.amazonaws.com/public/images/default-thumb-suitcase.png",
+        "job_url": "https://www.herkey.com/jobs/data-entry-executive-work-from-home/174134",
+        "job_id": "174134",
+        "min_experience": 0,
+        "max_experience": 3,
+        "avg_experience": 1.5,
+        "skills_list": [
+            "Microsoft Office",
+            "Computer Knowledge"
+        ],
+        "work_mode": "in-office"
+    },
+    {
+        "title": "Influencer Marketing Manager",
+        "company": "DRIM",
+        "location": "Any",
+        "work_type": "Work From Home",
+        "experience": "0-6 Yr",
+        "skills": "Good Communication • Team Work +7",
+        "easy_apply": false,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/ab8a534f72bf04c9695d6673e1543c.jpg",
+        "job_url": "https://www.herkey.com/jobs/influencer-marketing-manager/174124",
+        "job_id": "174124",
+        "min_experience": 0,
+        "max_experience": 6,
+        "avg_experience": 3.0,
+        "skills_list": [
+            "Good Communication",
+            "Team Work"
+        ],
+        "work_mode": "remote"
+    },
+    {
+        "title": "Senior Manager Data Engineering",
+        "company": "Publicis Sapient",
+        "location": "Gurgaon",
+        "work_type": "Work From Office",
+        "experience": "12-14 Yr",
+        "skills": "Data Engineering • Database Technologies +4",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/47b19f3d3e137e0ef5c90c813cb24c8a04fa60e9a9c0b883d6.jpg",
+        "job_url": "https://www.herkey.com/jobs/senior-manager-data-engineering/174122",
+        "job_id": "174122",
+        "min_experience": 12,
+        "max_experience": 14,
+        "avg_experience": 13.0,
+        "skills_list": [
+            "Data Engineering",
+            "Database Technologies"
+        ],
+        "work_mode": "in-office"
+    },
+    {
+        "title": "Manager Data Engineering DE - Big Data Azure",
+        "company": "Publicis Sapient",
+        "location": "Bangalore",
+        "work_type": "Work From Office",
+        "experience": "8-14 Yr",
+        "skills": "Java • Scala +5",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/47b19f3d3e137e0ef5c90c813cb24c8a04fa60e9a9c0b883d6.jpg",
+        "job_url": "https://www.herkey.com/jobs/manager-data-engineering-de---big-data-azure/174128",
+        "job_id": "174128",
+        "min_experience": 8,
+        "max_experience": 14,
+        "avg_experience": 11.0,
+        "skills_list": [
+            "Java",
+            "Scala"
+        ],
+        "work_mode": "in-office"
+    },
+    {
+        "title": "Manager Quality Engineering",
+        "company": "Publicis Sapient",
+        "location": "Gurgaon",
+        "work_type": "Work From Office",
+        "experience": "10-14 Yr",
+        "skills": "Java • Javascript +7",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/47b19f3d3e137e0ef5c90c813cb24c8a04fa60e9a9c0b883d6.jpg",
+        "job_url": "https://www.herkey.com/jobs/manager-quality-engineering/174121",
+        "job_id": "174121",
+        "min_experience": 10,
+        "max_experience": 14,
+        "avg_experience": 12.0,
+        "skills_list": [
+            "Java",
+            "Javascript"
+        ],
+        "work_mode": "in-office"
+    },
+    {
+        "title": "PI & Advisory Operations Associate",
+        "company": "Fidelity International",
+        "location": "Gurgaon",
+        "work_type": "Hybrid",
+        "experience": "1-2 Yr",
+        "skills": "Communication • German Language Study +1",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/3bb5af1294b8d88baef15109ff6f2f5ec515da00259610ee94.png",
+        "job_url": "https://www.herkey.com/jobs/pi--advisory-operations-associate/174091",
+        "job_id": "174091",
+        "min_experience": 1,
+        "max_experience": 2,
+        "avg_experience": 1.5,
+        "skills_list": [
+            "Communication",
+            "German Language Study"
+        ],
+        "work_mode": "hybrid"
+    },
+    {
+        "title": "Accounts Manager",
+        "company": "AapkaPainter Solutions ...",
+        "location": "Bangalore",
+        "work_type": "Work From Home",
+        "experience": "2-5 Yr",
+        "skills": "Analytics • Account Reconciliation +2",
+        "easy_apply": true,
+        "company_logo": "https://herkey-images.s3.ap-south-1.amazonaws.com/public/images/default-thumb-suitcase.png",
+        "job_url": "https://www.herkey.com/jobs/accounts-manager/174093",
+        "job_id": "174093",
+        "min_experience": 2,
+        "max_experience": 5,
+        "avg_experience": 3.5,
+        "skills_list": [
+            "Analytics",
+            "Account Reconciliation"
+        ],
+        "work_mode": "remote"
+    },
+    {
+        "title": "Expert RF Engineer",
+        "company": "Amdocs.com",
+        "location": "Gurgaon",
+        "work_type": "Hybrid",
+        "experience": "3-6 Yr",
+        "skills": "Telecommunications Networks • It Automation",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/5ae6e2c46c3f7bb540a78197b9558a.jpg",
+        "job_url": "https://www.herkey.com/jobs/expert-rf-engineer/174078",
+        "job_id": "174078",
+        "min_experience": 3,
+        "max_experience": 6,
+        "avg_experience": 4.5,
+        "skills_list": [
+            "Telecommunications Networks",
+            "It Automation"
+        ],
+        "work_mode": "hybrid"
+    },
+    {
+        "title": "Software Engineering Specialist (Senior GenAI...",
+        "company": "Amdocs.com",
+        "location": "Pune",
+        "work_type": "Hybrid",
+        "experience": "5-8 Yr",
+        "skills": "Python • Ai +4",
+        "easy_apply": false,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/5ae6e2c46c3f7bb540a78197b9558a.jpg",
+        "job_url": "https://www.herkey.com/jobs/software-engineering-specialist-senior-genai-developer/174080",
+        "job_id": "174080",
+        "min_experience": 5,
+        "max_experience": 8,
+        "avg_experience": 6.5,
+        "skills_list": [
+            "Python",
+            "Ai"
+        ],
+        "work_mode": "hybrid"
+    },
+    {
+        "title": "Work From Home – Digital Task Associate",
+        "company": "TurtleHub Nexus Connect...",
+        "location": "India",
+        "work_type": "Work From Home",
+        "experience": "0-1 Yr",
+        "skills": "Social Media • Digital Mktg. +6",
+        "easy_apply": false,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/8c7009fafdda74b5d63fb0833615e596cef36ca8096a820fc6.png",
+        "job_url": "https://www.herkey.com/jobs/work-from-home--digital-task-associate/174083",
+        "job_id": "174083",
+        "min_experience": 0,
+        "max_experience": 1,
+        "avg_experience": 0.5,
+        "skills_list": [
+            "Social Media",
+            "Digital Mktg."
+        ],
+        "work_mode": "remote"
+    },
+    {
+        "title": "Software Engineering Specialist",
+        "company": "Amdocs.com",
+        "location": "Pune",
+        "work_type": "Hybrid",
+        "experience": "6-9 Yr",
+        "skills": "Java • Springmvc +4",
+        "easy_apply": false,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/5ae6e2c46c3f7bb540a78197b9558a.jpg",
+        "job_url": "https://www.herkey.com/jobs/software-engineering-specialist/174079",
+        "job_id": "174079",
+        "min_experience": 6,
+        "max_experience": 9,
+        "avg_experience": 7.5,
+        "skills_list": [
+            "Java",
+            "Springmvc"
+        ],
+        "work_mode": "hybrid"
+    },
+    {
+        "title": "Assistant Manager- Inside Sales",
+        "company": "HerKey",
+        "location": "Bangalore",
+        "work_type": "Hybrid",
+        "experience": "3-5 Yr",
+        "skills": "Sales",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/c8dc717b169103af90ddc1ce3c5b389d9983119a584262ccb7.jpg",
+        "job_url": "https://www.herkey.com/jobs/assistant-manager--inside-sales/174074",
+        "job_id": "174074",
+        "min_experience": 3,
+        "max_experience": 5,
+        "avg_experience": 4.0,
+        "skills_list": [
+            "Sales"
+        ],
+        "work_mode": "hybrid"
+    },
+    {
+        "title": "Data Analyst",
+        "company": "Amdocs.com",
+        "location": "Gurgaon",
+        "work_type": "Work From Office",
+        "experience": "4-5 Yr",
+        "skills": "Tableau • Sql +3",
+        "easy_apply": true,
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/5ae6e2c46c3f7bb540a78197b9558a.jpg",
+        "job_url": "https://www.herkey.com/jobs/data-analyst/174077",
+        "job_id": "174077",
+        "min_experience": 4,
+        "max_experience": 5,
+        "avg_experience": 4.5,
+        "skills_list": [
+            "Tableau",
+            "Sql"
+        ],
+        "work_mode": "in-office"
     },
     {
         "title": "Associate - Talent & OD",
@@ -567,36 +1159,36 @@
         "experience": "5-15 Yr",
         "skills": "People Hr • Planning +8",
         "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/49d81c39d209649a6f7de51517bbf2900df5ae0dd2b8708b25.png"
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/49d81c39d209649a6f7de51517bbf2900df5ae0dd2b8708b25.png",
+        "job_url": "https://www.herkey.com/jobs/associate---talent--od/174067",
+        "job_id": "174067",
+        "min_experience": 5,
+        "max_experience": 15,
+        "avg_experience": 10.0,
+        "skills_list": [
+            "People Hr",
+            "Planning"
+        ],
+        "work_mode": "remote"
     },
     {
-        "title": "Engineer II - Fullstack Engineering",
-        "company": "Cencora",
-        "location": "Pune",
-        "work_type": "Work From Office",
-        "experience": "4-7 Yr",
-        "skills": "Sql Development • Couchbase +1",
-        "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/5156e77065156404f41f3d7234a0dce1b309ba36cc1b9e3100.jpg"
-    },
-    {
-        "title": "Construction Manager",
-        "company": "Amazon",
-        "location": "Hyderabad",
-        "work_type": "Work From Office",
-        "experience": "3-15 Yr",
-        "skills": "Construction Qa • Negotiation +1",
-        "easy_apply": false,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/d035a0b2e895dba83b87beca1c8d00.jpg"
-    },
-    {
-        "title": "Senior Technical Lead",
-        "company": "Ericsson",
+        "title": "Account Manager",
+        "company": "HerKey",
         "location": "Bangalore",
         "work_type": "Hybrid",
-        "experience": "7-10 Yr",
-        "skills": "C++ • Imsdb +1",
+        "experience": "3-5 Yr",
+        "skills": "Sales Strategy • Market Research +1",
         "easy_apply": true,
-        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/e77e219b9680d11514b7769941a22e69779cd497376956f512.jpg"
+        "company_logo": "https://assets.jobsforher.com/uploads/v3/companies/c8dc717b169103af90ddc1ce3c5b389d9983119a584262ccb7.jpg",
+        "job_url": "",
+        "job_id": "",
+        "min_experience": 3,
+        "max_experience": 5,
+        "avg_experience": 4.0,
+        "skills_list": [
+            "Sales Strategy",
+            "Market Research"
+        ],
+        "work_mode": "hybrid"
     }
 ]
