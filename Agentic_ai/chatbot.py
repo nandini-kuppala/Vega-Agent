@@ -178,8 +178,6 @@ class CareerGuidanceChatbot:
                     for i, job in enumerate(ext_jobs[:5], 1):  # Show top 5 results
                         response += f"{i}. **{job.get('job_title', 'Job Opportunity')}** at {job.get('company', 'Company')}\n"
                         response += f"   * Location: {job.get('location', 'Not specified')}\n"
-                        response += f"   * Experience: {job.get('experience_required', 'Not specified')}\n"
-                        response += f"   * Match: {job.get('match_percentage', 75.0):.1f}%\n"
                         
                         # Skills match
                         skills_match = job.get('skills_match', [])
