@@ -34,7 +34,72 @@ class TavilyJobAgent:
 
     def generate_personalized_query(self, profile: Dict) -> str:
         """Generate a personalized job search query using Gemini AI."""
-        return self._generate_fallback_query(profile)
+        if not self.gemini_model:
+            # Fallback query generation without AI
+            return self._generate_fallback_query(profile)
+                # Get experience years (handle different possible formats)
+        experience_data = self.user_profile.get('experience_years', 0)
+        if isinstance(experience_data, dict) and '$numberInt' in experience_data:
+            experience = int(experience_data['$numberInt'])
+        else:
+            experience = int(experience_data) if experience_data else 0
+        
+        try:
+            # Get experience level first
+                    # Get experience years (handle different possible formats)
+        
+            if experience_years == 0:
+                experience_level = "entry level junior"
+            elif experience_years <= 2:
+                experience_level = "junior"
+            elif experience_years <= 5:
+                experience_level = "mid level"
+            else:
+                experience_level = "senior"
+            
+            # Create a detailed prompt for Gemini
+            prompt = f"""
+            Based on the following user profile, generate a highly specific and effective job search query for Tavily that will find the most relevant job opportunities. The query should be concise but comprehensive enough to capture the user's requirements.
+
+            User Profile:
+            - Skills: {', '.join(profile.get('skills', []))}
+            - Experience: {experience_years} years
+            - Experience Level: {experience_level}
+            - Last Job: {profile.get('last_job', {}).get('title', 'N/A')} at {profile.get('last_job', {}).get('company', 'N/A')}
+            - Job Preferences: {profile.get('job_preferences', {}).get('type', 'N/A')}
+            - Preferred Roles: {', '.join(profile.get('job_preferences', {}).get('roles', []))}
+            - Location: {profile.get('location', {}).get('city', 'N/A')}
+            - Work Mode: {profile.get('location', {}).get('work_mode', 'N/A')}
+
+            Generate a job search query that includes:
+            1. Skill or technology
+            2. Specific Role 
+            3. Experience level: {experience_level}
+            4. Location preferences — use the user's location if 'in-office', otherwise default to 'remote' or 'hybrid' as per their preference.
+
+            Return ONLY the search query, nothing else. Make it optimized for job search engines.
+            """
+
+            response = self.gemini_model.generate_content(prompt)
+            query = response.text.strip()
+            
+            # Clean up the query
+            query = query.replace('"', '').replace("'", "")
+            
+            # Double-check that the correct experience level is in the query
+            if experience_years > 5 and "entry level" in query.lower():
+                query = query.replace("entry level", "senior").replace("junior", "senior")
+            elif experience_years > 2 and experience_years <= 5 and ("entry level" in query.lower() or "senior" in query.lower()):
+                query = query.replace("entry level", "mid level").replace("senior", "mid level").replace("junior", "mid level")
+            elif experience_years <= 2 and experience_years > 0 and ("entry level" in query.lower() or "senior" in query.lower()):
+                query = query.replace("entry level", "junior").replace("senior", "junior")
+            
+            logger.info(f"Generated personalized query: {query}")
+            return query
+            
+        except Exception as e:
+            logger.error(f"Error generating personalized query with Gemini: {e}")
+            return self._generate_fallback_query(profile)
 
     def _generate_fallback_query(self, profile: Dict) -> str:
         """Generate a fallback query without AI when Gemini is not available."""

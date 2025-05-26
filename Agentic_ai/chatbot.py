@@ -68,9 +68,12 @@ class CareerGuidanceChatbot:
             return
         
         # Get experience years (handle different possible formats)
-        exp_years = self.user_profile.get("experience_years", 0)
-        if isinstance(exp_years, dict) and "$numberInt" in exp_years:
-            exp_years = int(exp_years["$numberInt"])
+        experience_data = self.user_profile.get('experience_years', 0)
+        if isinstance(experience_data, dict) and '$numberInt' in experience_data:
+            exp_years = int(experience_data['$numberInt'])
+        else:
+            exp_years = int(experience_data) if experience_data else 0
+
         
         # Check for restarter (women who took a career break)
         life_stage = self.user_profile.get("life_stage", {})
