@@ -328,7 +328,7 @@ def get_career_guidance_task(profile_analysis, user_query):
         1. Provide a comprehensive, personalized response to the user's current query
         2. 2. **RESOURCE INCLUSION RULES**:
            - **For job/course/tool queries**: Include relevant external links and resources from live search results (hyper links are mandarory)
-           - **For advice queries**: Focus on guidance first, Present live search results as supplementary resources relating them with your main response          
+           - **For advice queries**: Focus more on guidance first, with minimal resources from live search results as supplementary resources relating them with your main response          
         3. Include specific links, resources, and actionable information from the search results
         4. Reference relevant information from previous sessions naturally 
         5. Adapt your communication style based on the user's identified patterns:
