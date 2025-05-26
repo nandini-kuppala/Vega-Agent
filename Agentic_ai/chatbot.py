@@ -49,8 +49,8 @@ class CareerGuidanceChatbot:
             self._determine_user_type()
             return True
         
-        if user_id:
-            profile = get_profile(user_id)
+        if st.session_state['user_id']:
+            profile = get_profile(st.session_state['user_id'])
             if profile:
                 self.user_profile = profile
                 self._determine_user_type()
@@ -64,15 +64,14 @@ class CareerGuidanceChatbot:
         """
         Determine if the user is a starter, restarter, or raiser based on profile data.
         """
-        if not self.user_profile:
-            return
+        profile = get_profile(st.session_state['user_id'])
         
         # Get experience years (handle different possible formats)
-        experience_data = self.user_profile.get('experience_years', 6)
+        experience_data = profile.get('experience_years', 0)
         if isinstance(experience_data, dict) and '$numberInt' in experience_data:
             exp_years = int(experience_data['$numberInt'])
         else:
-            exp_years = int(experience_data) if experience_data else 5
+            exp_years = int(experience_data) if experience_data else 0
 
         
         # Check for restarter (women who took a career break)
