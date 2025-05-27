@@ -38,6 +38,12 @@ class CareerGuidanceChatbot:
         self.user_type = None  # "starter", "restarter", or "raiser"
         self.tavily_agent = TavilyJobAgent()
         
+        if 'user_id' in st.session_state:
+            profile_res = get_profile(st.session_state['user_id'])
+            if profile_res["status"] == "success":
+                self.user_profile = profile_res["profile"]
+            
+        
     
     def load_profile(self, user_id: str = None, profile_data: Dict = None) -> bool:
         """
@@ -63,12 +69,10 @@ class CareerGuidanceChatbot:
     def _determine_user_type(self) -> None:
         """
         Determine if the user is a starter, restarter, or raiser based on profile data.
-        """
-        profile = get_profile(st.session_state['user_id'])
-        
+        """        
         # Get experience years (handle different possible formats)
-        exp_years = profile.get('experience_years', 0)
-        
+        exp_years = self.user_profile.get('experience_years', 0)
+
         # Check for restarter (women who took a career break)
         life_stage = self.user_profile.get("life_stage", {})
         is_woman_with_break = False
