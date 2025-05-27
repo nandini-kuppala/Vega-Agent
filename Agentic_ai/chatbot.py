@@ -25,72 +25,93 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
-
-class CareerGuidanceChatbot:
-    """
-    AI chatbot for career guidance, supporting starters, restarters, and raisers
-    with personalized recommendations.
-    """
-    
-    def __init__(self, firecrawl_api_key: str = None, groq_api_key: str = None):
-        """Initialize the career guidance chatbot with API keys."""
-        self.user_profile = None
-        self.user_type = None  # "starter", "restarter", or "raiser"
-        self.tavily_agent = TavilyJobAgent()
-        
-        if 'user_id' in st.session_state:
-            profile_res = get_profile(st.session_state['user_id'])
-            if profile_res["status"] == "success":
-                self.user_profile = profile_res["profile"]
-            
-        
-    
-    def load_profile(self, user_id: str = None, profile_data: Dict = None) -> bool:
-        """
-        Load user profile either by ID (fetching from API) or directly from provided data.
-        Returns True if profile loaded successfully, False otherwise.
-        """
-        if profile_data:
-            self.user_profile = profile_data
-            self._determine_user_type()
-            return True
-        
-        if st.session_state['user_id']:
-            profile = get_profile(st.session_state['user_id'])
-            if profile:
-                self.user_profile = profile
+class CareerGuidanceChatbot: 
+    """ 
+    AI chatbot for career guidance, supporting starters, restarters, and raisers 
+    with personalized recommendations. 
+    """ 
+     
+    def __init__(self, firecrawl_api_key: str = None, groq_api_key: str = None): 
+        """Initialize the career guidance chatbot with API keys.""" 
+        self.user_profile = None 
+        self.user_type = None  # "starter", "restarter", or "raiser" 
+        self.tavily_agent = TavilyJobAgent() 
+         
+        if 'user_id' in st.session_state: 
+            profile_res = get_profile(st.session_state['user_id']) 
+            if profile_res["status"] == "success": 
+                self.user_profile = profile_res["profile"] 
                 self._determine_user_type()
-                return True
-            else:
-                print("profile is not loaded")
-        
-        return False
-    
-    def _determine_user_type(self) -> None:
-        """
-        Determine if the user is a starter, restarter, or raiser based on profile data.
-        """        
-        # Get experience years (handle different possible formats)
+     
+    def load_profile(self, user_id: str = None, profile_data: Dict = None) -> bool: 
+        """ 
+        Load user profile either by ID (fetching from API) or directly from provided data. 
+        Returns True if profile loaded successfully, False otherwise. 
+        """ 
+        if profile_data: 
+            self.user_profile = profile_data 
+            self._determine_user_type() 
+            return True 
+         
+        if 'user_id' in st.session_state and st.session_state['user_id']: 
+            profile_res = get_profile(st.session_state['user_id']) 
+            if profile_res and profile_res.get("status") == "success": 
+                self.user_profile = profile_res["profile"]
+                self._determine_user_type() 
+                return True 
+            else: 
+                logger.warning("Profile could not be loaded from database")
+                print("profile is not loaded") 
+         
+        return False 
+     
+    def _determine_user_type(self) -> None: 
+        """ 
+        Determine if the user is a starter, restarter, or raiser based on profile data. 
+        """         
+        if not self.user_profile:
+            logger.warning("No user profile available for type determination")
+            return
+            
+        # Get experience years (handle different possible formats) 
         exp_years = self.user_profile.get('experience_years', 0)
-
-        # Check for restarter (women who took a career break)
-        life_stage = self.user_profile.get("life_stage", {})
-        is_woman_with_break = False
         
-        if life_stage.get("pregnancy_status") in ["Yes", "Recently"] or \
-           life_stage.get("needs_flexible_work") is True or \
-           "break" in life_stage.get("situation", "").lower():
-            is_woman_with_break = True
+        # Debug: Log the experience years
+        logger.info(f"User experience years: {exp_years}")
         
-        # Determine user type
-        if is_woman_with_break:
-            self.user_type = "restarter"
-        elif exp_years >= 5:
-            self.user_type = "raiser"
-        else:
-            self.user_type = "starter"
-        
-        logger.info(f"User determined to be a {self.user_type}")
+        # Ensure exp_years is numeric
+        try:
+            exp_years = int(exp_years) if exp_years is not None else 0
+        except (ValueError, TypeError):
+            logger.warning(f"Invalid experience_years value: {exp_years}, defaulting to 0")
+            exp_years = 0
+ 
+        # Check for restarter (women who took a career break) 
+        life_stage = self.user_profile.get("life_stage", {}) 
+        is_woman_with_break = False 
+         
+        # Only check for restarter if life_stage data exists and has meaningful values
+        if life_stage and isinstance(life_stage, dict):
+            pregnancy_status = life_stage.get("pregnancy_status", "").lower()
+            needs_flexible = life_stage.get("needs_flexible_work", False)
+            situation = life_stage.get("situation", "").lower()
+            
+            # Check for career break indicators
+            if pregnancy_status in ["yes", "recently"] or \
+               needs_flexible is True or \
+               any(keyword in situation for keyword in ["break", "gap", "hiatus", "pause"]):
+                is_woman_with_break = True
+                logger.info(f"Career break indicators found: pregnancy={pregnancy_status}, flexible={needs_flexible}, situation='{situation}'")
+         
+        # Determine user type with proper priority
+        if is_woman_with_break and exp_years > 0:  # Only classify as restarter if they have some experience
+            self.user_type = "restarter" 
+        elif exp_years >= 5: 
+            self.user_type = "raiser" 
+        else: 
+            self.user_type = "starter" 
+         
+        logger.info(f"User determined to be a {self.user_type} (experience: {exp_years} years, career break: {is_woman_with_break})")
     
     def process_query(self, query: str) -> str:
         """
