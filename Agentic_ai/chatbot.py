@@ -67,12 +67,7 @@ class CareerGuidanceChatbot:
         profile = get_profile(st.session_state['user_id'])
         
         # Get experience years (handle different possible formats)
-        experience_data = profile.get('experience_years', 0)
-        if isinstance(experience_data, dict) and '$numberInt' in experience_data:
-            exp_years = int(experience_data['$numberInt'])
-        else:
-            exp_years = int(experience_data) if experience_data else 0
-
+        exp_years = profile.get('experience_years', 0)
         
         # Check for restarter (women who took a career break)
         life_stage = self.user_profile.get("life_stage", {})
@@ -151,7 +146,7 @@ class CareerGuidanceChatbot:
             # Get external job recommendations 
             external_recommendations = {}
             if self.user_profile:
-                tavily_result = self.tavily_agent.get_job_recommendations(self.user_profile)
+                tavily_result = self.tavily_agent.get_job_recommendations()
                 if tavily_result["status"] == "success":
                     external_recommendations = tavily_result
             #ccall th efuntions here for tavily suggested ext_jobs
