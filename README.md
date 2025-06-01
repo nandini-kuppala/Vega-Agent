@@ -117,6 +117,8 @@ Asha AI is a **multi-agent** chatbot system designed to **revolutionize career d
 |🎙️ **Voice NLP**|[Sarvam AI](https://sarvam.ai/)|
 |🧹 **Bias Detection**|Custom NLP Pipeline + Specialized Agent|
 
+![image](https://github.com/user-attachments/assets/75751e5a-2a90-4896-bb40-d581923cc7d3)
+
 ---
 
 
